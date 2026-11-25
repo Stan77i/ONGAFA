@@ -6,13 +6,13 @@ inconnue**. Les chiffres ci-dessous sont **déclarés par l'ONG** ; ils s'affich
 
 ## Identité
 
-| Élément          | Valeur                                                 | Statut          |
-| ---------------- | ------------------------------------------------------ | --------------- |
-| Date de création | 3 juin 2016                                            | déclaré         |
-| Reconnaissance   | n° 418 MEMIS/DGAT/DAG/SDVA                             | déclaré         |
-| Présidente       | L'Honorable N'ZI N'DA AFFOUÉ Éliane                    | déclaré         |
-| Région d'origine | **N'Zi** (« zone de naissance »)                       | déclaré         |
-| Nom              | Trois versions coexistent — voir « Points à trancher » | **à confirmer** |
+| Élément          | Valeur                                                                           | Statut       |
+| ---------------- | -------------------------------------------------------------------------------- | ------------ |
+| Date de création | 3 juin 2016                                                                      | déclaré      |
+| Reconnaissance   | n° 418 MEMIS/DGAT/DAG/SDVA                                                       | déclaré      |
+| Présidente       | L'Honorable N'ZI N'DA AFFOUÉ Éliane                                              | déclaré      |
+| Région d'origine | **N'Zi** (« zone de naissance »)                                                 | déclaré      |
+| Nom officiel     | « Action des Femmes d'Afrique pour le Développement » (ONG AFA), version du logo | **confirmé** |
 
 ## Objet (statuts)
 
@@ -105,9 +105,8 @@ tapioca et dérivés de fécule, feuilles de manioc, farine.
 
 ## Points à trancher avec l'ONG
 
-1. **Nom exact.** Le logo dit « Action **des** Femmes **d'Afrique** pour le Développement » ; l'en-tête du
-   document dit « Action Femmes d'Afrique pour le Développement » ; le corps dit « Action Femmes **Actives**
-   pour le Développement ». Lequel figure sur l'acte de reconnaissance ?
+1. ~~Nom exact~~ : **réglé le 2026-11-25** : la version du logo fait foi (« Action des Femmes d'Afrique
+   pour le Développement »). Les autres formulations du document interne ne sont pas utilisées.
 2. **Date de référence** des résultats déclarés (pour les afficher « au … »).
 3. **Statut des partenariats** cités (signés, en cours, envisagés).
 4. **Source des rendements** des variétés (CNRA ?).

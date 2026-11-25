@@ -16,6 +16,7 @@ jamais par une réécriture silencieuse.
 | A7  | Choix techniques délégués à Claude (section suivante)                                                                                                                                    | 2026-11-25 |
 | A8  | L'administrateur (le responsable de l'ONG) voit les coordonnées privées des membres pour pouvoir les contacter. L'export en masse reste réservé au rôle « privacy_officer ». Remplace T5 | 2026-11-25 |
 | A9  | Design « Terre et trait » validé : palette, Fraunces + Source Sans 3, barre de navigation basse sur mobile (voir docs/DESIGN.md)                                                         | 2026-11-25 |
+| A10 | Nom confirmé après lecture du document de présentation : la version du **logo** fait foi (« Action des Femmes d'Afrique pour le Développement »)                                         | 2026-11-25 |
 
 ## Décidées par Claude (délégation A7)
 
