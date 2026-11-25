@@ -4,6 +4,10 @@ export const site = {
   shortName: "ONG AFA",
   slogan: "Valoriser la terre pour nourrir la Nation",
   country: "Côte d'Ivoire",
+  /** Faits déclarés par l'ONG (docs/CONTEXTE_AFA.md). */
+  foundedOn: "2016-06-03",
+  registration: "n° 418 MEMIS/DGAT/DAG/SDVA",
+  originRegion: "N'Zi",
   locale: "fr_CI",
   colors: {
     orange: "#df8433",

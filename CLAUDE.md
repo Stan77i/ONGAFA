@@ -47,6 +47,8 @@ PGHOST=/var/run/postgresql pnpm test:db
 
 ## Repères
 
+- **Contexte de l'ONG** (historique, résultats déclarés, perspectives, manioc) : `docs/CONTEXTE_AFA.md`.
+  Origine : région du N'Zi (implantée) ; déploiement suivant : Nawa (Soubré).
 - Décisions et leurs raisons : `docs/DECISIONS.md`.
 - Design system (couleurs, contrastes, composants, règles) : `docs/DESIGN.md`. Réutiliser les
   composants de `src/components/` plutôt qu'en recréer ; démonstration sur `/design-system` en développement.
