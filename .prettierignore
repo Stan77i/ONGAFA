@@ -1,0 +1,6 @@
+.claude/
+.next/
+node_modules/
+pnpm-lock.yaml
+supabase/
+public/

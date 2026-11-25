@@ -1,0 +1,36 @@
+@import "tailwindcss";
+
+/*
+ * Jetons de marque AFA (provisoires). Le design system complet arrive en Phase 2.
+ * Accessibilité : l'orange #df8433 a un contraste insuffisant pour du texte courant
+ * sur fond blanc ; le réserver aux accents, boutons et grands titres.
+ */
+:root {
+  --afa-orange: #df8433;
+  --afa-green: #4a7230;
+  --afa-green-light: #59883c;
+  --afa-green-dark: #3a5a26;
+  --background: #ffffff;
+  --foreground: #1c2418;
+}
+
+@theme inline {
+  --color-afa-orange: var(--afa-orange);
+  --color-afa-green: var(--afa-green);
+  --color-afa-green-light: var(--afa-green-light);
+  --color-afa-green-dark: var(--afa-green-dark);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family:
+    system-ui,
+    -apple-system,
+    "Segoe UI",
+    Roboto,
+    Arial,
+    sans-serif;
+}
