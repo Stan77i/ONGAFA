@@ -15,6 +15,7 @@ jamais par une réécriture silencieuse.
 | A6  | Veille automatique, sur sources validées, étiquetée « Source externe »                                                                                                                   | 2026-11-25 |
 | A7  | Choix techniques délégués à Claude (section suivante)                                                                                                                                    | 2026-11-25 |
 | A8  | L'administrateur (le responsable de l'ONG) voit les coordonnées privées des membres pour pouvoir les contacter. L'export en masse reste réservé au rôle « privacy_officer ». Remplace T5 | 2026-11-25 |
+| A9  | Design « Terre et trait » validé : palette, Fraunces + Source Sans 3, barre de navigation basse sur mobile (voir docs/DESIGN.md)                                                         | 2026-11-25 |
 
 ## Décidées par Claude (délégation A7)
 

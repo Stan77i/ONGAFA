@@ -89,7 +89,7 @@ Catalogue complet : `supabase/migrations/20261125000400_seed_roles_permissions.s
 ## Feuille de route
 
 1. **Architecture, base, authentification, rôles** ← terminé
-2. Design system
+2. **Design system** ← terminé (voir `docs/DESIGN.md`)
 3. Site institutionnel
 4. Carte nationale
 5. Veille et contenus

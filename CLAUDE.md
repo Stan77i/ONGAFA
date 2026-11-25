@@ -48,6 +48,8 @@ PGHOST=/var/run/postgresql pnpm test:db
 ## Repères
 
 - Décisions et leurs raisons : `docs/DECISIONS.md`.
+- Design system (couleurs, contrastes, composants, règles) : `docs/DESIGN.md`. Réutiliser les
+  composants de `src/components/` plutôt qu'en recréer ; démonstration sur `/design-system` en développement.
 - Architecture, modèle de données, rôles, feuille de route : `docs/ARCHITECTURE.md`.
 - Next.js 16 : `middleware` s'appelle désormais `proxy` (`src/proxy.ts`). Lire
   `node_modules/next/dist/docs/` avant d'utiliser une API Next.

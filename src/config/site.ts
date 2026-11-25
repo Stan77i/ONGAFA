@@ -10,6 +10,14 @@ export const site = {
     green: "#4a7230",
     greenLight: "#59883c",
   },
+  /** Coordonnées officielles : null tant qu'elles ne sont pas communiquées (rien d'inventé). */
+  contact: {
+    email: null as string | null,
+    phone: null as string | null,
+    address: null as string | null,
+  },
+  /** Réseaux sociaux officiels : à compléter avec les vraies adresses. */
+  social: [] as ReadonlyArray<{ label: string; href: string }>,
   logos: {
     seal: "/brand/logo-sceau-ong-afa.webp",
     symbol: "/brand/symbole-afa.webp",
