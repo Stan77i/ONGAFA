@@ -12,7 +12,7 @@ const allMainNav = [
   { href: "/manioc", label: "Manioc", available: true },
   { href: "/vivrier", label: "Vivrier", available: false }, // phase 5
   { href: "/veille", label: "Veille", available: false }, // phase 5
-  { href: "/carte", label: "Carte", available: false }, // phase 4
+  { href: "/carte", label: "Carte", available: true },
   { href: "/communaute", label: "Communauté", available: false }, // phase 7
 ] as const satisfies readonly NavItem[];
 
@@ -23,7 +23,7 @@ const allMobileTabs = [
   { href: "/", label: "Accueil", icon: "home", available: true },
   { href: "/a-propos", label: "L'ONG", icon: "landmark", available: true },
   { href: "/veille", label: "Veille", icon: "newspaper", available: false },
-  { href: "/carte", label: "Carte", icon: "map", available: false },
+  { href: "/carte", label: "Carte", icon: "map", available: true },
   { href: "/manioc", label: "Manioc", icon: "sprout", available: true },
   { href: "/communaute", label: "Communauté", icon: "messages", available: false },
   { href: "/actions", label: "Actions", icon: "layers", available: true },
@@ -40,7 +40,8 @@ const allFooterNav: { title: string; links: NavItem[] }[] = [
       { href: "/a-propos#realisations", label: "Nos réalisations", available: true },
       { href: "/a-propos#gouvernance", label: "Gouvernance", available: true },
       { href: "/actions", label: "Nos actions", available: true },
-      { href: "/deploiement", label: "Déploiement national", available: false },
+      { href: "/carte", label: "Carte nationale", available: true },
+      { href: "/carte#chronologie", label: "Déploiement national", available: true },
       { href: "/a-propos/partenaires", label: "Partenaires", available: false },
     ],
   },

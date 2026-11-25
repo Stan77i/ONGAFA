@@ -6,18 +6,22 @@ import { ValueChain } from "@/components/brand/ValueChain";
 import { DomainIcon } from "@/components/content/DomainIcon";
 import { KeyFigure } from "@/components/content/KeyFigure";
 import { Container, Section, SectionHeading } from "@/components/layout/Section";
-import { StatusPill } from "@/components/map/StatusPill";
+import { MapLegend } from "@/components/map/StatusPill";
+import { NationalMap } from "@/components/map/NationalMap";
+import { getAfaMapPoints } from "@/lib/map/data";
 import { Button } from "@/components/ui/Button";
 import { links } from "@/config/navigation";
 import { site } from "@/config/site";
 import { VALUE_CHAIN_STEPS } from "@/components/brand/ValueChain";
-import { cassava, domains, president, results, territories } from "@/content/afa";
+import { cassava, domains, president, results } from "@/content/afa";
 
 /**
- * Accueil (phase 3). Sections affichées uniquement si leur contenu existe :
+ * Accueil (phases 3-4). Sections affichées uniquement si leur contenu existe :
  * veille, communauté, agenda, témoignages et partenaires s'ajouteront à leur phase.
  */
-export default function HomePage() {
+export default async function HomePage() {
+  const points = await getAfaMapPoints();
+
   return (
     <>
       {/* B — Ouverture (version sans photo, en attendant les photos de l'ONG) */}
@@ -179,32 +183,42 @@ export default function HomePage() {
         </ul>
       </Section>
 
-      {/* D — Ancrage territorial (la carte interactive arrive en phase 4) */}
-      <Section tone="sand" labelledBy="t-territoires">
-        <SectionHeading
-          id="t-territoires"
-          eyebrow="Déploiement national"
-          title="Du N'Zi à toute la Côte d'Ivoire"
-          intro="Après sa région d'origine, AFA prévoit de se déployer dans la Nawa, puis progressivement dans les autres régions du pays."
-        />
-        <ol className="grid gap-4 md:grid-cols-3">
-          {territories.map((t, i) => (
-            <li
-              key={t.name}
-              className="relative flex flex-col gap-3 rounded-card bg-white p-5 text-ink ring-1 ring-rule"
+      {/* D — Carte nationale (aperçu ; carte interactive sur /carte) */}
+      <Section tone="forest" labelledBy="t-territoires">
+        <div className="grid items-center gap-10 lg:grid-cols-[1fr_1.1fr]">
+          <div className="space-y-6">
+            <SectionHeading
+              id="t-territoires"
+              onDark
+              eyebrow="Déploiement national"
+              title="Du N'Zi à toute la Côte d'Ivoire"
+              intro="Après sa région d'origine, AFA prévoit de se déployer dans la Nawa, puis progressivement dans les autres régions du pays."
+            />
+            <MapLegend />
+            <ul className="space-y-3">
+              {points.map((p) => (
+                <li key={p.slug} className="rounded-card bg-white/8 p-4 ring-1 ring-white/15">
+                  <p className="font-display text-h3 font-semibold text-white">{p.name}</p>
+                  {p.description && <p className="text-sand">{p.description}</p>}
+                </li>
+              ))}
+            </ul>
+            <Button
+              href="/carte"
+              variant="on-dark"
+              iconAfter={<ArrowRight className="size-5" aria-hidden="true" />}
             >
-              <span
-                className="font-display text-h2 leading-none font-semibold text-accent/70"
-                aria-hidden="true"
-              >
-                {String(i + 1).padStart(2, "0")}
-              </span>
-              <StatusPill status={t.status} className="self-start" />
-              <h3 className="font-display text-h3 font-semibold text-forest">{t.name}</h3>
-              <p className="text-ink-soft">{t.text}</p>
-            </li>
-          ))}
-        </ol>
+              Explorer la carte
+            </Button>
+          </div>
+          <Link
+            href="/carte"
+            aria-label="Ouvrir la carte nationale d'AFA"
+            className="block rounded-card bg-sand p-4 transition-transform hover:-translate-y-1 sm:p-6"
+          >
+            <NationalMap points={points} className="h-auto w-full" />
+          </Link>
+        </div>
       </Section>
 
       {/* H — Manioc et transformation */}

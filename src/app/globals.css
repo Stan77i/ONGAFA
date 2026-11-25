@@ -55,6 +55,13 @@
   html {
     -webkit-text-size-adjust: 100%;
     scroll-padding-top: 5rem;
+    /* Mobile : la barre de navigation basse ne doit jamais masquer un élément atteint au clavier. */
+    scroll-padding-bottom: 5.5rem;
+  }
+  @media (min-width: 64rem) {
+    html {
+      scroll-padding-bottom: 0;
+    }
   }
   body {
     background: #ffffff;

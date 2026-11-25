@@ -5,8 +5,10 @@
 Plateforme numérique de l'ONG AFA (Côte d'Ivoire) : filière manioc, vivrier ivoirien, producteurs,
 femmes rurales et territoires.
 
-**État : Phase 1 terminée** (architecture, base de données, authentification, rôles). Le site n'est pas
-encore ouvert au public.
+**État : phases 1 à 4 terminées** (base de données, design system, site institutionnel, carte nationale).
+Le site n'est pas encore ouvert au public.
+
+Limites administratives de la carte : geoBoundaries (Banque mondiale), licence CC BY 4.0.
 
 ## Démarrer
 

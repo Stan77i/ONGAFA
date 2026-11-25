@@ -91,7 +91,7 @@ Catalogue complet : `supabase/migrations/20261125000400_seed_roles_permissions.s
 1. **Architecture, base, authentification, rôles** ← terminé
 2. **Design system** ← terminé (voir `docs/DESIGN.md`)
 3. **Site institutionnel** ← terminé (accueil, L'ONG AFA, Nos actions, Manioc, Rejoindre AFA)
-4. Carte nationale
+4. **Carte nationale** ← terminé (`/carte`, aperçu sur l'accueil ; N'Zi implantée, Nawa bientôt)
 5. Veille et contenus
 6. Espace producteurs
 7. Communauté

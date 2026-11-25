@@ -158,7 +158,7 @@ select tests.assert_fails(
     values ('00000000-0000-0000-0000-00000000000a', 'moderator', auth.uid())$$,
   'éditeur : ne peut pas attribuer de rôles');
 select tests.assert_fails(
-  $$insert into public.locations (level, name, slug) values ('region', 'Nawa', 'nawa')$$,
+  $$insert into public.locations (level, name, slug) values ('region', 'Région test', 'region-test-editeur')$$,
   'éditeur : ne peut pas gérer les territoires');
 reset role;
 
@@ -178,20 +178,20 @@ select tests.assert(exists (select 1 from public.admin_audit_logs where action =
 set role authenticated;
 select tests.login('00000000-0000-0000-0000-0000000000ad');
 insert into public.locations (id, level, name, slug) values
-  ('10000000-0000-0000-0000-000000000001', 'region', 'Nawa', 'nawa');
+  ('10000000-0000-0000-0000-000000000001', 'region', 'Région test', 'region-test');
 insert into public.locations (id, parent_id, level, name, slug) values
-  ('10000000-0000-0000-0000-000000000002', '10000000-0000-0000-0000-000000000001', 'department', 'Soubré', 'soubre');
+  ('10000000-0000-0000-0000-000000000002', '10000000-0000-0000-0000-000000000001', 'department', 'Département test', 'dept-test');
 insert into public.locations (id, parent_id, level, name, slug, centroid) values
-  ('10000000-0000-0000-0000-000000000003', '10000000-0000-0000-0000-000000000002', 'city', 'Soubré', 'soubre',
+  ('10000000-0000-0000-0000-000000000003', '10000000-0000-0000-0000-000000000002', 'city', 'Ville test', 'ville-test',
    extensions.st_setsrid(extensions.st_makepoint(-6.59, 5.78), 4326));
-select tests.assert((select path_slug from public.locations where id = '10000000-0000-0000-0000-000000000003') = 'nawa/soubre/soubre',
+select tests.assert((select path_slug from public.locations where id = '10000000-0000-0000-0000-000000000003') = 'region-test/dept-test/ville-test',
   'territoire : chemin d''URL calculé automatiquement');
 select tests.assert_fails(
   $$insert into public.locations (parent_id, level, name, slug)
     values ('10000000-0000-0000-0000-000000000003', 'region', 'Invalide', 'invalide')$$,
   'territoire : une région ne peut pas être sous une ville');
-update public.locations set slug = 'region-nawa' where id = '10000000-0000-0000-0000-000000000001';
-select tests.assert((select path_slug from public.locations where id = '10000000-0000-0000-0000-000000000003') = 'region-nawa/soubre/soubre',
+update public.locations set slug = 'region-renommee' where id = '10000000-0000-0000-0000-000000000001';
+select tests.assert((select path_slug from public.locations where id = '10000000-0000-0000-0000-000000000003') = 'region-renommee/dept-test/ville-test',
   'territoire : renommer une région met à jour les chemins de ses descendants');
 insert into public.afa_locations (location_id, status, since_date)
   values ('10000000-0000-0000-0000-000000000003', 'active', null);
@@ -199,8 +199,8 @@ reset role;
 
 set role anon;
 select tests.login(null);
-select tests.assert((select count(*) from public.locations) = 3, 'visiteur : voit les territoires actifs');
-select tests.assert((select count(*) from public.afa_map_points) = 0, 'carte : une implantation non publiée est invisible');
+select tests.assert((select count(*) from public.locations where path_slug like 'region-renommee%') = 3, 'visiteur : voit les territoires actifs');
+select tests.assert((select count(*) from public.afa_map_points where path_slug like 'region-renommee%') = 0, 'carte : une implantation non publiée est invisible');
 select tests.assert_fails($$insert into public.locations (level, name, slug) values ('region', 'X', 'x')$$,
   'visiteur : ne peut pas créer de territoire');
 reset role;
@@ -212,11 +212,21 @@ reset role;
 
 set role anon;
 select tests.login(null);
-select tests.assert((select count(*) from public.afa_map_points where status = 'active' and point is not null) = 1,
+select tests.assert((select count(*) from public.afa_map_points where path_slug like 'region-renommee%' and status = 'active' and point is not null) = 1,
   'carte : implantation publiée visible avec un point (repli sur le centre du territoire)');
 reset role;
 
 select tests.assert(exists (select 1 from public.admin_audit_logs where entity_type = 'afa_locations' and action = 'update'),
   'audit : la publication d''une implantation est tracée');
 
-\echo '✔ Tous les tests de sécurité de la Phase 1 sont passés.'
+
+
+-- ───────── Données réelles de la carte (migration 0006) ─────────
+set role anon;
+select tests.login(null);
+select tests.assert((select status from public.afa_map_points where path_slug = 'nzi') = 'active',
+  'carte : le N''Zi est publié comme « AFA implantée »');
+select tests.assert((select status from public.afa_map_points where path_slug = 'nawa') = 'upcoming',
+  'carte : la Nawa est publiée comme « AFA bientôt »');
+reset role;
+\echo '✔ Tous les tests de sécurité sont passés.'
