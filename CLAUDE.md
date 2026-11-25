@@ -22,7 +22,8 @@ Utile avant esthétique, vivant avant institutionnel, évolutif avant terminé.
 
 - **Rien d'inventé** : ni prix, ni chiffre, ni témoignage, ni partenaire, ni réalisation, ni source.
   Une donnée agricole n'est jamais présentée comme actuelle sans date et vérification.
-- **Données personnelles** : le téléphone d'un producteur n'est jamais public par défaut ; position
+- **Données personnelles** : le téléphone d'un producteur n'est jamais public par défaut (seuls lui et
+  l'administrateur AFA le voient, pour le contacter) ; position
   limitée à village ou ville ; consentement versionné ; séparation stricte public / privé.
 - **Sécurité en base** : RLS activée sur toute table, accès accordé explicitement. Aucun rôle élevé
   attribuable par l'application ou par l'inscription. Toute nouvelle table a ses tests dans

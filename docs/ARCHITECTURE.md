@@ -70,18 +70,18 @@ Tronc commun des contenus : `slug` unique, `status` (`draft` → `review` → `p
 
 ## Rôles et permissions
 
-| Rôle                | Permissions principales                                            |
-| ------------------- | ------------------------------------------------------------------ |
-| (visiteur)          | Aucune : lecture du contenu public                                 |
-| `member`            | `create_post`, `comment`                                           |
-| `producer`          | `create_post`, `comment` (+ son profil producteur, par propriété)  |
-| `partner`           | `comment`                                                          |
-| `moderator`         | modération, signalements, sanctions, témoignages                   |
-| `editor`            | articles, veille, ressources, pages, agenda, opportunités          |
-| `data_manager`      | prix (saisie, vérification), sources de veille                     |
-| `territorial_agent` | producteurs, agenda, demandes, sur sa zone (effectif en phase 6)   |
-| `privacy_officer`   | `view_producer_private`, `export_producer_data`, `view_audit_logs` |
-| `admin`             | tout, **sauf** les deux permissions de données personnelles        |
+| Rôle                | Permissions principales                                                                           |
+| ------------------- | ------------------------------------------------------------------------------------------------- |
+| (visiteur)          | Aucune : lecture du contenu public                                                                |
+| `member`            | `create_post`, `comment`                                                                          |
+| `producer`          | `create_post`, `comment` (+ son profil producteur, par propriété)                                 |
+| `partner`           | `comment`                                                                                         |
+| `moderator`         | modération, signalements, sanctions, témoignages                                                  |
+| `editor`            | articles, veille, ressources, pages, agenda, opportunités                                         |
+| `data_manager`      | prix (saisie, vérification), sources de veille                                                    |
+| `territorial_agent` | producteurs, agenda, demandes, sur sa zone (effectif en phase 6)                                  |
+| `privacy_officer`   | `view_producer_private`, `export_producer_data`, `view_audit_logs`                                |
+| `admin`             | tout, y compris la **lecture** des coordonnées privées (décision A8) ; **sauf** l'export en masse |
 
 Catalogue complet : `supabase/migrations/20261125000400_seed_roles_permissions.sql`
 (miroir TypeScript `src/lib/auth/permissions.ts`, vérifié par test).

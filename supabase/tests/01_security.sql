@@ -53,10 +53,12 @@ select tests.assert((select display_name from public.profiles where id = '000000
                     'un nom trop court est remplacé (partie locale de l''email)');
 select tests.assert((select array_agg(role_code) from public.user_roles where user_id = '00000000-0000-0000-0000-0000000000ee') = array['member'],
                     'les métadonnées ne peuvent PAS attribuer un rôle (seul "member" à l''inscription)');
+select tests.assert(exists (
+  select 1 from public.role_permissions where role_code = 'admin' and permission_code = 'view_producer_private'),
+  'l''administrateur peut consulter les coordonnées privées (décision A8)');
 select tests.assert(not exists (
-  select 1 from public.role_permissions where role_code = 'admin'
-  and permission_code in ('view_producer_private', 'export_producer_data')),
-  'l''administrateur n''a pas d''accès par défaut aux données personnelles');
+  select 1 from public.role_permissions where role_code = 'admin' and permission_code = 'export_producer_data'),
+  'l''administrateur ne peut pas exporter en masse sans le rôle privacy_officer');
 
 -- ───────── Visiteur anonyme ─────────
 set role anon;
@@ -129,8 +131,10 @@ select tests.assert(exists (select 1 from public.admin_audit_logs
   'audit : l''attribution du rôle éditeur est tracée avec son auteur');
 select tests.assert_fails($$update public.admin_audit_logs set action = 'effacé'$$, 'audit : le journal ne peut pas être modifié');
 select tests.assert_fails($$delete from public.admin_audit_logs$$,                 'audit : le journal ne peut pas être effacé');
-select tests.assert((select count(*) from public.user_private) = 0,
-  'admin : ne voit PAS les téléphones sans le rôle privacy_officer');
+select tests.assert((select phone from public.user_private where user_id = '00000000-0000-0000-0000-00000000000a') is not null,
+  'admin : voit le téléphone d''Alice pour pouvoir la contacter');
+select tests.assert(tests.rows($$update public.user_private set phone = '0000000' where user_id = '00000000-0000-0000-0000-00000000000a'$$) = 0,
+  'admin : voit mais ne peut pas modifier le téléphone d''un membre');
 insert into public.user_roles (user_id, role_code, granted_by)
   values ('00000000-0000-0000-0000-00000000000c', 'privacy_officer', auth.uid());
 select tests.assert_fails(

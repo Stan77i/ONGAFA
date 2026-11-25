@@ -5,15 +5,16 @@ jamais par une réécriture silencieuse.
 
 ## Décidées par l'ONG AFA
 
-| #   | Décision                                                                          | Date       |
-| --- | --------------------------------------------------------------------------------- | ---------- |
-| A1  | Nom officiel : « Action des Femmes d'Afrique pour le Développement » (ONG AFA)    | 2026-11-25 |
-| A2  | Connexion par email. Téléphone facultatif, déclaratif, non vérifié                | 2026-11-25 |
-| A3  | Annuaire des producteurs réservé aux membres connectés                            | 2026-11-25 |
-| A4  | Français uniquement au départ                                                     | 2026-11-25 |
-| A5  | Modération et rédaction confiées à Claude, avec validation humaine finale par AFA | 2026-11-25 |
-| A6  | Veille automatique, sur sources validées, étiquetée « Source externe »            | 2026-11-25 |
-| A7  | Choix techniques délégués à Claude (section suivante)                             | 2026-11-25 |
+| #   | Décision                                                                                                                                                                                 | Date       |
+| --- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------- |
+| A1  | Nom officiel : « Action des Femmes d'Afrique pour le Développement » (ONG AFA)                                                                                                           | 2026-11-25 |
+| A2  | Connexion par email. Téléphone facultatif, déclaratif, non vérifié                                                                                                                       | 2026-11-25 |
+| A3  | Annuaire des producteurs réservé aux membres connectés                                                                                                                                   | 2026-11-25 |
+| A4  | Français uniquement au départ                                                                                                                                                            | 2026-11-25 |
+| A5  | Modération et rédaction confiées à Claude, avec validation humaine finale par AFA                                                                                                        | 2026-11-25 |
+| A6  | Veille automatique, sur sources validées, étiquetée « Source externe »                                                                                                                   | 2026-11-25 |
+| A7  | Choix techniques délégués à Claude (section suivante)                                                                                                                                    | 2026-11-25 |
+| A8  | L'administrateur (le responsable de l'ONG) voit les coordonnées privées des membres pour pouvoir les contacter. L'export en masse reste réservé au rôle « privacy_officer ». Remplace T5 | 2026-11-25 |
 
 ## Décidées par Claude (délégation A7)
 
@@ -23,7 +24,7 @@ jamais par une réécriture silencieuse.
 | T2  | **Supabase** (Postgres, Auth, Storage, RLS)                                                                                                              | Un seul service pour données, comptes, fichiers et règles d'accès ; Postgres standard (pas d'enfermement fort)    |
 | T3  | **Sécurité dans la base (RLS)**, l'interface ne fait que refléter                                                                                        | Une erreur d'interface ne peut pas exposer de données                                                             |
 | T4  | **Rôles = ensembles de permissions** ; vérification par `has_permission()`                                                                               | Ajouter un rôle ne demande pas de modifier le code                                                                |
-| T5  | L'administrateur **n'a pas** accès aux données personnelles ; rôle explicite `privacy_officer`                                                           | Principe du moindre privilège ; limite les fuites                                                                 |
+| T5  | ~~L'administrateur n'a pas accès aux données personnelles~~ : **remplacée par A8** (l'administrateur voit, n'exporte pas)                                | Décision de l'ONG : contacter les producteurs est le but                                                          |
 | T6  | Premier administrateur créé **hors application** (`supabase/bootstrap_admin.sql`)                                                                        | Aucun chemin applicatif vers un droit élevé                                                                       |
 | T7  | **Un seul arbre de territoires** (`locations`), chemins d'URL calculés                                                                                   | Carte et pages territoriales pilotées par les données, jamais codées en dur                                       |
 | T8  | **PostGIS** pour la géographie ; **MapLibre GL** pour la carte (phase 4)                                                                                 | Standard ouvert, pas de clé propriétaire obligatoire                                                              |
@@ -43,7 +44,7 @@ jamais par une réécriture silencieuse.
 
 - Projet Supabase de test (séparé de la production) et passage au plan payant avant l'ouverture (sauvegardes, pas de mise en pause).
 - Nom de domaine et adresse d'envoi des emails.
-- Désignation des deux premiers administrateurs et de la personne de validation finale (modération).
+- Adresse email du compte administrateur (le responsable de l'ONG) ; désignation d'un second administrateur de secours et de la personne de validation finale (modération).
 - Liste des sources de veille à valider ; sources de prix fiables à identifier.
 - Critères de « producteur référencé » et du badge « vérifié par AFA ».
 - Relecture juridique (loi ivoirienne n° 2013-450, ARTCI) des textes de consentement.
