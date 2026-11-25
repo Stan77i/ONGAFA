@@ -2,12 +2,15 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { House, Map, MessagesSquare, Newspaper, UserRound } from "lucide-react";
+import { House, Landmark, Layers, Map, MessagesSquare, Newspaper, Sprout, UserRound } from "lucide-react";
 import { mobileTabs } from "@/config/navigation";
 import { cn } from "@/lib/cn";
 
 const icons = {
   home: House,
+  landmark: Landmark,
+  layers: Layers,
+  sprout: Sprout,
   newspaper: Newspaper,
   map: Map,
   messages: MessagesSquare,
@@ -25,7 +28,10 @@ export function MobileTabBar() {
       aria-label="Navigation rapide"
       className="fixed inset-x-0 bottom-0 z-40 border-t border-rule bg-white/95 pb-[env(safe-area-inset-bottom)] backdrop-blur lg:hidden"
     >
-      <ul className="mx-auto grid h-[4.5rem] max-w-lg grid-cols-5">
+      <ul
+        className="mx-auto grid h-[4.5rem] max-w-lg"
+        style={{ gridTemplateColumns: `repeat(${mobileTabs.length}, minmax(0, 1fr))` }}
+      >
         {mobileTabs.map((tab) => {
           const Icon = icons[tab.icon];
           const active = tab.href === "/" ? pathname === "/" : pathname.startsWith(tab.href);

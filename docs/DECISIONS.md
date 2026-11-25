@@ -17,6 +17,8 @@ jamais par une réécriture silencieuse.
 | A8  | L'administrateur (le responsable de l'ONG) voit les coordonnées privées des membres pour pouvoir les contacter. L'export en masse reste réservé au rôle « privacy_officer ». Remplace T5 | 2026-11-25 |
 | A9  | Design « Terre et trait » validé : palette, Fraunces + Source Sans 3, barre de navigation basse sur mobile (voir docs/DESIGN.md)                                                         | 2026-11-25 |
 | A10 | Nom confirmé après lecture du document de présentation : la version du **logo** fait foi (« Action des Femmes d'Afrique pour le Développement »)                                         | 2026-11-25 |
+| A11 | Toutes les informations du document de présentation sont utilisées. Résultats sans date précise : affichés « Bilan déclaré depuis 2016 · Source : ONG AFA »                              | 2026-11-25 |
+| A12 | La présidente (L'Honorable N'ZI N'DA AFFOUÉ Éliane) apparaît sur le site ; photo fournie plus tard                                                                                       | 2026-11-25 |
 
 ## Décidées par Claude (délégation A7)
 
@@ -41,6 +43,8 @@ jamais par une réécriture silencieuse.
 | T17 | Statistiques sans cookies (Plausible ou Umami) + compteurs agrégés                                                                                       | Pas de bandeau cookies, données personnelles minimales                                                            |
 | T18 | API expérimentales de Next (`forbidden()`, `unauthorized()`) **non utilisées**                                                                           | La sécurité ne repose pas sur une API instable                                                                    |
 | T19 | Veille : résumé par IA **non activé** tant que le budget d'API n'est pas décidé                                                                          | Coût et risque d'erreur ; extraits fournis par la source en attendant                                             |
+| T20 | Contenus institutionnels dans `src/content/afa.ts` (fichier typé) jusqu'au back-office (phase 9)                                                         | Peu de contenus, modifiés rarement ; évite des tables vides et un back-office prématuré                           |
+| T21 | Liens de navigation masqués tant que leur page n'existe pas (`available` dans `src/config/navigation.ts`)                                                | Aucun lien cassé ; activer à chaque phase                                                                         |
 
 ## En attente (exigent une action ou un accord de l'ONG AFA)
 

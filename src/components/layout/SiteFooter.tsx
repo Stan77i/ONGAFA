@@ -91,15 +91,17 @@ export function SiteFooter({ newsletter }: { newsletter?: ReactNode }) {
           <p>
             © {site.shortName} — {site.name}
           </p>
-          <ul className="flex flex-wrap gap-x-5 gap-y-2">
-            {legalNav.map((l) => (
-              <li key={l.href}>
-                <Link href={l.href} className="inline-block py-2.5 hover:text-white hover:underline">
-                  {l.label}
-                </Link>
-              </li>
-            ))}
-          </ul>
+          {legalNav.length > 0 && (
+            <ul className="flex flex-wrap gap-x-5 gap-y-2">
+              {legalNav.map((l) => (
+                <li key={l.href}>
+                  <Link href={l.href} className="inline-block py-2.5 hover:text-white hover:underline">
+                    {l.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          )}
         </div>
       </div>
     </footer>

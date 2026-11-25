@@ -5,7 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { Menu, Search, X } from "lucide-react";
-import { mainNav } from "@/config/navigation";
+import { links, mainNav } from "@/config/navigation";
 import { site } from "@/config/site";
 import { cn } from "@/lib/cn";
 import { Button } from "@/components/ui/Button";
@@ -69,14 +69,16 @@ export function SiteHeader() {
         </nav>
 
         <div className="ml-auto flex items-center gap-1 sm:gap-2">
-          <Link
-            href="/recherche"
-            className="grid size-12 place-items-center rounded-full text-forest hover:bg-sand"
-            aria-label="Rechercher"
-          >
-            <Search className="size-5" aria-hidden="true" />
-          </Link>
-          <Button href="/rejoindre-afa" variant="accent" className="px-4 sm:px-6">
+          {links.search && (
+            <Link
+              href={links.search}
+              className="grid size-12 place-items-center rounded-full text-forest hover:bg-sand"
+              aria-label="Rechercher"
+            >
+              <Search className="size-5" aria-hidden="true" />
+            </Link>
+          )}
+          <Button href={links.join} variant="accent" className="px-4 sm:px-6">
             <span>
               Rejoindre<span className="hidden sm:inline"> AFA</span>
             </span>
@@ -127,21 +129,18 @@ export function SiteHeader() {
           </ul>
           <div className="mt-8 space-y-3">
             <Button
-              href="/producteurs/inscription"
+              href={links.producerSignup ?? links.join}
               variant="primary"
               className="w-full"
               onClick={() => setOpen(false)}
             >
               Je suis producteur / productrice
             </Button>
-            <Button
-              href="/question-a-afa"
-              variant="secondary"
-              className="w-full"
-              onClick={() => setOpen(false)}
-            >
-              Poser une question à AFA
-            </Button>
+            {links.ask && (
+              <Button href={links.ask} variant="secondary" className="w-full" onClick={() => setOpen(false)}>
+                Poser une question à AFA
+              </Button>
+            )}
           </div>
         </nav>
       </dialog>
