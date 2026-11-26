@@ -54,6 +54,7 @@ PGHOST=/var/run/postgresql pnpm test:db
   composants de `src/components/` plutôt qu'en recréer ; démonstration sur `/design-system` en développement.
 - Architecture, modèle de données, rôles, feuille de route : `docs/ARCHITECTURE.md`.
 - Comptes et emails (réglages Supabase) : `docs/COMPTES.md`.
+- Modération de la communauté (règles automatiques, décisions) : `docs/MODERATION.md`.
 - Formulaires : `useFormSubmit` (composants `forms/FormParts`) pour tout formulaire à étapes ou à listes
   déroulantes ; toute lecture de session passe par `getSessionUser()` sous `<Suspense>`.
 - Veille automatique (sources, collecte, validation) : `docs/VEILLE.md`. La fonction Supabase

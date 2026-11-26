@@ -6,17 +6,18 @@ type NavItem = { href: string; label: string; available: boolean };
 
 const filterAvailable = <T extends NavItem>(items: readonly T[]) => items.filter((i) => i.available);
 
+/** `header` : affiché dans l'en-tête sur ordinateur (les autres restent dans le menu et le pied de page). */
 const allMainNav = [
-  { href: "/a-propos", label: "L'ONG AFA", available: true },
-  { href: "/actions", label: "Nos actions", available: true },
-  { href: "/manioc", label: "Manioc", available: true },
-  { href: "/vivrier", label: "Vivrier", available: false }, // quand des contenus sourcés par culture existeront
-  { href: "/veille", label: "Veille", available: true },
-  { href: "/prix", label: "Prix", available: true },
-  { href: "/carte", label: "Carte", available: true },
-  { href: "/producteurs", label: "Producteurs", available: true },
-  { href: "/communaute", label: "Communauté", available: false }, // phase 7
-] as const satisfies readonly NavItem[];
+  { href: "/a-propos", label: "L'ONG", available: true, header: true },
+  { href: "/actions", label: "Nos actions", available: true, header: false },
+  { href: "/manioc", label: "Manioc", available: true, header: true },
+  { href: "/vivrier", label: "Vivrier", available: false, header: true }, // quand des contenus sourcés par culture existeront
+  { href: "/veille", label: "Veille", available: true, header: true },
+  { href: "/prix", label: "Prix", available: true, header: true },
+  { href: "/carte", label: "Carte", available: true, header: true },
+  { href: "/producteurs", label: "Producteurs", available: true, header: true },
+  { href: "/communaute", label: "Communauté", available: true, header: true },
+] as const satisfies readonly (NavItem & { header: boolean })[];
 
 export const mainNav = filterAvailable(allMainNav);
 
@@ -24,10 +25,10 @@ export const mainNav = filterAvailable(allMainNav);
 const allMobileTabs = [
   { href: "/", label: "Accueil", icon: "home", available: true },
   { href: "/veille", label: "Veille", icon: "newspaper", available: true },
+  { href: "/communaute", label: "Communauté", icon: "messages", available: true },
   { href: "/carte", label: "Carte", icon: "map", available: true },
-  { href: "/manioc", label: "Manioc", icon: "sprout", available: true },
-  { href: "/communaute", label: "Communauté", icon: "messages", available: false },
   { href: "/compte", label: "Compte", icon: "user", available: true },
+  { href: "/manioc", label: "Manioc", icon: "sprout", available: true },
   { href: "/a-propos", label: "L'ONG", icon: "landmark", available: true },
   { href: "/actions", label: "Actions", icon: "layers", available: true },
 ] as const satisfies readonly (NavItem & { icon: string })[];
@@ -64,7 +65,9 @@ const allFooterNav: { title: string; links: NavItem[] }[] = [
       { href: "/rejoindre-afa", label: "Rejoindre AFA", available: true },
       { href: "/producteurs/inscription", label: "Inscription producteur", available: true },
       { href: "/producteurs", label: "Annuaire des producteurs", available: true },
-      { href: "/communaute", label: "Communauté", available: false },
+      { href: "/communaute", label: "Communauté", available: true },
+      { href: "/temoignages", label: "Témoignages", available: true },
+      { href: "/charte-communaute", label: "Charte de la communauté", available: true },
       { href: "/question-a-afa", label: "Poser une question à AFA", available: true },
     ],
   },

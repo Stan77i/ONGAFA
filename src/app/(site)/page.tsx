@@ -11,6 +11,9 @@ import { NationalMap } from "@/components/map/NationalMap";
 import { getAfaMapPoints } from "@/lib/map/data";
 import { NewsListItem } from "@/components/content/NewsListItem";
 import { getNews } from "@/lib/content/data";
+import { getTestimonials, listPosts } from "@/lib/community/data";
+import { DiscussionCard } from "@/components/content/DiscussionCard";
+import { TestimonialQuote } from "@/components/content/TestimonialQuote";
 import { Button } from "@/components/ui/Button";
 import { links } from "@/config/navigation";
 import { site } from "@/config/site";
@@ -22,7 +25,14 @@ import { cassava, domains, president, results } from "@/content/afa";
  * communauté, agenda, témoignages et partenaires s'ajouteront à leur phase.
  */
 export default async function HomePage() {
-  const [points, news] = await Promise.all([getAfaMapPoints(), getNews({ page: 1 })]);
+  const [points, news, forum, testimonials] = await Promise.all([
+    getAfaMapPoints(),
+    getNews({ page: 1 }),
+    listPosts({ page: 1 }),
+    getTestimonials(1),
+  ]);
+  const latestPosts = forum.items.slice(0, 3);
+  const testimonial = testimonials[0];
   const latestNews = news.items.slice(0, 4);
 
   return (
@@ -245,6 +255,63 @@ export default async function HomePage() {
               </li>
             ))}
           </ul>
+        </Section>
+      )}
+
+      {/* G — Communauté (masquée tant qu'aucune discussion n'est publiée) */}
+      {latestPosts.length > 0 && (
+        <Section tone="sand" labelledBy="t-communaute">
+          <SectionHeading
+            id="t-communaute"
+            eyebrow="Communauté"
+            title="Les dernières discussions"
+            intro="Producteurs, transformatrices, commerçantes et équipe AFA s'entraident."
+            action={
+              <Button href="/communaute/nouveau" variant="secondary">
+                Poser une question
+              </Button>
+            }
+          />
+          <ul className="space-y-3">
+            {latestPosts.map((p) => (
+              <li key={p.id}>
+                <DiscussionCard
+                  discussion={{
+                    href: `/communaute/${p.id}`,
+                    question: p.title,
+                    authorName: p.authorName,
+                    place: p.region ?? undefined,
+                    crop: p.crop?.name,
+                    replies: p.replyCount,
+                    askedAt: p.createdAt,
+                  }}
+                />
+              </li>
+            ))}
+          </ul>
+        </Section>
+      )}
+
+      {/* J — Témoignage (masqué tant qu'aucun témoignage n'est validé) */}
+      {testimonial && (
+        <Section labelledBy="t-temoignage">
+          <h2 id="t-temoignage" className="sr-only">
+            La parole aux producteurs
+          </h2>
+          <TestimonialQuote
+            testimonial={{
+              quote: testimonial.quote,
+              name: testimonial.name,
+              place: testimonial.place,
+              activity: testimonial.activity,
+              date: testimonial.publishedAt,
+            }}
+          />
+          <div className="mt-8 text-center">
+            <Button href="/temoignages" variant="ghost">
+              Tous les témoignages
+            </Button>
+          </div>
         </Section>
       )}
 

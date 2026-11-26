@@ -58,27 +58,30 @@ export function SiteHeaderView({ account, pathname = "" }: { account?: ReactNode
           <span className="font-display text-lg leading-tight font-semibold text-forest">ONG AFA</span>
         </Link>
 
-        <nav aria-label="Navigation principale" className="ml-6 hidden lg:block">
+        <nav aria-label="Navigation principale" className="ml-4 hidden xl:block">
           <ul className="flex items-center gap-1">
-            {mainNav.map((item) => (
-              <li key={item.href}>
-                <Link
-                  href={item.href}
-                  aria-current={isActive(pathname, item.href) ? "page" : undefined}
-                  className={cn(
-                    "inline-flex min-h-11 items-center rounded-full px-3 font-semibold text-ink-soft transition-colors hover:bg-sand hover:text-forest",
-                    "aria-[current=page]:bg-sand aria-[current=page]:text-forest",
-                  )}
-                >
-                  {item.label}
-                </Link>
-              </li>
-            ))}
+            {mainNav
+              .filter((item) => item.header)
+              .map((item) => (
+                <li key={item.href}>
+                  <Link
+                    href={item.href}
+                    aria-current={isActive(pathname, item.href) ? "page" : undefined}
+                    className={cn(
+                      "whitespace-nowrap",
+                      "inline-flex min-h-11 items-center rounded-full px-3 font-semibold text-ink-soft transition-colors hover:bg-sand hover:text-forest",
+                      "aria-[current=page]:bg-sand aria-[current=page]:text-forest",
+                    )}
+                  >
+                    {item.label}
+                  </Link>
+                </li>
+              ))}
           </ul>
         </nav>
 
         <div className="ml-auto flex items-center gap-1 sm:gap-2">
-          {account && <div className="hidden lg:block">{account}</div>}
+          {account && <div className="hidden xl:block">{account}</div>}
           {links.search && (
             <Link
               href={links.search}
@@ -96,7 +99,7 @@ export function SiteHeaderView({ account, pathname = "" }: { account?: ReactNode
           <button
             type="button"
             onClick={() => setOpen(true)}
-            className="grid size-12 place-items-center rounded-full text-forest hover:bg-sand lg:hidden"
+            className="grid size-12 place-items-center rounded-full text-forest hover:bg-sand xl:hidden"
             aria-label="Ouvrir le menu"
             aria-haspopup="dialog"
           >
@@ -150,6 +153,12 @@ export function SiteHeaderView({ account, pathname = "" }: { account?: ReactNode
               <Button href={links.ask} variant="secondary" className="w-full" onClick={() => setOpen(false)}>
                 Poser une question à AFA
               </Button>
+            )}
+            {/* Compte : toujours accessible depuis le menu (y compris entre 1024 et 1279 px). */}
+            {account && (
+              <div className="flex justify-center pt-2" onClick={() => setOpen(false)}>
+                {account}
+              </div>
             )}
           </div>
         </nav>
