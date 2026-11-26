@@ -1,4 +1,3 @@
-import { cacheLife, cacheTag } from "next/cache";
 import type { AfaStatus } from "@/components/map/StatusPill";
 import { createPublicClient } from "@/lib/supabase/public";
 
@@ -19,13 +18,9 @@ const order: Record<AfaStatus, number> = { active: 0, in_progress: 1, upcoming: 
 
 /**
  * Implantations publiées (vue afa_map_points, lisible par les visiteurs).
- * Mise en cache quelques heures ; en cas d'erreur ou sans configuration : liste vide (la carte reste affichée).
+ * En cas d'erreur ou sans configuration : liste vide (la carte reste affichée).
  */
 export async function getAfaMapPoints(): Promise<AfaMapPoint[]> {
-  "use cache";
-  cacheLife("hours");
-  cacheTag(AFA_MAP_TAG);
-
   const supabase = createPublicClient();
   if (!supabase) return [];
   const { data, error } = await supabase

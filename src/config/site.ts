@@ -1,3 +1,6 @@
+/** Préfixe d'adresse ("/ONGAFA" sur GitHub Pages, vide ailleurs) : next/image ne l'ajoute pas tout seul. */
+const BASE_PATH = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
+
 /** Identité officielle de l'ONG. Source unique : ne pas réécrire ces valeurs ailleurs. */
 export const site = {
   name: "Action des Femmes d'Afrique pour le Développement",
@@ -23,7 +26,7 @@ export const site = {
   /** Réseaux sociaux officiels : à compléter avec les vraies adresses. */
   social: [] as ReadonlyArray<{ label: string; href: string }>,
   logos: {
-    seal: "/brand/logo-sceau-ong-afa.webp",
-    symbol: "/brand/symbole-afa.webp",
+    seal: `${BASE_PATH}/brand/logo-sceau-ong-afa.webp`,
+    symbol: `${BASE_PATH}/brand/symbole-afa.webp`,
   },
 } as const;

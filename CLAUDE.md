@@ -53,7 +53,8 @@ PGHOST=/var/run/postgresql pnpm test:db
 - Design system (couleurs, contrastes, composants, règles) : `docs/DESIGN.md`. Réutiliser les
   composants de `src/components/` plutôt qu'en recréer ; démonstration sur `/design-system` en développement.
 - Architecture, modèle de données, rôles, feuille de route : `docs/ARCHITECTURE.md`.
-- Mise en ligne (Vercel, pas GitHub Pages) : `docs/DEPLOIEMENT.md`.
+- Mise en ligne : site **statique sur GitHub Pages** (`pages.yml`, mode `GITHUB_PAGES=true`) ; comptes et
+  communauté rangés dans `_reporte/` jusqu'au signal de l'ONG ; Vercel ensuite. Voir `docs/DEPLOIEMENT.md`.
 - Comptes et emails (réglages Supabase) : `docs/COMPTES.md`.
 - Modération de la communauté (règles automatiques, décisions) : `docs/MODERATION.md`.
 - Formulaires : `useFormSubmit` (composants `forms/FormParts`) pour tout formulaire à étapes ou à listes

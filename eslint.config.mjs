@@ -16,6 +16,8 @@ const eslintConfig = defineConfig([
     ".claude/**",
     // Fonctions Supabase (Deno) : vérifiées à leur déploiement.
     "supabase/functions/**/index.ts",
+    // Fonctions mises de côté (comptes, communauté) : revérifiées à leur réactivation.
+    "src/**/_reporte/**",
   ]),
 ]);
 

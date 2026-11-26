@@ -15,8 +15,8 @@ const allMainNav = [
   { href: "/veille", label: "Veille", available: true, header: true },
   { href: "/prix", label: "Prix", available: true, header: true },
   { href: "/carte", label: "Carte", available: true, header: true },
-  { href: "/producteurs", label: "Producteurs", available: true, header: true },
-  { href: "/communaute", label: "Communauté", available: true, header: true },
+  { href: "/producteurs", label: "Producteurs", available: false, header: true }, // mis de côté (comptes)
+  { href: "/communaute", label: "Communauté", available: false, header: true }, // mis de côté (comptes)
 ] as const satisfies readonly (NavItem & { header: boolean })[];
 
 export const mainNav = filterAvailable(allMainNav);
@@ -25,9 +25,9 @@ export const mainNav = filterAvailable(allMainNav);
 const allMobileTabs = [
   { href: "/", label: "Accueil", icon: "home", available: true },
   { href: "/veille", label: "Veille", icon: "newspaper", available: true },
-  { href: "/communaute", label: "Communauté", icon: "messages", available: true },
+  { href: "/communaute", label: "Communauté", icon: "messages", available: false }, // mis de côté
   { href: "/carte", label: "Carte", icon: "map", available: true },
-  { href: "/compte", label: "Compte", icon: "user", available: true },
+  { href: "/compte", label: "Compte", icon: "user", available: false }, // mis de côté
   { href: "/manioc", label: "Manioc", icon: "sprout", available: true },
   { href: "/a-propos", label: "L'ONG", icon: "landmark", available: true },
   { href: "/actions", label: "Actions", icon: "layers", available: true },
@@ -63,12 +63,12 @@ const allFooterNav: { title: string; links: NavItem[] }[] = [
     title: "Participer",
     links: [
       { href: "/rejoindre-afa", label: "Rejoindre AFA", available: true },
-      { href: "/producteurs/inscription", label: "Inscription producteur", available: true },
-      { href: "/producteurs", label: "Annuaire des producteurs", available: true },
-      { href: "/communaute", label: "Communauté", available: true },
-      { href: "/temoignages", label: "Témoignages", available: true },
-      { href: "/charte-communaute", label: "Charte de la communauté", available: true },
-      { href: "/question-a-afa", label: "Poser une question à AFA", available: true },
+      { href: "/producteurs/inscription", label: "Inscription producteur", available: false },
+      { href: "/producteurs", label: "Annuaire des producteurs", available: false },
+      { href: "/communaute", label: "Communauté", available: false },
+      { href: "/temoignages", label: "Témoignages", available: false },
+      { href: "/charte-communaute", label: "Charte de la communauté", available: false },
+      { href: "/question-a-afa", label: "Poser une question à AFA", available: false },
     ],
   },
 ];
@@ -77,7 +77,7 @@ export const footerNav = allFooterNav.map((g) => ({ title: g.title, links: filte
 
 const allLegalNav = [
   { href: "/mentions-legales", label: "Mentions légales", available: false }, // avant l'ouverture publique
-  { href: "/confidentialite", label: "Confidentialité", available: true },
+  { href: "/confidentialite", label: "Confidentialité", available: false }, // avec les comptes
   { href: "/accessibilite", label: "Accessibilité", available: false },
 ] as const;
 
@@ -86,7 +86,7 @@ export const legalNav = filterAvailable(allLegalNav);
 /** Liens de bouton visibles seulement si la page existe. */
 export const links = {
   join: "/rejoindre-afa",
-  producerSignup: "/producteurs/inscription" as string | null,
-  ask: "/question-a-afa" as string | null,
+  producerSignup: null as string | null, // mis de côté (comptes) : "/producteurs/inscription"
+  ask: null as string | null, // mis de côté (formulaires) : "/question-a-afa"
   search: null as string | null, // recherche globale : phase ultérieure
 };

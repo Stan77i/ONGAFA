@@ -19,6 +19,7 @@ jamais par une réécriture silencieuse.
 | A10 | Nom confirmé après lecture du document de présentation : la version du **logo** fait foi (« Action des Femmes d'Afrique pour le Développement »)                                         | 2026-11-25 |
 | A11 | Toutes les informations du document de présentation sont utilisées. Résultats sans date précise : affichés « Bilan déclaré depuis 2016 · Source : ONG AFA »                              | 2026-11-25 |
 | A12 | La présidente (L'Honorable N'ZI N'DA AFFOUÉ Éliane) apparaît sur le site ; photo fournie plus tard                                                                                       | 2026-11-25 |
+| A13 | Site simple et statique publié sur GitHub Pages ; comptes, administration et communauté mis de côté jusqu'au signal de l'ONG ; le design sera repris dans Claude Design                  | 2026-11-26 |
 
 ## Décidées par Claude (délégation A7)
 
@@ -61,6 +62,8 @@ jamais par une réécriture silencieuse.
 | T35 | Forum lisible par tous (visiteurs compris), écriture réservée aux membres ; le nom affiché du membre apparaît avec ses messages                                             | Contenu utile et indexable ; l'annuaire des producteurs, lui, reste réservé aux membres                                                     |
 | T36 | Modération : premiers contenus d'un nouveau membre et liens en attente ; masquage automatique à 3 signalements ; toutes les décisions tracées                               | Validation humaine finale (décision A5) sans bloquer les membres actifs                                                                     |
 | T37 | Navigation complète de l'en-tête à partir de 1280 px ; « Nos actions » dans le menu et le pied de page                                                                      | Les 8 rubriques débordaient à 1024 px                                                                                                       |
+| T38 | Export statique (`GITHUB_PAGES=true`) sans `cacheComponents` ; données lues à la construction, site reconstruit toutes les 6 h par `pages.yml`                              | GitHub Pages ne sert que des fichiers fixes ; la veille reste à jour sans serveur                                                           |
+| T39 | Fonctions de comptes et de communauté rangées dans `_reporte/` (non publiées, non vérifiées) plutôt que supprimées                                                          | Réactivation rapide, sans perte de travail                                                                                                  |
 
 ## En attente (exigent une action ou un accord de l'ONG AFA)
 

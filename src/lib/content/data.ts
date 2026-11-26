@@ -1,7 +1,6 @@
-import { cacheLife, cacheTag } from "next/cache";
 import { createPublicClient } from "@/lib/supabase/public";
 
-/** Étiquettes de cache à invalider depuis le back-office (phase 9). */
+/** Étiquettes de cache (réservées au mode serveur, back-office phase 9). */
 export const CONTENT_TAGS = {
   news: "veille",
   prices: "prix",
@@ -48,9 +47,6 @@ const toEntry = (r: Row): NewsEntry => ({
 
 /** Référentiels : catégories de veille et cultures (changent rarement). */
 export async function getNewsFilters(): Promise<{ categories: Option[]; crops: Option[] }> {
-  "use cache";
-  cacheLife("days");
-  cacheTag(CONTENT_TAGS.refs);
   const supabase = createPublicClient();
   if (!supabase) return { categories: [], crops: [] };
   const [cats, crops] = await Promise.all([
@@ -70,9 +66,6 @@ export async function getNews(opts: { category?: string; crop?: string; page?: n
   items: NewsEntry[];
   total: number;
 }> {
-  "use cache";
-  cacheLife("hours");
-  cacheTag(CONTENT_TAGS.news);
   const supabase = createPublicClient();
   if (!supabase) return { items: [], total: 0 };
 
@@ -98,11 +91,27 @@ export async function getNews(opts: { category?: string; crop?: string; page?: n
   return { items: (data as unknown as Row[]).map(toEntry), total: count ?? 0 };
 }
 
+/** Dernières informations publiées (site statique : filtrage fait dans le navigateur). */
+export async function getRecentNews(limit = 240): Promise<NewsEntry[]> {
+  const supabase = createPublicClient();
+  if (!supabase) return [];
+  const { data, error } = await supabase
+    .from("news_items")
+    .select(
+      "id, title, excerpt, url, published_at, news_sources(name), categories(slug, name), news_item_crops(crops(slug, name))",
+    )
+    .eq("status", "published")
+    .order("published_at", { ascending: false })
+    .limit(limit);
+  if (error) {
+    console.error("Veille : lecture impossible", error.message);
+    return [];
+  }
+  return (data as unknown as Row[]).map(toEntry);
+}
+
 /** Sources actives (transparence éditoriale). */
 export async function getNewsSources(): Promise<{ name: string; siteUrl: string }[]> {
-  "use cache";
-  cacheLife("days");
-  cacheTag(CONTENT_TAGS.refs);
   const supabase = createPublicClient();
   if (!supabase) return [];
   const { data } = await supabase
@@ -127,9 +136,6 @@ export type PriceEntry = {
 
 /** Prix VÉRIFIÉS uniquement (garanti aussi par la RLS). */
 export async function getVerifiedPrices(): Promise<PriceEntry[]> {
-  "use cache";
-  cacheLife("hours");
-  cacheTag(CONTENT_TAGS.prices);
   const supabase = createPublicClient();
   if (!supabase) return [];
   const { data, error } = await supabase
@@ -178,9 +184,6 @@ export type ResourceEntry = {
 };
 
 export async function getResources(): Promise<ResourceEntry[]> {
-  "use cache";
-  cacheLife("hours");
-  cacheTag(CONTENT_TAGS.resources);
   const supabase = createPublicClient();
   if (!supabase) return [];
   const { data, error } = await supabase

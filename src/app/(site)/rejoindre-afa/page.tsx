@@ -1,24 +1,9 @@
 import type { Metadata } from "next";
-import { Suspense } from "react";
-import {
-  ArrowRight,
-  Factory,
-  GraduationCap,
-  Handshake,
-  ShoppingBasket,
-  Sprout,
-  Store,
-  Truck,
-  Users,
-} from "lucide-react";
-import { JoinForm } from "@/components/forms/RequestForms";
+import { Factory, GraduationCap, Handshake, ShoppingBasket, Sprout, Store, Truck, Users } from "lucide-react";
 import { PageHero } from "@/components/layout/PageHero";
-import { Section, SectionHeading } from "@/components/layout/Section";
+import { Section } from "@/components/layout/Section";
+import { Alert } from "@/components/ui/Alert";
 import { Button } from "@/components/ui/Button";
-import { CardSkeleton } from "@/components/ui/Skeleton";
-import { consentTexts } from "@/config/consent";
-import { getSessionUser } from "@/lib/auth/session";
-import { getRegions } from "@/lib/producers/data";
 
 export const metadata: Metadata = {
   title: "Rejoindre AFA",
@@ -27,6 +12,7 @@ export const metadata: Metadata = {
 };
 
 const profiles = [
+  { icon: Sprout, label: "Productrice ou producteur", text: "Manioc, maïs ou autres cultures vivrières." },
   { icon: Users, label: "Coopérative", text: "Groupement de producteurs ou de productrices." },
   { icon: Store, label: "Commerçante", text: "Commercialisation des produits vivriers et dérivés." },
   {
@@ -44,17 +30,10 @@ const profiles = [
   },
 ] as const;
 
-async function Form() {
-  const [regions, user] = await Promise.all([getRegions(), getSessionUser()]);
-  return (
-    <JoinForm
-      regions={regions}
-      consentText={consentTexts.request}
-      prefill={{ email: user?.email ?? undefined }}
-    />
-  );
-}
-
+/**
+ * Version statique (site publié sur GitHub Pages) : présentation des profils, sans formulaire.
+ * Le formulaire d'adhésion et l'inscription producteur sont prêts dans `_reporte/` (réactivation : docs/DEPLOIEMENT.md).
+ */
 export default function JoinPage() {
   return (
     <>
@@ -71,59 +50,35 @@ export default function JoinPage() {
           </p>
         }
       />
-
-      <Section labelledBy="t-producteur">
-        <div className="flex flex-col gap-5 rounded-card bg-afa p-6 text-white sm:flex-row sm:items-center sm:justify-between sm:p-8">
-          <div className="flex items-start gap-4">
-            <span className="grid size-14 shrink-0 place-items-center rounded-full bg-white text-afa">
-              <Sprout className="size-7" aria-hidden="true" />
-            </span>
-            <div>
-              <h2 id="t-producteur" className="font-display text-h3 font-semibold">
-                Vous êtes productrice ou producteur ?
-              </h2>
-              <p className="text-sand">
-                Créez votre fiche dans l&apos;annuaire AFA : environ deux minutes, depuis votre téléphone.
-              </p>
-            </div>
-          </div>
-          <Button
-            href="/producteurs/inscription"
-            variant="on-dark"
-            size="lg"
-            iconAfter={<ArrowRight className="size-5" aria-hidden="true" />}
-          >
-            Créer ma fiche
+      <Section labelledBy="t-profils">
+        <Alert tone="info" title="Inscriptions en ligne bientôt ouvertes" className="mb-10">
+          L&apos;inscription en ligne sera disponible prochainement sur cette page : environ deux minutes,
+          depuis votre téléphone.
+        </Alert>
+        <h2 id="t-profils" className="mb-6 font-display text-h2 font-semibold text-forest">
+          Qui peut rejoindre le réseau ?
+        </h2>
+        <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          {profiles.map(({ icon: Icon, label, text }) => (
+            <li
+              key={label}
+              className="flex flex-col gap-3 rounded-card bg-white p-5 text-ink ring-1 ring-rule"
+            >
+              <span className="grid size-12 place-items-center rounded-full bg-leaf/12 text-afa">
+                <Icon className="size-6" aria-hidden="true" />
+              </span>
+              <p className="font-semibold text-ink">{label}</p>
+              <p className="text-meta text-ink-soft">{text}</p>
+            </li>
+          ))}
+        </ul>
+        <div className="mt-10 flex flex-col gap-3 sm:flex-row">
+          <Button href="/a-propos" variant="secondary">
+            Découvrir l&apos;ONG AFA
           </Button>
-        </div>
-      </Section>
-
-      <Section tone="sand" labelledBy="t-autres">
-        <div className="grid gap-10 lg:grid-cols-[1fr_1.1fr]">
-          <div>
-            <SectionHeading
-              id="t-autres"
-              eyebrow="Les autres acteurs"
-              title="Coopératives, commerçantes, acheteurs, partenaires…"
-              intro="Présentez-vous : l'équipe AFA vous recontacte pour voir comment travailler ensemble."
-            />
-            <ul className="grid gap-3 sm:grid-cols-2">
-              {profiles.map(({ icon: Icon, label, text }) => (
-                <li key={label} className="flex gap-3 rounded-card bg-white p-4 text-ink ring-1 ring-rule">
-                  <Icon className="mt-0.5 size-6 shrink-0 text-afa" aria-hidden="true" />
-                  <span>
-                    <span className="block font-semibold">{label}</span>
-                    <span className="block text-meta text-ink-soft">{text}</span>
-                  </span>
-                </li>
-              ))}
-            </ul>
-          </div>
-          <div className="rounded-card bg-white p-5 text-ink ring-1 ring-rule sm:p-8">
-            <Suspense fallback={<CardSkeleton />}>
-              <Form />
-            </Suspense>
-          </div>
+          <Button href="/actions" variant="ghost">
+            Nos domaines d&apos;action
+          </Button>
         </div>
       </Section>
     </>
