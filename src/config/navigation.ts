@@ -10,8 +10,9 @@ const allMainNav = [
   { href: "/a-propos", label: "L'ONG AFA", available: true },
   { href: "/actions", label: "Nos actions", available: true },
   { href: "/manioc", label: "Manioc", available: true },
-  { href: "/vivrier", label: "Vivrier", available: false }, // phase 5
-  { href: "/veille", label: "Veille", available: false }, // phase 5
+  { href: "/vivrier", label: "Vivrier", available: false }, // quand des contenus sourcés par culture existeront
+  { href: "/veille", label: "Veille", available: true },
+  { href: "/prix", label: "Prix", available: true },
   { href: "/carte", label: "Carte", available: true },
   { href: "/communaute", label: "Communauté", available: false }, // phase 7
 ] as const satisfies readonly NavItem[];
@@ -22,7 +23,7 @@ export const mainNav = filterAvailable(allMainNav);
 const allMobileTabs = [
   { href: "/", label: "Accueil", icon: "home", available: true },
   { href: "/a-propos", label: "L'ONG", icon: "landmark", available: true },
-  { href: "/veille", label: "Veille", icon: "newspaper", available: false },
+  { href: "/veille", label: "Veille", icon: "newspaper", available: true },
   { href: "/carte", label: "Carte", icon: "map", available: true },
   { href: "/manioc", label: "Manioc", icon: "sprout", available: true },
   { href: "/communaute", label: "Communauté", icon: "messages", available: false },
@@ -51,8 +52,9 @@ const allFooterNav: { title: string; links: NavItem[] }[] = [
       { href: "/manioc", label: "Espace manioc", available: true },
       { href: "/manioc#derives", label: "Dérivés du manioc", available: true },
       { href: "/vivrier", label: "Le vivrier ivoirien", available: false },
-      { href: "/prix", label: "Prix du vivrier", available: false },
-      { href: "/ressources", label: "Ressources", available: false },
+      { href: "/veille", label: "Veille du vivrier", available: true },
+      { href: "/prix", label: "Prix du vivrier", available: true },
+      { href: "/ressources", label: "Ressources", available: true },
     ],
   },
   {
@@ -81,5 +83,5 @@ export const links = {
   join: "/rejoindre-afa",
   producerSignup: null as string | null, // phase 6
   ask: null as string | null, // phase 6
-  search: null as string | null, // phase 5
+  search: null as string | null, // recherche globale : phase ultérieure
 };

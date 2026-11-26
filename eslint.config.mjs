@@ -14,6 +14,8 @@ const eslintConfig = defineConfig([
     "next-env.d.ts",
     // Skills Claude (outils tiers, hors code de l'application).
     ".claude/**",
+    // Fonctions Supabase (Deno) : vérifiées à leur déploiement.
+    "supabase/functions/**/index.ts",
   ]),
 ]);
 

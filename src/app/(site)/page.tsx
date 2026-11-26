@@ -9,6 +9,8 @@ import { Container, Section, SectionHeading } from "@/components/layout/Section"
 import { MapLegend } from "@/components/map/StatusPill";
 import { NationalMap } from "@/components/map/NationalMap";
 import { getAfaMapPoints } from "@/lib/map/data";
+import { NewsListItem } from "@/components/content/NewsListItem";
+import { getNews } from "@/lib/content/data";
 import { Button } from "@/components/ui/Button";
 import { links } from "@/config/navigation";
 import { site } from "@/config/site";
@@ -16,11 +18,12 @@ import { VALUE_CHAIN_STEPS } from "@/components/brand/ValueChain";
 import { cassava, domains, president, results } from "@/content/afa";
 
 /**
- * Accueil (phases 3-4). Sections affichées uniquement si leur contenu existe :
- * veille, communauté, agenda, témoignages et partenaires s'ajouteront à leur phase.
+ * Accueil. Sections affichées uniquement si leur contenu existe :
+ * communauté, agenda, témoignages et partenaires s'ajouteront à leur phase.
  */
 export default async function HomePage() {
-  const points = await getAfaMapPoints();
+  const [points, news] = await Promise.all([getAfaMapPoints(), getNews({ page: 1 })]);
+  const latestNews = news.items.slice(0, 4);
 
   return (
     <>
@@ -220,6 +223,30 @@ export default async function HomePage() {
           </Link>
         </div>
       </Section>
+
+      {/* E — Veille du vivrier (masquée tant qu'aucune information n'est publiée) */}
+      {latestNews.length > 0 && (
+        <Section labelledBy="t-veille">
+          <SectionHeading
+            id="t-veille"
+            eyebrow="Veille du vivrier"
+            title="Les dernières informations agricoles"
+            intro="Collectées toutes les deux heures auprès de l'AIP, du CNRA, de l'ANADER et de la presse ivoirienne. Chaque information renvoie vers sa source."
+            action={
+              <Button href="/veille" variant="secondary">
+                Toute la veille
+              </Button>
+            }
+          />
+          <ul className="grid gap-4 md:grid-cols-2">
+            {latestNews.map((it) => (
+              <li key={it.id} className="flex">
+                <NewsListItem item={it} />
+              </li>
+            ))}
+          </ul>
+        </Section>
+      )}
 
       {/* H — Manioc et transformation */}
       <Section tone="cream" labelledBy="t-manioc">

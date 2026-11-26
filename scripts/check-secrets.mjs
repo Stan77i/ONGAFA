@@ -13,8 +13,11 @@ const patterns = [
   [/-----BEGIN [A-Z ]*PRIVATE KEY-----/, "clé privée"],
   [/eyJhbGciOi[A-Za-z0-9_-]{20,}\.[A-Za-z0-9_-]{20,}\.[A-Za-z0-9_-]{10,}/, "jeton JWT"],
 ];
-// service_role est légitime dans les fichiers SQL (nom de rôle Postgres) et la documentation.
-const allowServiceRoleIn = (f) => f.endsWith(".sql") || f.endsWith(".md");
+// service_role est légitime dans les fichiers SQL (nom de rôle Postgres), la documentation et les fonctions
+// Supabase côté serveur (qui lisent la clé depuis leur environnement, jamais en dur). Les VALEURS de clés
+// (JWT, sb_secret_…) restent détectées partout.
+const allowServiceRoleIn = (f) =>
+  f.endsWith(".sql") || f.endsWith(".md") || f.startsWith("supabase/functions/");
 
 const problems = [];
 for (const f of files) {

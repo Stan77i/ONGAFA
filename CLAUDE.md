@@ -53,5 +53,7 @@ PGHOST=/var/run/postgresql pnpm test:db
 - Design system (couleurs, contrastes, composants, règles) : `docs/DESIGN.md`. Réutiliser les
   composants de `src/components/` plutôt qu'en recréer ; démonstration sur `/design-system` en développement.
 - Architecture, modèle de données, rôles, feuille de route : `docs/ARCHITECTURE.md`.
+- Veille automatique (sources, collecte, validation) : `docs/VEILLE.md`. La fonction Supabase
+  `veille-ingest` doit être redéployée après toute modification de `supabase/functions/veille-ingest/`.
 - Next.js 16 : `middleware` s'appelle désormais `proxy` (`src/proxy.ts`). Lire
   `node_modules/next/dist/docs/` avant d'utiliser une API Next.
