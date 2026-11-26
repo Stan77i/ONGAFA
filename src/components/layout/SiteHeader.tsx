@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 import { Menu, Search, X } from "lucide-react";
 import { links, mainNav } from "@/config/navigation";
 import { site } from "@/config/site";
@@ -17,9 +17,18 @@ function isActive(pathname: string, href: string) {
 /**
  * En-tête. Ordinateur : sceau, navigation complète, recherche, « Rejoindre AFA ».
  * Mobile : symbole, recherche, « Rejoindre », menu plein écran (fenêtre modale native : focus piégé, Échap).
+ * `account` : lien de compte rendu côté serveur (selon la session), affiché sur ordinateur ;
+ * sur mobile, le compte est dans la barre de navigation basse.
+ *
+ * Deux composants : `SiteHeaderView` (affichage pur, présent dans la page pré-générée) et `SiteHeader`
+ * qui lit l'adresse pour surligner la rubrique active. Le second se place sous <Suspense> avec le premier
+ * comme repli : Next 16 ne connaît pas l'adresse des pages variables au moment de la génération.
  */
-export function SiteHeader() {
-  const pathname = usePathname();
+export function SiteHeader({ account }: { account?: ReactNode }) {
+  return <SiteHeaderView account={account} pathname={usePathname()} />;
+}
+
+export function SiteHeaderView({ account, pathname = "" }: { account?: ReactNode; pathname?: string }) {
   const [open, setOpen] = useState(false);
   const dialogRef = useRef<HTMLDialogElement>(null);
 
@@ -69,6 +78,7 @@ export function SiteHeader() {
         </nav>
 
         <div className="ml-auto flex items-center gap-1 sm:gap-2">
+          {account && <div className="hidden lg:block">{account}</div>}
           {links.search && (
             <Link
               href={links.search}

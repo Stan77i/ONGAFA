@@ -93,7 +93,7 @@ Catalogue complet : `supabase/migrations/20261125000400_seed_roles_permissions.s
 3. **Site institutionnel** ← terminé (accueil, L'ONG AFA, Nos actions, Manioc, Rejoindre AFA)
 4. **Carte nationale** ← terminé (`/carte`, aperçu sur l'accueil ; N'Zi implantée, Nawa bientôt)
 5. **Veille et contenus** ← terminé (`/veille` alimentée automatiquement, `/prix`, `/ressources` ; voir `docs/VEILLE.md`)
-6. Espace producteurs
+6. **Espace producteurs** ← terminé (comptes, fiche producteur en 5 étapes, annuaire réservé aux membres, Mon compte, Question à AFA, Rejoindre AFA ; voir `docs/COMPTES.md`)
 7. Communauté
 8. Événements et opportunités
 9. Back-office

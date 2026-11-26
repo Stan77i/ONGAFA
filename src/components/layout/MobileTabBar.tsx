@@ -20,9 +20,13 @@ const icons = {
 /**
  * Barre de navigation basse (mobile et tablette uniquement), à portée du pouce.
  * La page doit réserver l'espace en bas : classe `pb-[calc(4.5rem+env(safe-area-inset-bottom))] lg:pb-0`.
+ * Même découpage que l'en-tête : `MobileTabBarView` (pur) sert de repli sous <Suspense>.
  */
 export function MobileTabBar() {
-  const pathname = usePathname();
+  return <MobileTabBarView pathname={usePathname()} />;
+}
+
+export function MobileTabBarView({ pathname = "" }: { pathname?: string }) {
   return (
     <nav
       aria-label="Navigation rapide"
@@ -34,7 +38,8 @@ export function MobileTabBar() {
       >
         {mobileTabs.map((tab) => {
           const Icon = icons[tab.icon];
-          const active = tab.href === "/" ? pathname === "/" : pathname.startsWith(tab.href);
+          const active =
+            pathname !== "" && (tab.href === "/" ? pathname === "/" : pathname.startsWith(tab.href));
           return (
             <li key={tab.href}>
               <Link

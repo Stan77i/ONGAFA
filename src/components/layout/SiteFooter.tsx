@@ -74,7 +74,7 @@ export function SiteFooter({ newsletter }: { newsletter?: ReactNode }) {
                 <ul className="space-y-1">
                   {group.links.map((l) => (
                     <li key={l.href}>
-                      <Link href={l.href} className="inline-block py-2.5 hover:text-white hover:underline">
+                      <Link href={l.href} className="inline-block py-3 hover:text-white hover:underline">
                         {l.label}
                       </Link>
                     </li>
@@ -95,7 +95,7 @@ export function SiteFooter({ newsletter }: { newsletter?: ReactNode }) {
             <ul className="flex flex-wrap gap-x-5 gap-y-2">
               {legalNav.map((l) => (
                 <li key={l.href}>
-                  <Link href={l.href} className="inline-block py-2.5 hover:text-white hover:underline">
+                  <Link href={l.href} className="inline-block py-3 hover:text-white hover:underline">
                     {l.label}
                   </Link>
                 </li>
