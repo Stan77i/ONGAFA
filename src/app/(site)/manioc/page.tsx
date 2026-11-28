@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { AfaIcon, type AfaIconName } from "@/components/afa/icons";
+import { PhotoStory, type StorySpot } from "@/components/afa/PhotoStory";
 import { AnchorPills, Crumbs, CtaBand, Declared, Notebook, Panel, SectionHead } from "@/components/afa/ui";
 import { UsesRing } from "@/components/afa/dataviz";
 import { ValueChain } from "@/components/brand/ValueChain";
@@ -21,6 +22,53 @@ const groupIcons: Record<string, AfaIconName> = {
 };
 
 const BASE = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
+
+const usesTotal = cassava.derivatives.reduce((n, g) => n + g.items.length, 0);
+const attieke = cassava.dishes.find((d) => d.name === "Attiéké");
+
+/** Fils de la photo : contenus de l'espace manioc (src/content/afa.ts). */
+const heroSpots: StorySpot[] = [
+  {
+    x: 43,
+    y: 50,
+    lx: -8,
+    ly: 70,
+    bend: -40,
+    tag: "Culture",
+    t: "Le maïs aussi",
+    d: "Seconde culture de l'objet d'AFA, de la production à la transformation en produits finis.",
+  },
+  {
+    x: 82,
+    y: 44,
+    lx: 62,
+    ly: 64,
+    bend: 40,
+    tag: "Transformation",
+    t: `${usesTotal} usages`,
+    d: "Alimentation, pharmacie, cosmétique : chaque partie de la plante peut être valorisée.",
+  },
+  {
+    x: 42,
+    y: 14,
+    lx: 20,
+    ly: 32,
+    bend: -20,
+    tag: "Dans l'assiette",
+    t: "L'attiéké",
+    d: attieke?.text ?? "",
+  },
+  {
+    x: 70,
+    y: 50,
+    lx: 34,
+    ly: 86,
+    bend: 20,
+    tag: "Sécurité alimentaire",
+    t: "Manioc amer",
+    d: "Jamais consommé sans traitement : râpage, fermentation, pressage, séchage ou cuisson prolongée éliminent ses composés toxiques.",
+  },
+];
 
 export default function CassavaPage() {
   return (
@@ -51,16 +99,18 @@ export default function CassavaPage() {
             />
           </div>
           <div className="relative w-full max-w-[620px] self-end justify-self-center">
-            {/* eslint-disable-next-line @next/next/no-img-element -- srcset fait main (export statique) */}
-            <img
-              src={`${BASE}/photos/femmes-groupe.webp`}
-              srcSet={`${BASE}/photos/femmes-groupe-560.webp 560w, ${BASE}/photos/femmes-groupe.webp 1100w`}
-              sizes="(min-width: 1024px) 44vw, 92vw"
-              width={1100}
-              height={978}
-              alt="Des productrices tenant maïs et manioc"
-              className="block h-auto w-full"
-            />
+            <PhotoStory spots={heroSpots} ink="#f7f2e8" lit="#df8433">
+              {/* eslint-disable-next-line @next/next/no-img-element -- srcset fait main (export statique) */}
+              <img
+                src={`${BASE}/photos/femmes-groupe.webp`}
+                srcSet={`${BASE}/photos/femmes-groupe-560.webp 560w, ${BASE}/photos/femmes-groupe.webp 1100w`}
+                sizes="(min-width: 1024px) 44vw, 92vw"
+                width={1100}
+                height={978}
+                alt="Des productrices tenant maïs et manioc"
+                className="block h-auto w-full"
+              />
+            </PhotoStory>
             <div className="absolute top-[4%] right-[2%]">
               <Notebook
                 rotate={5}

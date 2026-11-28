@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Arrow } from "@/components/afa/icons";
 import { Crumbs, Notebook, Panel, PillLink } from "@/components/afa/ui";
+import { PhotoStory, type StorySpot } from "@/components/afa/PhotoStory";
 import { ProfilePicker } from "@/components/join/ProfilePicker";
 import { HeroPanel } from "@/components/layout/HeroPanel";
 
@@ -11,6 +12,40 @@ export const metadata: Metadata = {
 };
 
 const BASE = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
+
+/** Fils de la photo : ce que propose la page (profils, inscription à venir). */
+const heroSpots: StorySpot[] = [
+  {
+    x: 50,
+    y: 8,
+    lx: 66,
+    ly: 2,
+    bend: 40,
+    tag: "Bientôt",
+    t: "Inscription en ligne",
+    d: "Environ deux minutes, depuis votre téléphone : l'inscription ouvre bientôt sur cette page.",
+  },
+  {
+    x: 68,
+    y: 76,
+    lx: 74,
+    ly: 60,
+    bend: 30,
+    tag: "Profil",
+    t: "Productrice ou producteur",
+    d: "Manioc, maïs ou autres cultures vivrières : votre place est dans le réseau AFA.",
+  },
+  {
+    x: 26,
+    y: 56,
+    lx: 2,
+    ly: 46,
+    bend: -30,
+    tag: "Le réseau",
+    t: "8 profils",
+    d: "Productrices, coopératives, commerçantes, transformatrices, acheteurs, transporteurs, jeunes, partenaires.",
+  },
+];
 
 /**
  * Version statique (site publié sur GitHub Pages) : présentation des profils, sans formulaire.
@@ -43,16 +78,18 @@ export default function JoinPage() {
             </Notebook>
           </div>
           <div className="w-full max-w-[520px] justify-self-center">
-            {/* eslint-disable-next-line @next/next/no-img-element -- srcset fait main (export statique) */}
-            <img
-              src={`${BASE}/photos/femme-houe.webp`}
-              srcSet={`${BASE}/photos/femme-houe-560.webp 560w, ${BASE}/photos/femme-houe.webp 900w`}
-              sizes="(min-width: 1024px) 520px, 90vw"
-              width={896}
-              height={1200}
-              alt="Une productrice souriante, casquette « Je suis AFA », houe sur l'épaule"
-              className="block h-auto w-full"
-            />
+            <PhotoStory spots={heroSpots} lit="#2c4520">
+              {/* eslint-disable-next-line @next/next/no-img-element -- srcset fait main (export statique) */}
+              <img
+                src={`${BASE}/photos/femme-houe.webp`}
+                srcSet={`${BASE}/photos/femme-houe-560.webp 560w, ${BASE}/photos/femme-houe.webp 900w`}
+                sizes="(min-width: 1024px) 520px, 90vw"
+                width={896}
+                height={1200}
+                alt="Une productrice souriante, casquette « Je suis AFA », houe sur l'épaule"
+                className="block h-auto w-full"
+              />
+            </PhotoStory>
           </div>
         </div>
       </HeroPanel>
