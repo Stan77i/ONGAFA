@@ -3,6 +3,8 @@ import Link from "next/link";
 import { links, mainNav } from "@/config/navigation";
 import { site } from "@/config/site";
 import { cn } from "@/lib/cn";
+import { NewsBadge } from "@/components/search/NewsBadge";
+import { SearchButton } from "@/components/search/SearchButton";
 import { SiteMenu } from "./SiteMenu";
 
 export function isActive(current: string | undefined, href: string) {
@@ -67,13 +69,15 @@ export function SiteHeader({
                 )}
               >
                 {item.label}
+                {item.href === "/veille" && <NewsBadge />}
               </Link>
             );
           })}
         </nav>
       </div>
 
-      <div className="flex flex-none items-center gap-1.5 sm:gap-2">
+      <div className="flex flex-none items-center gap-1 sm:gap-2">
+        <SearchButton className="hidden text-(--hfg) hover:bg-(--hring) sm:flex" />
         {variant === "page" && (
           <Link
             href={links.join}

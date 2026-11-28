@@ -5,11 +5,16 @@ import { formatDate } from "@/lib/format";
  * Élément de veille externe : titre, extrait court, source, date, lien vers l'article d'origine.
  * Pas d'image (droits) : la lecture reste rapide sur mobile.
  */
-export function NewsListItem({ item }: { item: NewsEntry }) {
+export function NewsListItem({ item, isNew = false }: { item: NewsEntry; isNew?: boolean }) {
   return (
     <article className="afa-card sticker group relative flex w-full flex-col gap-2.5 bg-white p-6 text-ink">
-      {(item.category || item.crops.length > 0) && (
+      {(isNew || item.category || item.crops.length > 0) && (
         <div className="flex flex-wrap items-center gap-1.5">
+          {isNew && (
+            <span className="rounded-full bg-accent px-3 py-1 text-[12px] font-extrabold tracking-[0.06em] uppercase">
+              Nouveau
+            </span>
+          )}
           {item.category && (
             <span className="rounded-full bg-cream px-3 py-1 text-[12px] font-extrabold tracking-[0.06em] uppercase">
               {item.category.name}

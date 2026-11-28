@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { VeillePulse } from "@/components/afa/dataviz";
 import { AfaIcon } from "@/components/afa/icons";
 import { Panel } from "@/components/afa/ui";
 import { NewsExplorer } from "@/components/content/NewsExplorer";
@@ -33,6 +34,12 @@ export default async function VeillePage() {
         }
         intro="L'actualité agricole de Côte d'Ivoire et les prix des marchés, collectés auprès de sources identifiées. Chaque information est datée et renvoie vers son origine."
       />
+
+      {items.length > 0 && (
+        <Panel tone="forest" label="Le pouls de la veille">
+          <VeillePulse items={items} />
+        </Panel>
+      )}
 
       <Panel id="veille" tone="sand" labelledBy="t-veille">
         <NewsExplorer items={items} categories={categories} crops={crops} headingId="t-veille" />

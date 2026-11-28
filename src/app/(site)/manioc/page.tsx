@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { AfaIcon, type AfaIconName } from "@/components/afa/icons";
 import { AnchorPills, Crumbs, CtaBand, Declared, Notebook, Panel, SectionHead } from "@/components/afa/ui";
+import { UsesRing } from "@/components/afa/dataviz";
 import { ValueChain } from "@/components/brand/ValueChain";
 import { HeroPanel } from "@/components/layout/HeroPanel";
 import { links } from "@/config/navigation";
@@ -197,6 +198,9 @@ export default function CassavaPage() {
           title="Une plante, des dizaines de produits."
           intro="Le manioc ne nourrit pas seulement : son amidon entre dans des médicaments et des cosmétiques, et chaque partie de la plante peut être valorisée."
         />
+        <div className="mb-8">
+          <UsesRing groups={cassava.derivatives.map((g) => ({ group: g.group, count: g.items.length }))} />
+        </div>
         <div className="grid gap-4 lg:grid-cols-2">
           {cassava.derivatives.map((g) => (
             <article

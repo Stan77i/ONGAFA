@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { House, Landmark, Layers, Map, MessagesSquare, Newspaper, Sprout, UserRound } from "lucide-react";
 import { mobileTabs } from "@/config/navigation";
 import { cn } from "@/lib/cn";
+import { NewsBadge } from "@/components/search/NewsBadge";
 
 const icons = {
   home: House,
@@ -50,7 +51,12 @@ export function MobileTabBarView({ pathname = "" }: { pathname?: string }) {
                   active ? "bg-sand text-ink" : "text-sand/85 hover:text-white",
                 )}
               >
-                <Icon className="size-5" aria-hidden="true" strokeWidth={active ? 2.4 : 2} />
+                <span className="relative">
+                  <Icon className="size-5" aria-hidden="true" strokeWidth={active ? 2.4 : 2} />
+                  {tab.href === "/veille" && (
+                    <NewsBadge className="absolute -top-1.5 -right-3 grid min-w-[18px] place-items-center rounded-full bg-accent px-1 text-[10px] leading-[18px] font-extrabold text-ink" />
+                  )}
+                </span>
                 {tab.label}
               </Link>
             </li>

@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
 import type { CSSProperties } from "react";
+import { DeploymentBar } from "@/components/afa/dataviz";
 import { Crumbs, CtaBand, Panel, SectionHead } from "@/components/afa/ui";
 import { heroTones } from "@/components/layout/HeroPanel";
 import { SiteHeader } from "@/components/layout/SiteHeader";
-import { AfaMap3D } from "@/components/map/AfaMap3D";
+import { AfaMap } from "@/components/map/AfaMap";
 import { links } from "@/config/navigation";
 import { site } from "@/config/site";
 import { formatDate } from "@/lib/format";
@@ -29,7 +30,7 @@ export default function MapPage() {
           style={vars}
           className="on-dark relative h-[calc(100svh-16px-5rem-env(safe-area-inset-bottom))] min-h-[600px] lg:h-[calc(100svh-24px)] overflow-hidden rounded-[22px] bg-night text-sand lg:min-h-[660px] sm:rounded-[28px]"
         >
-          <AfaMap3D mode="full" shift={0.1} shiftY={0.09} className="absolute inset-0" />
+          <AfaMap mode="full" className="absolute inset-0" />
           <div className="pointer-events-none absolute inset-x-0 top-0 z-[5] bg-[linear-gradient(rgba(20,26,16,.9),rgba(20,26,16,.55)_60%,rgba(20,26,16,0))] p-[clamp(12px,2vw,26px)]">
             <div className="pointer-events-auto">
               <SiteHeader current="/carte" join="orange" />
@@ -63,6 +64,7 @@ export default function MapPage() {
           title="Les étapes du déploiement."
           intro="La carte s'enrichira à chaque nouvelle implantation."
         />
+        <DeploymentBar className="mb-8 max-w-[640px]" />
         <ol className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,280px),1fr))] gap-4">
           <li className="afa-card sticker on-dark flex flex-col gap-3 bg-afa p-[26px] text-white">
             <span className="text-[13px] font-extrabold tracking-[0.1em] text-sand uppercase">

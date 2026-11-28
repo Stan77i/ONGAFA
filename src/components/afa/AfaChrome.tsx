@@ -8,6 +8,8 @@ import { links, mainNav } from "@/config/navigation";
 import { site } from "@/config/site";
 import { cn } from "@/lib/cn";
 import { useAfaFx } from "./useAfaFx";
+import { NewsBadge } from "@/components/search/NewsBadge";
+import { SearchButton } from "@/components/search/SearchButton";
 
 /**
  * Habillage vivant commun à toutes les pages :
@@ -83,9 +85,11 @@ export function AfaChrome() {
                 className="flex min-h-10 items-center rounded-full px-3.5 text-[12px] font-bold tracking-[0.06em] whitespace-nowrap text-sand uppercase hover:bg-sand/12 hover:text-white aria-[current=page]:bg-sand aria-[current=page]:text-ink"
               >
                 {item.label}
+                {item.href === "/veille" && <NewsBadge />}
               </Link>
             ))}
         </nav>
+        <SearchButton className="min-h-10 min-w-10 text-sand hover:bg-sand/12" />
         <Link
           href={links.join}
           className="flex min-h-10 items-center rounded-full bg-accent px-3.5 text-[12px] font-bold tracking-[0.06em] whitespace-nowrap text-ink uppercase hover:bg-accent-hover"

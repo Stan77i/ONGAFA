@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { DeploymentBar } from "@/components/afa/dataviz";
 import { domainIcon } from "@/components/afa/domains";
 import { AfaIcon, Arrow } from "@/components/afa/icons";
 import { Declared, Notebook, Panel, PillLink, SectionHead } from "@/components/afa/ui";
@@ -6,7 +7,7 @@ import { ValueChain } from "@/components/brand/ValueChain";
 import { NewsListItem } from "@/components/content/NewsListItem";
 import { HeroJeSuisAfa } from "@/components/home/HeroJeSuisAfa";
 import { SiteHeader } from "@/components/layout/SiteHeader";
-import { AfaMap3D } from "@/components/map/AfaMap3D";
+import { AfaMap } from "@/components/map/AfaMap";
 import { links } from "@/config/navigation";
 import { site } from "@/config/site";
 import { cassava, domains, results } from "@/content/afa";
@@ -263,7 +264,7 @@ export default async function HomePage() {
 
       {/* 05 — Carte (aperçu vivant) */}
       <Panel tone="night" labelledBy="t-carte" bare className="h-[max(640px,88svh)] overflow-hidden">
-        <AfaMap3D mode="teaser" shift={0.2} className="absolute inset-0" />
+        <AfaMap mode="teaser" className="absolute inset-0" />
         <div className="pointer-events-none relative z-[2] flex max-w-[560px] flex-col gap-[18px] px-[clamp(20px,4vw,64px)] py-[clamp(28px,4.5vw,72px)] max-sm:bg-[linear-gradient(rgba(20,26,16,.92),rgba(20,26,16,.6)_75%,transparent)]">
           <p className="eyebrow text-mint">05 — Déploiement national</p>
           <h2 id="t-carte" className="h-section text-white">
@@ -284,6 +285,7 @@ export default async function HomePage() {
           >
             Entrer dans le territoire <Arrow />
           </PillLink>
+          <DeploymentBar dark className="pointer-events-auto mt-4 w-full max-w-[420px]" />
         </div>
       </Panel>
 

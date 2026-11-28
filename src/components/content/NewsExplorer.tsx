@@ -1,6 +1,7 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { markVeilleSeen, veilleSeenAt } from "@/lib/search/client";
 import { NewsListItem } from "@/components/content/NewsListItem";
 import type { NewsEntry, Option } from "@/lib/content/data";
 import { cn } from "@/lib/cn";
@@ -66,6 +67,16 @@ export function NewsExplorer({
   const [category, setCategory] = useState<string | null>(null);
   const [crop, setCrop] = useState<string | null>(null);
   const [shown, setShown] = useState(PAGE);
+  // Informations parues depuis la dernière visite de la veille (mémoire de ce navigateur).
+  const [seenAt, setSeenAt] = useState<number | null>(null);
+  useEffect(() => {
+    const raf = requestAnimationFrame(() => setSeenAt(veilleSeenAt()));
+    const t = window.setTimeout(markVeilleSeen, 2500);
+    return () => {
+      cancelAnimationFrame(raf);
+      window.clearTimeout(t);
+    };
+  }, []);
 
   const filtered = useMemo(
     () =>
@@ -160,7 +171,7 @@ export function NewsExplorer({
         <ul className="grid gap-4 md:grid-cols-2">
           {filtered.slice(0, shown).map((it) => (
             <li key={it.id} className="flex">
-              <NewsListItem item={it} />
+              <NewsListItem item={it} isNew={seenAt !== null && Date.parse(it.publishedAt) > seenAt} />
             </li>
           ))}
         </ul>
