@@ -496,8 +496,9 @@ html:has(dialog[open]) {
   .hero-top {
     font-size: clamp(64px, 7.6vw, 150px);
   }
+  /* Hauteur fixe (celle du mot le plus haut, « AFA ») : le hero ne bouge jamais quand le mot change. */
   .hero-word {
-    height: auto;
+    height: calc(clamp(120px, 21vw, 390px) * 0.92);
   }
   .hero-word-size {
     font-size: var(--wd);

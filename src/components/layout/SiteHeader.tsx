@@ -80,8 +80,7 @@ export function SiteHeader({
 
       <div className="flex flex-none items-center gap-1 sm:gap-2">
         <ThemeToggle className="hidden text-(--hfg) xl:flex" />
-        <SearchButton bar className="hidden text-(--hfg) min-[1360px]:flex" />
-        <SearchButton className="hidden text-(--hfg) hover:bg-(--hring) sm:flex min-[1360px]:hidden" />
+        <SearchButton className="hidden text-(--hfg) hover:bg-(--hring) sm:flex" />
         <NewsBell className="hidden text-(--hfg) sm:block" />
         {variant === "page" && (
           <Link
