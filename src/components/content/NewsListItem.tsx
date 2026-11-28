@@ -1,5 +1,6 @@
 import type { NewsEntry } from "@/lib/content/data";
 import { formatDate } from "@/lib/format";
+import { Rature, Tape } from "@/components/brand/Rature";
 
 /** Mot d'appel du bandeau, par thème (repli : nom du thème). */
 const kickers: Record<string, string> = {
@@ -13,7 +14,7 @@ const kickers: Record<string, string> = {
 
 /**
  * Élément de veille externe en « une de journal » : titre, extrait court, source, date, lien vers
- * l'article d'origine, tenu par une baguette porte-journal. Pas d'image (droits). `index` alterne la mise en page.
+ * l'article d'origine, tenu par un scotch (comme la feuille du hero). Pas d'image (droits). `index` alterne la mise en page.
  */
 export function NewsListItem({
   item,
@@ -29,13 +30,6 @@ export function NewsListItem({
   const rot = alt ? "rotate-[1.2deg]" : "-rotate-[1.4deg]";
   return (
     <article className="group relative w-full px-[clamp(14px,2.4vw,30px)] pt-[clamp(30px,3.4vw,44px)] pb-[clamp(30px,3.6vw,48px)] text-ink">
-      <span
-        aria-hidden="true"
-        className="absolute top-0 right-[4%] z-[3] text-[34px] leading-none font-black"
-      >
-        ✱
-      </span>
-
       <div className="relative">
         <div
           aria-hidden="true"
@@ -48,27 +42,7 @@ export function NewsListItem({
         <div
           className={`relative flex flex-col gap-3 rounded-[3px] border-2 border-ink bg-paper p-[clamp(16px,2vw,24px)] pt-[clamp(26px,2.6vw,34px)] shadow-[5px_5px_0_-1px_#fbf7ee,5px_5px_0_1px_#1d2417,10px_10px_0_-1px_#fbf7ee,10px_10px_0_1px_#1d2417,0_26px_30px_-14px_rgba(29,36,23,.35)] transition-transform duration-300 ease-(--ease-afa) group-hover:translate-y-[-4px] group-hover:rotate-0 ${rot}`}
         >
-          {/* Baguette porte-journal (comme dans un salon de lecture) */}
-          <div
-            aria-hidden="true"
-            className="absolute -top-[11px] -right-[18px] -left-[18px] h-5 rounded-[10px] border-[1.5px] border-ink shadow-[0_5px_8px_rgba(29,36,23,.3),inset_0_2px_0_rgba(255,255,255,.3)]"
-            style={{ background: "linear-gradient(180deg,#c89160 0%,#a5653a 45%,#8c4a2f 70%,#6b3520 100%)" }}
-          >
-            {["-left-3", "-right-3"].map((pos) => (
-              <span
-                key={pos}
-                className={`absolute top-1/2 -mt-[11px] size-[22px] rounded-full border-[1.5px] border-ink ${pos}`}
-                style={{ background: "radial-gradient(circle at 35% 35%,#f6d58a,#e9b44c 45%,#a8761c)" }}
-              />
-            ))}
-            {["left-[28%]", "right-[28%]"].map((pos) => (
-              <span
-                key={pos}
-                className={`absolute -top-[5px] h-7 w-3.5 rounded-[3px] border-[1.5px] border-ink ${pos}`}
-                style={{ background: "linear-gradient(90deg,#9aa094,#f1f2ec,#9aa094)" }}
-              />
-            ))}
-          </div>
+          <Tape />
           <p
             aria-hidden="true"
             className="border-t-2 border-b-[1.5px] border-ink pt-1.5 pb-0.5 text-center font-ink text-[clamp(24px,2.6vw,36px)] leading-[1.15]"
@@ -95,6 +69,7 @@ export function NewsListItem({
               <h3 className="text-center text-[clamp(26px,2.6vw,38px)] leading-[1.02] font-black tracking-[-0.035em] [text-wrap:balance]">
                 {item.title}
               </h3>
+              <Rature className={alt ? "self-center" : undefined} color="var(--color-leaf)" />
             </>
           ) : (
             <>
@@ -104,6 +79,7 @@ export function NewsListItem({
               <h3 className="text-[clamp(22px,2.1vw,30px)] leading-[1.08] font-extrabold tracking-[-0.025em] [text-wrap:balance]">
                 {item.title}
               </h3>
+              <Rature className={alt ? "self-center" : undefined} color="var(--color-leaf)" />
             </>
           )}
 
@@ -128,7 +104,7 @@ export function NewsListItem({
             href={item.url}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex min-h-11 items-center gap-2 self-start text-[15px] font-extrabold text-forest underline decoration-2 underline-offset-4 after:absolute after:inset-0"
+            className="inline-flex min-h-11 items-center gap-2 self-start text-[15px] font-extrabold text-[#1d2417] underline decoration-[#59883c] decoration-2 underline-offset-4 after:absolute after:inset-0"
           >
             Lire l&apos;article sur {item.source.split(" — ")[0]} <span aria-hidden="true">↗</span>
             <span className="sr-only"> (ouvre le site de la source dans un nouvel onglet)</span>

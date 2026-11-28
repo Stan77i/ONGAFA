@@ -1,3 +1,4 @@
+import { DomainMedallion, hasDomainPhoto } from "@/components/afa/DomainMedallion";
 import Link from "next/link";
 import { DeploymentBar } from "@/components/afa/dataviz";
 import { domainIcon } from "@/components/afa/domains";
@@ -169,9 +170,7 @@ export default async function HomePage() {
               className="afa-card sticker group grid h-full grid-cols-[repeat(auto-fit,minmax(min(100%,340px),1fr))] gap-[clamp(20px,3vw,48px)] bg-forest p-[clamp(24px,3vw,40px)] text-sand"
             >
               <div className="flex flex-col gap-4">
-                <span data-card-icon="" className="grid size-[72px] place-items-center rounded-full bg-sand">
-                  <AfaIcon name="manioc" size={46} />
-                </span>
+                <DomainMedallion slug="manioc" className="size-[clamp(84px,8vw,112px)]" />
                 <p className="eyebrow text-mint">Axe prioritaire</p>
                 <h3 className="m-0 text-[clamp(30px,3vw,44px)] leading-none font-extrabold tracking-[-0.025em]">
                   {featured.title}
@@ -216,7 +215,13 @@ export default async function HomePage() {
           {others.map((d, i) => (
             <li key={d.slug} className={i === others.length - 1 ? "md:col-span-2 lg:col-span-1" : undefined}>
               <div className="afa-card sticker flex h-full flex-col gap-3 bg-white p-6">
-                <AfaIcon name={domainIcon[d.slug]} size={56} data-card-icon="" />
+                <div className="flex h-[88px] items-end">
+                  {hasDomainPhoto(d.slug) ? (
+                    <DomainMedallion slug={d.slug} className="size-[88px]" />
+                  ) : (
+                    <AfaIcon name={domainIcon[d.slug]} size={56} data-card-icon="" />
+                  )}
+                </div>
                 <h3 className="mt-2 text-[23px] leading-[1.1] font-extrabold tracking-[-0.02em]">
                   {d.title}
                 </h3>

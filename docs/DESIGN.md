@@ -80,11 +80,17 @@ Refonte v2 : `afa/` (`Panel`, `SectionHead`, `PillLink`, `AnchorPills`, `CtaBand
 `AfaIcon`, `InkFilter`, `AfaChrome`), `home/HeroJeSuisAfa`, `layout/HeroPanel`, `layout/SiteMenu`,
 `layout/VivrierHero`, `map/AfaMap`, `join/ProfilePicker`, `search/` (`SearchPalette`, `SearchButton`, `NewsBadge`),
 `afa/dataviz` (`DeploymentBar`, `VeillePulse`, `UsesRing`), `afa/Signpost` (carrefour de la veille),
-`content/NewsTicker` (annonce défilante), `content/NewsListItem` (carte « une de journal » sur baguette porte-journal,
+`content/NewsTicker` (annonce défilante), `content/NewsListItem` (carte « une de journal » tenue par un scotch,
 sans fond coloré, deux mises en page alternées selon `index`). Photos de l'ONG dans `public/photos/` (WebP, variante
 560 px pour le mobile) ; photos détourées `manioc-detoure.webp` et `mais-detoure.webp`, collées aux cartes « affiche ».
 
 ## Règles d'usage
+
+- **Logique du hero partout** : `brand/Rature` (double rature à la main) sous chaque titre de section
+  (`SectionHead`, automatique) et sous le titre des infos ; `brand/Tape` (scotch translucide) pour tenir une feuille
+  ou une carte posée. Pas d'objet décoratif dessiné (baguette, épingle…).
+- **Photos réelles** : manioc, maïs, femmes, jeunes et logistique sont montrés par leurs photos détourées
+  (`afa/DomainMedallion`, `DomainArt`), jamais par une icône ; les autres domaines gardent l'icône.
 
 - **Rien d'inventé** : une section sans contenu réel est masquée ou affiche un `EmptyState` explicite.
   `MediaFrame` sans image affiche le symbole AFA, jamais une photo générique.

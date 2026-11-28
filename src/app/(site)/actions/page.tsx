@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { DomainMedallion } from "@/components/afa/DomainMedallion";
+import { DomainArt, DomainMedallion, hasDomainPhoto } from "@/components/afa/DomainMedallion";
 import { domainIcon } from "@/components/afa/domains";
 import { AfaIcon, Arrow } from "@/components/afa/icons";
 import { Crumbs, CtaBand, Panel, SectionHead } from "@/components/afa/ui";
@@ -42,10 +42,14 @@ export default function ActionsPage() {
                     href={`#${d.slug}`}
                     aria-label={d.title}
                     title={d.title}
-                    className="grid aspect-square place-items-center rounded-full border-[1.5px] border-ink shadow-[0_5px_0_#1d2417] transition-transform duration-[250ms] ease-(--ease-afa) hover:-translate-y-1 hover:rotate-0!"
+                    className="relative grid aspect-square place-items-center rounded-full border-[1.5px] border-ink shadow-[0_5px_0_#1d2417] transition-transform duration-[250ms] ease-(--ease-afa) hover:-translate-y-1 hover:rotate-0!"
                     style={{ background: tileBg[i], rotate: `${tileRot[i]}deg` }}
                   >
-                    <AfaIcon name={domainIcon[d.slug]} size={54} className="h-auto w-[58%]" />
+                    {hasDomainPhoto(d.slug) ? (
+                      <DomainArt slug={d.slug} />
+                    ) : (
+                      <AfaIcon name={domainIcon[d.slug]} size={54} className="h-auto w-[58%]" />
+                    )}
                   </a>
                 </li>
               ))}

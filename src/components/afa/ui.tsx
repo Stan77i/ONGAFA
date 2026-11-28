@@ -1,3 +1,4 @@
+import { Rature } from "@/components/brand/Rature";
 import Link from "next/link";
 import type { ComponentProps, CSSProperties, ReactNode } from "react";
 import { results } from "@/content/afa";
@@ -118,6 +119,12 @@ export function SectionHead({
       <h2 id={id} className={cn("h-section", dark && "text-white")}>
         {title}
       </h2>
+      <Rature
+        className="-mt-1"
+        color={
+          dark ? "var(--color-leaf-light)" : tone === "orange" ? "var(--color-ink)" : "var(--color-leaf)"
+        }
+      />
       {intro && (
         <div
           className={cn(

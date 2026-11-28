@@ -61,7 +61,10 @@ export function SiteHeader({
           <Link
             href="/"
             aria-current={current === "/" ? "page" : undefined}
-            className="flex min-h-10 items-center gap-1.5 rounded-full bg-accent px-3.5 pl-2.5 text-[12.5px] font-extrabold tracking-[0.06em] whitespace-nowrap text-ink uppercase transition-colors duration-200 hover:bg-accent-hover"
+            className={cn(
+              "flex min-h-10 items-center gap-1.5 rounded-full px-3.5 pl-2.5 text-[12.5px] font-bold tracking-[0.06em] whitespace-nowrap uppercase transition-colors duration-200",
+              current === "/" ? "bg-(--hfg) text-(--hbg)" : "hover:bg-(--hring)",
+            )}
           >
             <svg
               width="18"
