@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import { AfaIconDark, Check } from "@/components/afa/icons";
+import { PhotoStory, type StorySpot } from "@/components/afa/PhotoStory";
 import { AnchorPills, Crumbs, CtaBand, Declared, Notebook, Panel, SectionHead } from "@/components/afa/ui";
 import { HeroPanel } from "@/components/layout/HeroPanel";
 import { links } from "@/config/navigation";
@@ -14,6 +15,41 @@ export const metadata: Metadata = {
 
 const BASE = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
 const resultIcons = ["field", "factory", "people"] as const;
+
+/** Fils de la photo : faits déclarés par l'ONG (src/config/site.ts, src/content/afa.ts). */
+const heroSpots: StorySpot[] = [
+  {
+    x: 50,
+    y: 7,
+    lx: -30,
+    ly: 6,
+    bend: -50,
+    tag: "Statut",
+    t: "ONG reconnue",
+    d: `Enregistrée sous le ${site.registration}.`,
+  },
+  {
+    x: 47,
+    y: 61,
+    lx: -36,
+    ly: 46,
+    bend: -60,
+    tag: "Histoire",
+    t: "Née dans le N'Zi",
+    d: "Créée le 3 juin 2016, AFA y a bâti pendant une dizaine d'années un modèle centré sur le manioc.",
+  },
+  {
+    x: 88,
+    y: 42,
+    lx: 70,
+    ly: 18,
+    bend: 30,
+    tag: "Bilan",
+    t: results.items[2].value,
+    d: `${results.items[2].label}.`,
+    src: true,
+  },
+];
 
 export default function AboutPage() {
   return (
@@ -41,7 +77,7 @@ export default function AboutPage() {
             />
           </div>
           <div className="relative w-full max-w-[440px] justify-self-center max-lg:mt-4 max-lg:mr-3.5">
-            <div className="relative aspect-[3/4]">
+            <PhotoStory spots={heroSpots} className="aspect-[3/4]" lit="#2c4520">
               <div className="absolute inset-0 translate-x-3.5 translate-y-3 rounded-[999px_999px_22px_22px] bg-afa" />
               {/* eslint-disable-next-line @next/next/no-img-element -- srcset fait main (export statique) */}
               <img
@@ -53,7 +89,7 @@ export default function AboutPage() {
                 alt="Une productrice souriante portant la casquette « Je suis AFA »"
                 className="absolute inset-0 block size-full rounded-[999px_999px_22px_22px] border-[2.5px] border-ink object-cover object-top"
               />
-            </div>
+            </PhotoStory>
             <div className="absolute bottom-9 -left-3 sm:-left-10">
               <Notebook
                 rotate={-6}
