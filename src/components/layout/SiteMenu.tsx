@@ -8,6 +8,19 @@ import { site } from "@/config/site";
 import { cn } from "@/lib/cn";
 import { openSearch } from "@/lib/search/client";
 import { NewsBadge } from "@/components/search/NewsBadge";
+import { ThemeToggle } from "@/components/theme/ThemeToggle";
+import { BookOpen, House, Landmark, Layers, Map, Newspaper, Scale, Sprout } from "lucide-react";
+
+const menuIcons: Record<string, typeof House> = {
+  "/": House,
+  "/a-propos": Landmark,
+  "/actions": Layers,
+  "/manioc": Sprout,
+  "/veille": Newspaper,
+  "/prix": Scale,
+  "/ressources": BookOpen,
+  "/carte": Map,
+};
 
 /**
  * Bouton « Menu » et menu plein écran (fenêtre modale native : focus piégé, Échap pour fermer,
@@ -114,7 +127,7 @@ export function SiteMenu({ current, alwaysVisible = false }: { current?: string;
 
           <nav aria-label="Menu principal" className="flex-1">
             <ol className="grid gap-x-10 sm:grid-cols-2">
-              {menuNav.map((item, i) => {
+              {menuNav.map((item) => {
                 const active = isCurrent(item.href);
                 return (
                   <li key={item.href} className="border-b border-sand/15">
@@ -122,10 +135,13 @@ export function SiteMenu({ current, alwaysVisible = false }: { current?: string;
                       href={item.href}
                       onClick={() => setOpen(false)}
                       aria-current={active ? "page" : undefined}
-                      className="group flex min-h-16 items-baseline gap-4 py-3 text-[clamp(28px,4.2vw,44px)] leading-none font-extrabold tracking-[-0.03em] hover:text-accent aria-[current=page]:text-accent"
+                      className="group flex min-h-16 items-center gap-4 py-3 text-[clamp(28px,4.2vw,44px)] leading-none font-extrabold tracking-[-0.03em] hover:text-accent aria-[current=page]:text-accent"
                     >
-                      <span className="font-ink text-[0.5em] font-normal tracking-normal text-mint">
-                        {String(i + 1).padStart(2, "0")}
+                      <span className="grid size-11 flex-none place-items-center rounded-full border-[1.5px] border-sand/25 text-mint transition-[transform,background-color,color] duration-300 group-hover:-rotate-6 group-hover:bg-accent group-hover:text-ink">
+                        {(() => {
+                          const Icon = menuIcons[item.href] ?? House;
+                          return <Icon className="size-5" strokeWidth={2} aria-hidden="true" />;
+                        })()}
                       </span>
                       {item.label}
                       {item.href === "/veille" && <NewsBadge />}
@@ -137,7 +153,10 @@ export function SiteMenu({ current, alwaysVisible = false }: { current?: string;
           </nav>
 
           <div className="flex flex-wrap items-end justify-between gap-6 pb-[calc(1rem+env(safe-area-inset-bottom))]">
-            <p className="hand max-w-[14ch] text-[40px] text-mint">{site.slogan}</p>
+            <div className="flex flex-col gap-4">
+              <ThemeToggle onDark className="self-start text-sand" />
+              <p className="hand max-w-[14ch] text-[40px] text-mint">{site.slogan}</p>
+            </div>
             <Link
               href={links.join}
               onClick={() => setOpen(false)}

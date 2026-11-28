@@ -59,6 +59,7 @@ export function Panel({
           panelTones[tone],
           className,
         )}
+        data-tone={tone}
         style={style}
       >
         {children}

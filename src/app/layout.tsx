@@ -28,8 +28,17 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="fr"
+      suppressHydrationWarning
       className={`${archivo.variable} ${shrikhand.variable} ${reenieBeanie.variable} h-full antialiased`}
     >
+      <head>
+        {/* Thème jour/nuit appliqué avant l'affichage (pas de flash) : choix mémorisé, sinon réglage de l'appareil. */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `try{var t=localStorage.getItem("afa:theme");if(t!=="light"&&t!=="dark")t=matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light";document.documentElement.dataset.theme=t}catch(e){}`,
+          }}
+        />
+      </head>
       <body className="flex min-h-full flex-col">
         <InkFilter />
         {children}
