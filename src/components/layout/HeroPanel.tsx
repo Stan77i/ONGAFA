@@ -36,6 +36,7 @@ export function HeroPanel({
   return (
     <div className="panel-frame">
       <div
+        data-tone={tone === "cream" ? "cream" : undefined}
         style={{ ...vars, background: t.bg, color: t.fg }}
         className={cn(
           "relative overflow-hidden rounded-[22px] p-[clamp(12px,2vw,26px)] pb-[clamp(28px,4vw,56px)] sm:rounded-[28px]",

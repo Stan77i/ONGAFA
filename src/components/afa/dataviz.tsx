@@ -198,9 +198,15 @@ export function UsesRing({ groups }: { groups: { group: string; count: number }[
           );
           return el;
         })}
-        <circle cx="90" cy="90" r={R - 13} fill="none" stroke="#1d2417" strokeWidth="1.5" />
-        <circle cx="90" cy="90" r={R + 13} fill="none" stroke="#1d2417" strokeWidth="1.5" />
-        <text x="90" y="88" textAnchor="middle" style={{ font: "400 38px var(--font-ink)" }} fill="#1d2417">
+        <circle cx="90" cy="90" r={R - 13} fill="none" stroke="currentColor" strokeWidth="1.5" />
+        <circle cx="90" cy="90" r={R + 13} fill="none" stroke="currentColor" strokeWidth="1.5" />
+        <text
+          x="90"
+          y="88"
+          textAnchor="middle"
+          style={{ font: "400 38px var(--font-ink)" }}
+          fill="currentColor"
+        >
           {total}
         </text>
         <text
@@ -208,7 +214,8 @@ export function UsesRing({ groups }: { groups: { group: string; count: number }[
           y="110"
           textAnchor="middle"
           style={{ font: "700 12px var(--font-archivo)", letterSpacing: ".12em" }}
-          fill="#4b5444"
+          fill="currentColor"
+          opacity={0.75}
         >
           USAGES
         </text>

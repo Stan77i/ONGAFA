@@ -144,13 +144,27 @@ export function AfaMap({ mode, className }: { mode: "teaser" | "full"; className
       if (!p) return;
       const b = p.getBBox();
       const ratio = fullVB[2] / fullVB[3];
-      let w = Math.max(b.width, b.height * ratio) * 2.4;
-      w = Math.min(Math.max(w, fullVB[2] * 0.28), fullVB[2]);
+      // La région occupe environ un tiers de la vue : on garde le pays autour (lecture du contexte).
+      let w = Math.max(b.width, b.height * ratio) * 3.4;
+      w = Math.min(Math.max(w, fullVB[2] * 0.5), fullVB[2]);
       const h = w / ratio;
-      animateTo([b.x + b.width / 2 - w / 2, b.y + b.height / 2 - h / 2, w, h]);
+      // Sur grand écran, le panneau occupe la droite : la région se place dans l'espace libre à gauche.
+      const rw = rootRef.current?.clientWidth ?? 0;
+      const dx = rw > 1000 ? (200 / rw) * w : 0;
+      const dy = rw > 1000 ? 0 : h * 0.12;
+      animateTo([b.x + b.width / 2 - w / 2 + dx, b.y + b.height / 2 - h / 2 + dy, w, h]);
     },
     [animateTo, fullVB],
   );
+
+  const panelTitle = useRef<HTMLHeadingElement>(null);
+  const focusPanel = useRef(false);
+  useEffect(() => {
+    if (sel && focusPanel.current) {
+      focusPanel.current = false;
+      panelTitle.current?.focus();
+    }
+  }, [sel]);
 
   const select = useCallback(
     (slug: string | null) => {
@@ -236,7 +250,7 @@ export function AfaMap({ mode, className }: { mode: "teaser" | "full"; className
 
   const zoomBy = (f: number) => {
     const [x, y, w, h] = vb.current;
-    const nw = Math.min(fullVB[2], Math.max(fullVB[2] * 0.22, w * f));
+    const nw = Math.min(fullVB[2], Math.max(fullVB[2] * 0.3, w * f));
     const nh = nw * (h / w);
     animateTo([x + w / 2 - nw / 2, y + h / 2 - nh / 2, nw, nh], 500);
   };
@@ -246,8 +260,17 @@ export function AfaMap({ mode, className }: { mode: "teaser" | "full"; className
     if (e.key === "+" || e.key === "=") zoomBy(0.75);
     else if (e.key === "-" || e.key === "_") zoomBy(1.33);
     else if (e.key === "0") select(null);
-    else if (e.key === "Escape") select(null);
   };
+
+  // Échap referme la région ouverte, même si le focus n'est pas dans la carte (clic à la souris).
+  useEffect(() => {
+    if (!full || sel === null) return;
+    const onEsc = (e: KeyboardEvent) => {
+      if (e.key === "Escape" && !document.querySelector("dialog[open]")) select(null);
+    };
+    window.addEventListener("keydown", onEsc);
+    return () => window.removeEventListener("keydown", onEsc);
+  }, [full, sel, select]);
 
   const engaged = full && (sel !== null || zoomed);
   useEffect(() => {
@@ -255,11 +278,17 @@ export function AfaMap({ mode, className }: { mode: "teaser" | "full"; className
   }, [engaged]);
 
   const regions = useMemo(() => data?.regions ?? [], [data]);
-  const order = useMemo(() => {
-    const rank = (r: Region) =>
-      (r.slug === sel ? 4 : 0) + (r.slug === hover ? 3 : 0) + (statusOf(r.slug) !== "later" ? 2 : 0);
-    return [...regions].sort((a, b) => rank(a) - rank(b));
-  }, [regions, sel, hover]);
+  // Ordre fixe (régions AFA au-dessus) : le réordonner au survol annulerait le premier clic.
+  const order = useMemo(
+    () =>
+      [...regions].sort(
+        (a, b) => (statusOf(a.slug) !== "later" ? 1 : 0) - (statusOf(b.slug) !== "later" ? 1 : 0),
+      ),
+    [regions],
+  );
+  const lifted = [sel, hover !== sel ? hover : null]
+    .map((slug) => regions.find((r) => r.slug === slug))
+    .filter((r): r is Region => !!r);
   const nzi = regions.find((r) => r.slug === "nzi");
   const nawa = regions.find((r) => r.slug === "nawa");
   const counts = { active: 0, upcoming: 0, later: 0 };
@@ -323,7 +352,7 @@ export function AfaMap({ mode, className }: { mode: "teaser" | "full"; className
                       }}
                       d={r.d}
                       data-status={st}
-                      className={cn("afam-r", r.slug === hover && "is-hov", r.slug === sel && "is-sel")}
+                      className="afam-r"
                       onPointerEnter={() => setHover(r.slug)}
                       onClick={() => {
                         if (drag.current && drag.current.moved > 4) return;
@@ -332,6 +361,17 @@ export function AfaMap({ mode, className }: { mode: "teaser" | "full"; className
                     />
                   );
                 })}
+              </g>
+              {/* Copies surélevées de la région survolée et de la région choisie (sans capter le pointeur) */}
+              <g pointerEvents="none">
+                {lifted.map((r) => (
+                  <path
+                    key={`lift-${r.slug}`}
+                    d={r.d}
+                    data-status={statusOf(r.slug)}
+                    className={cn("afam-r", r.slug === sel ? "is-sel" : "is-hov")}
+                  />
+                ))}
               </g>
               {nzi && nawa && (
                 <path
@@ -393,7 +433,14 @@ export function AfaMap({ mode, className }: { mode: "teaser" | "full"; className
           <ul className="afam-sr" aria-label="Régions de Côte d'Ivoire">
             {regions.map((r) => (
               <li key={r.slug}>
-                <button type="button" onClick={() => select(r.slug)} aria-pressed={sel === r.slug}>
+                <button
+                  type="button"
+                  onClick={() => {
+                    focusPanel.current = true;
+                    select(r.slug);
+                  }}
+                  aria-pressed={sel === r.slug}
+                >
                   {r.name} : {statusLabel[statusOf(r.slug)]}
                 </button>
               </li>
@@ -418,7 +465,9 @@ export function AfaMap({ mode, className }: { mode: "teaser" | "full"; className
               >
                 {panel.eyebrow}
               </span>
-              <h3 className="afam-nm">{panel.name}</h3>
+              <h3 className="afam-nm" ref={panelTitle} tabIndex={-1}>
+                {panel.name}
+              </h3>
               <span className="afam-st">
                 <StatusShape status={panel.status} />
                 {statusLabel[panel.status]}

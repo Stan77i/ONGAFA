@@ -263,7 +263,7 @@ export default async function HomePage() {
       </Panel>
 
       {/* 05 — Carte (aperçu vivant) */}
-      <Panel tone="night" labelledBy="t-carte" bare className="h-[max(640px,88svh)] overflow-hidden">
+      <Panel tone="night" labelledBy="t-carte" bare className="min-h-[max(640px,88svh)] overflow-hidden">
         <AfaMap mode="teaser" className="absolute inset-0" />
         <div className="pointer-events-none relative z-[2] flex max-w-[560px] flex-col gap-[18px] px-[clamp(20px,4vw,64px)] py-[clamp(28px,4.5vw,72px)] max-sm:bg-[linear-gradient(rgba(20,26,16,.92),rgba(20,26,16,.6)_75%,transparent)]">
           <p className="eyebrow text-mint">05 — Déploiement national</p>

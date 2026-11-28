@@ -40,6 +40,12 @@ Définies dans `src/app/globals.css` (`@theme`). Classes Tailwind : `bg-afa`, `t
 
 Toute nouvelle couleur doit être vérifiée (WCAG AA : 4,5:1 texte, 3:1 grands titres et composants).
 
+## Jour et nuit
+
+`data-theme` sur `<html>` (script anti-flash dans `src/app/layout.tsx`, sélecteur `theme/ThemeToggle`). Les panneaux
+marqués `data-tone` sand/cream passent en sombre ; les fiches (`.sticker`, `bg-white`, papier) gardent leurs couleurs.
+Toute nouvelle carte claire doit porter `.sticker` ou un fond `bg-white`/`bg-sand` pour rester lisible la nuit.
+
 ## Typographie
 
 - **Archivo** (400 à 900) : interface et texte (`font-sans`, `font-display`).
@@ -89,8 +95,8 @@ Refonte v2 : `afa/` (`Panel`, `SectionHead`, `PillLink`, `AnchorPills`, `CtaBand
 
 ## Mouvement
 
-- Hero « Je suis AFA » (`HeroJeSuisAfa`) : photo fixe ; le mot après « Je suis » change toutes les 2,4 s (fonte d'encre,
-  lettres qui montent), avec une étiquette de contexte ; bouton pause.
+- Hero « Je suis AFA » (`HeroJeSuisAfa`) : trois femmes sur fond blanc ; le mot après « Je suis » change toutes les 2,4 s
+  (fonte d'encre, lettres qui montent), sa couleur suit la photo ; fils animés vers les fiches.
 - `AfaChrome` + `useAfaFx` : barre flottante (ordinateur), progression, retour en haut, apparitions en cascade,
   icônes qui se dessinent, compteur « 4 000 ha » (`data-count`), cartes inclinables, pilules magnétiques, pollen.
 - Carte nationale (`AfaMap`, SVG 2,5D) : inclinaison qui suit la souris, régions qui se soulèvent au survol, zoom doux,

@@ -678,7 +678,7 @@ html:has(dialog[open]) {
   letter-spacing: 0.1em;
   text-transform: uppercase;
   text-anchor: middle;
-  fill: rgb(247 242 232 / 0.78);
+  fill: rgb(247 242 232 / 0.92);
   paint-order: stroke;
   stroke: #141a10;
   stroke-width: calc(3px / var(--z, 1));
@@ -898,4 +898,106 @@ html:has(dialog[open]) {
 .afam-sr button:hover,
 .afam-sr button[aria-pressed="true"] {
   background: rgb(247 242 232 / 0.12);
+}
+
+/* Fils explicatifs du hero : tracés, parcourus par une lumière, renforcés au survol. */
+.hero-thread path {
+  stroke: currentColor;
+  stroke-width: 1.8;
+  opacity: 0.75;
+  transition:
+    stroke 0.3s,
+    stroke-width 0.3s,
+    opacity 0.3s;
+}
+.hero-thread.is-lit path {
+  stroke: var(--haccent, #4a7230);
+  stroke-width: 3;
+  opacity: 1;
+}
+.hero-thread-dot {
+  fill: var(--haccent, #4a7230);
+  stroke: #fff;
+  stroke-width: 2;
+  opacity: 0;
+}
+
+/* ───────── Mode nuit (data-theme="dark" sur <html>) ─────────
+   Les panneaux clairs passent en sombre ; les fiches (cartes, papier) restent claires, comme des
+   feuilles posées sur une table de nuit. Orange, forêt, vert, carte et pied de page sont inchangés. */
+html[data-theme="dark"] {
+  color-scheme: dark;
+  background: #0b0e09;
+}
+html[data-theme="dark"] body {
+  background: #0b0e09;
+}
+html[data-theme="dark"] :is([data-tone="sand"], [data-tone="cream"], [data-tone="white"]) {
+  --color-ink: #efe8d8;
+  --color-ink-soft: #b9c0ad;
+  --color-accent-text: #f0a25e;
+  --color-rule: #3a4232;
+  --color-sand: #161b12;
+  color: var(--color-ink);
+}
+/* Blocs vert, forêt ou nuit posés dans un panneau clair : couleurs d'origine. */
+html[data-theme="dark"] [data-tone] :is(.bg-forest, .bg-afa, .bg-night, .on-dark) {
+  --color-sand: #f7f2e8;
+  --color-ink: #1d2417;
+  --color-ink-soft: #4b5444;
+}
+html[data-theme="dark"] [data-tone="cream"] {
+  --color-cream: #1c2217;
+  --hbg: #1c2217 !important;
+  --hfg: #efe8d8 !important;
+  --hring: rgb(247 242 232 / 0.14) !important;
+  background: #1c2217 !important;
+  color: #efe8d8 !important;
+}
+html[data-theme="dark"] :is([data-tone="sand"], [data-tone="cream"], [data-tone="white"]) :is(.text-forest) {
+  color: var(--color-mint);
+}
+html[data-theme="dark"] :is([data-tone="sand"], [data-tone="cream"], [data-tone="white"]) :is(.text-pen) {
+  color: #9db7ff;
+}
+/* Fiches : on revient aux couleurs du papier. */
+html[data-theme="dark"]
+  [data-tone]
+  :is(.sticker, .notebook, .bg-white, .bg-sand, .bg-cream, .bg-paper):not(
+    .on-dark,
+    .bg-forest,
+    .bg-afa,
+    .bg-ink,
+    .bg-accent
+  ) {
+  --color-ink: #1d2417;
+  --color-ink-soft: #4b5444;
+  --color-accent-text: #9a4c15;
+  --color-rule: #ddd5c3;
+  --color-sand: #f7f2e8;
+  --color-white: #ffffff;
+  --color-cream: #efe6d2;
+  color: var(--color-ink);
+}
+html[data-theme="dark"] [data-tone] :is(.sticker, .bg-white, .bg-sand, .bg-cream) :is(.text-forest) {
+  color: #2c4520;
+}
+html[data-theme="dark"] [data-tone] :is(.sticker, .bg-white, .bg-sand, .bg-cream, .notebook) .text-pen {
+  color: #1f3f9e;
+}
+/* Hero de l'accueil : fond nuit, texte crème, mot dans un ton clair accordé à la photo. */
+html[data-theme="dark"] [data-hero] {
+  --hbg: #141a10 !important;
+  --hfg: #f7f2e8 !important;
+  --hring: rgb(247 242 232 / 0.16) !important;
+  --haccent: var(--haccent-dark) !important;
+  --hbrush: var(--haccent-dark) !important;
+}
+html[data-theme="dark"] .afa-search {
+  background: #1c2217;
+  color: #efe8d8;
+  --color-ink: #efe8d8;
+  --color-ink-soft: #b9c0ad;
+  --color-sand: #1c2217;
+  --color-accent-text: #f0a25e;
 }

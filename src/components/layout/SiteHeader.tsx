@@ -4,7 +4,9 @@ import { links, mainNav } from "@/config/navigation";
 import { site } from "@/config/site";
 import { cn } from "@/lib/cn";
 import { NewsBadge } from "@/components/search/NewsBadge";
+import { NewsBell } from "@/components/search/NewsBell";
 import { SearchButton } from "@/components/search/SearchButton";
+import { ThemeToggle } from "@/components/theme/ThemeToggle";
 import { SiteMenu } from "./SiteMenu";
 
 export function isActive(current: string | undefined, href: string) {
@@ -77,7 +79,10 @@ export function SiteHeader({
       </div>
 
       <div className="flex flex-none items-center gap-1 sm:gap-2">
-        <SearchButton className="hidden text-(--hfg) hover:bg-(--hring) sm:flex" />
+        <ThemeToggle className="hidden text-(--hfg) xl:flex" />
+        <SearchButton bar className="hidden text-(--hfg) min-[1360px]:flex" />
+        <SearchButton className="hidden text-(--hfg) hover:bg-(--hring) sm:flex min-[1360px]:hidden" />
+        <NewsBell className="hidden text-(--hfg) sm:block" />
         {variant === "page" && (
           <Link
             href={links.join}

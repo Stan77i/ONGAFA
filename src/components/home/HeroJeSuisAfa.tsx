@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState, type CSSProperties, type ReactNode } from "react";
+import { useEffect, useRef, useState, type CSSProperties, type ReactNode } from "react";
 import { links } from "@/config/navigation";
 import { results } from "@/content/afa";
 
@@ -18,34 +18,132 @@ type Spot = {
   tag?: string;
   src?: boolean;
 };
-type SceneDef = { paper: { x: number; y: number; rot: number; w: number; text: string }; spots: Spot[] };
-
-/** Scène unique (photo fixe, décision de l'ONG) : la productrice à la houe, fond blanc. */
-const SCENE: SceneDef = {
-  paper: { x: -90, y: 450, rot: -6, w: 440, text: "Je suis AFA" },
-  spots: [
-    {
-      x: 411,
-      y: 232,
-      lx: 60,
-      ly: 10,
-      bend: -40,
-      t: "Femmes & revenus",
-      d: "Insertion économique des femmes et activités génératrices de revenus.",
-    },
-    {
-      x: 497,
-      y: 690,
-      lx: 430,
-      ly: -24,
-      bend: 230,
-      t: results.items[0].value,
-      d: results.items[0].label + ".",
-      src: true,
-    },
-  ],
+type SceneDef = {
+  key: string;
+  img: { src: string; srcSet: string };
+  alt: string;
+  kind: "cut" | "arch";
+  box: [number, number, number, number];
+  /** Couleur du grand mot, accordée à la photo (casquette, foulards, manioc). Lisible sur blanc (≥ 3:1). */
+  accent: string;
+  /** Variante claire du même ton pour le mode nuit. */
+  accentDark: string;
+  paper: { x: number; y: number; rot: number; w: number; text: string };
+  spots: Spot[];
 };
-const BOX: [number, number, number, number] = [150, 160, 523, 700];
+
+const photo = (name: string) => ({
+  src: `${BASE}/photos/${name}.webp`,
+  srcSet: `${BASE}/photos/${name}-560.webp 560w, ${BASE}/photos/${name}.webp 900w`,
+});
+
+/** Trois femmes, fond blanc fixe : seule la photo change (toutes les 4 étapes du mot). */
+const SCENES: SceneDef[] = [
+  {
+    key: "houe",
+    img: photo("femme-houe"),
+    alt: "Une productrice souriante, casquette « Je suis AFA », houe sur l'épaule",
+    kind: "cut",
+    box: [150, 160, 523, 700],
+    accent: "#4a7230",
+    accentDark: "#a9c98f",
+    paper: { x: -90, y: 450, rot: -6, w: 440, text: "Je suis AFA" },
+    spots: [
+      {
+        x: 411,
+        y: 232,
+        lx: 60,
+        ly: 10,
+        bend: -40,
+        t: "Femmes & revenus",
+        d: "Insertion économique des femmes et activités génératrices de revenus.",
+      },
+      {
+        x: 497,
+        y: 690,
+        lx: 430,
+        ly: -24,
+        bend: 230,
+        t: results.items[0].value,
+        d: results.items[0].label + ".",
+        src: true,
+      },
+    ],
+  },
+  {
+    key: "groupe",
+    img: photo("femmes-groupe"),
+    alt: "Des productrices tenant maïs et manioc",
+    kind: "cut",
+    box: [0, 238, 700, 622],
+    accent: "#c26418",
+    accentDark: "#f0a25e",
+    paper: { x: 90, y: 660, rot: -4, w: 560, text: "Nous sommes AFA" },
+    spots: [
+      {
+        x: 273,
+        y: 292,
+        lx: -40,
+        ly: 70,
+        bend: -90,
+        t: "Coopératives",
+        d: "Structurées et accompagnées dans une dizaine de sous-préfectures du N'Zi.",
+        src: true,
+      },
+      {
+        x: 282,
+        y: 487,
+        lx: 190,
+        ly: -40,
+        bend: 40,
+        t: "Maïs",
+        d: "Seconde culture de l'objet d'AFA, de la production aux produits finis.",
+      },
+      {
+        x: 532,
+        y: 505,
+        lx: 450,
+        ly: 90,
+        bend: 60,
+        t: results.items[1].value,
+        d: results.items[1].label + ".",
+        src: true,
+      },
+    ],
+  },
+  {
+    key: "casquette",
+    img: photo("femme-casquette"),
+    alt: "Une productrice souriante portant la casquette « Je suis AFA »",
+    kind: "arch",
+    box: [150, 170, 500, 690],
+    accent: "#2c4520",
+    accentDark: "#c9e2a8",
+    paper: { x: 10, y: 640, rot: -6, w: 440, text: "Je suis AFA" },
+    spots: [
+      {
+        x: 401,
+        y: 228,
+        lx: -40,
+        ly: 20,
+        bend: -60,
+        t: "Commercialisation",
+        tag: "Perspective",
+        d: "Financer la commercialisation et la bancarisation des commerçantes et des productrices.",
+      },
+      {
+        x: 401,
+        y: 562,
+        lx: 450,
+        ly: -14,
+        bend: 230,
+        t: "Autonomisation",
+        d: "Des activités génératrices de revenus pour les personnes défavorisées.",
+      },
+    ],
+  },
+];
+const WORDS_PER_SCENE = 4;
 
 type Status = "org" | "active" | "upcoming" | "later" | "country" | "people";
 /**
@@ -103,24 +201,31 @@ function wordVars(t: string): CSSProperties {
 }
 
 /**
- * Hero « Je suis AFA » (accueil). Photo fixe ; seul le grand mot change toutes les 2,4 s
- * (AFA, le N'Zi, la Nawa, les régions, la Côte d'Ivoire, ivoirienne, ivoirien), avec une étiquette de
- * contexte. Bouton pause (WCAG 2.2.2). Points cliquables sur la photo.
+ * Hero « Je suis AFA » (accueil). Fond blanc fixe ; le mot après « Je suis » change toutes les 2,4 s
+ * (AFA, le N'Zi, la Nawa, les régions, la Côte d'Ivoire, ivoirienne, ivoirien) et, toutes les 4 étapes,
+ * la femme photographiée change (dévoilement circulaire). La couleur du mot suit la photo.
+ * Pas de bouton pause (décision de l'ONG, T52) : l'animation s'arrête quand une fiche est ouverte.
  * `header` : en-tête du site, rendu côté serveur.
  */
 export function HeroJeSuisAfa({ header }: { header: ReactNode }) {
   const [{ w, prev }, setWords] = useState<{ w: number; prev: number | null }>({ w: 0, prev: null });
-  const [paused, setPaused] = useState(false);
   const [open, setOpen] = useState<number | null>(null);
   const [compact, setCompact] = useState(false);
+  const [later, setLater] = useState(false);
+
+  const si = Math.floor(w / WORDS_PER_SCENE) % SCENES.length;
+  const prevSi = prev === null ? -1 : Math.floor(prev / WORDS_PER_SCENE) % SCENES.length;
+  const sc = SCENES[si];
 
   useEffect(() => {
-    if (paused || open !== null) return;
+    if (open !== null) return;
     const t = window.setInterval(() => {
       setWords((cur) => ({ prev: cur.w, w: (cur.w + 1) % WORDS.length }));
     }, STEP_MS);
     return () => window.clearInterval(t);
-  }, [paused, open]);
+  }, [open]);
+
+  // Pas de changement de femme tant qu'une fiche est ouverte (l'horloge est suspendue).
 
   useEffect(() => {
     const mq = window.matchMedia("(max-width: 1099px)");
@@ -130,18 +235,27 @@ export function HeroJeSuisAfa({ header }: { header: ReactNode }) {
     return () => mq.removeEventListener("change", apply);
   }, []);
 
+  // Photos 2 et 3 téléchargées après le chargement de la page (hors chemin critique).
+  useEffect(() => {
+    const go = () => window.setTimeout(() => setLater(true), 300);
+    if (document.readyState === "complete") go();
+    else window.addEventListener("load", go, { once: true });
+    return () => window.removeEventListener("load", go);
+  }, []);
+
   const word = WORDS[w];
   const vars = {
     "--hbg": "#ffffff",
     "--hfg": "#1d2417",
-    "--hbrush": "#df8433",
-    "--hpulse": "#df8433",
+    "--haccent": sc.accent,
+    "--haccent-dark": sc.accentDark,
+    "--hbrush": sc.accent,
+    "--hpulse": sc.accent,
     "--hcard": "#f7f2e8",
     "--hring": "rgba(29,36,23,.14)",
   } as CSSProperties;
-  const openSpot = open !== null ? SCENE.spots[open] : null;
+  const openSpot = open !== null ? sc.spots[open] : null;
   const pc = (v: number, t: number) => `${(v / t) * 100}%`;
-  const [bx, by, bw, bh] = BOX;
 
   return (
     <div className="panel-frame">
@@ -159,31 +273,15 @@ export function HeroJeSuisAfa({ header }: { header: ReactNode }) {
         >
           {/* a — étiquette et titre */}
           <div className="relative z-[1] flex flex-col gap-3 pt-3 pl-1 [grid-area:a]">
-            <div className="flex items-center gap-2">
-              <p
-                aria-hidden="true"
-                key={`tag${w}`}
-                className="inline-flex min-h-9 items-center gap-2 rounded-full border-[1.5px] border-ink bg-sand py-1 pr-4 pl-2.5 text-[12px] font-extrabold tracking-[0.08em] uppercase"
-                style={{ animation: "afaPop .5s cubic-bezier(.2,.8,.2,1) both" }}
-              >
-                <StatusMark status={word.status} />
-                {word.tag}
-              </p>
-              <button
-                type="button"
-                onClick={() => setPaused((p) => !p)}
-                aria-label={paused ? "Relancer l'animation du titre" : "Mettre en pause l'animation du titre"}
-                className="grid size-11 cursor-pointer place-items-center rounded-full text-ink/70 hover:bg-ink/8 hover:text-ink"
-              >
-                <svg width="14" height="14" viewBox="0 0 16 16" aria-hidden="true">
-                  {paused ? (
-                    <path d="M4 2 L13 8 L4 14 Z" fill="currentColor" />
-                  ) : (
-                    <path d="M4 2 V14 M11 2 V14" stroke="currentColor" strokeWidth="2.5" />
-                  )}
-                </svg>
-              </button>
-            </div>
+            <p
+              aria-hidden="true"
+              key={`tag${w}`}
+              className="inline-flex min-h-9 items-center gap-2 self-start rounded-full border-[1.5px] border-ink bg-sand py-1 pr-4 pl-2.5 text-[12px] font-extrabold tracking-[0.08em] text-ink uppercase"
+              style={{ animation: "afaPop .5s cubic-bezier(.2,.8,.2,1) both" }}
+            >
+              <StatusMark status={word.status} />
+              {word.tag}
+            </p>
 
             <h1 className="m-0 font-ink leading-none font-normal whitespace-nowrap text-(--hfg)">
               <span className="sr-only">
@@ -191,7 +289,7 @@ export function HeroJeSuisAfa({ header }: { header: ReactNode }) {
               </span>
               <span aria-hidden="true" className="hero-ink block pb-[0.08em]">
                 <span className="hero-top block leading-[0.95]">Je suis</span>
-                <span className="hero-word ml-[0.06em] grid items-start leading-[0.9]">
+                <span className="hero-word ml-[0.06em] grid items-start leading-[0.9] text-(--haccent) transition-colors duration-700">
                   {prev !== null && (
                     <span
                       key={`pw${prev}-${w}`}
@@ -226,40 +324,73 @@ export function HeroJeSuisAfa({ header }: { header: ReactNode }) {
             </h1>
           </div>
 
-          {/* s — photo */}
+          {/* s — photos */}
           <div className="relative z-[2] [grid-area:s] max-[1099px]:-mx-[clamp(12px,2vw,26px)] max-[1099px]:-mt-[10%] min-[1100px]:min-h-[min(78vh,760px)]">
             <div className="absolute inset-0 flex items-end justify-center [container-type:size] max-[1099px]:relative max-[1099px]:[container-type:normal]">
               <div className="relative aspect-[700/860] w-[min(100cqw,calc(100cqh*700/860))] max-[1099px]:w-[min(100%,calc(68svh*700/860))]">
-                <div
-                  className="absolute inset-0"
-                  style={{
-                    left: pc(bx, 700),
-                    top: pc(by, 860),
-                    width: pc(bw, 700),
-                    height: pc(bh, 860),
-                    transformOrigin: "50% 100%",
-                    animation: "afaHeroIn 1.25s cubic-bezier(.75,0,.2,1) .1s both",
-                  }}
-                >
-                  {/* eslint-disable-next-line @next/next/no-img-element -- dimensions en % d'une scène SVG, srcset fait main (export statique) */}
-                  <img
-                    src={`${BASE}/photos/femme-houe.webp`}
-                    srcSet={`${BASE}/photos/femme-houe-560.webp 560w, ${BASE}/photos/femme-houe.webp 900w`}
-                    sizes="(min-width: 1100px) 46vw, 92vw"
-                    alt="Une productrice souriante, casquette « Je suis AFA », houe sur l'épaule"
-                    fetchPriority="high"
-                    decoding="async"
-                    className="absolute inset-0 block size-full object-contain object-bottom"
-                  />
-                </div>
+                {SCENES.map((scene, k) => {
+                  const active = k === si;
+                  const mode = active ? "in" : k === prevSi ? "out" : "wait";
+                  const [bx, by, bw, bh] = scene.box;
+                  const rad = `50% 50% 0 0 / ${((bw / 2 / bh) * 100).toFixed(2)}% ${((bw / 2 / bh) * 100).toFixed(2)}% 0 0`;
+                  const load = k === 0 || later || active;
+                  return (
+                    <div
+                      key={scene.key}
+                      aria-hidden={!active}
+                      style={{
+                        position: "absolute",
+                        left: pc(bx, 700),
+                        top: pc(by, 860),
+                        width: pc(bw, 700),
+                        height: pc(bh, 860),
+                        opacity: mode === "wait" ? 0 : mode === "in" ? 1 : 0,
+                        clipPath: mode === "wait" ? "circle(0% at 50% 82%)" : "circle(140% at 50% 82%)",
+                        transform: mode === "out" ? "scale(.92) translateX(-5%)" : "none",
+                        filter: mode === "out" ? "blur(10px) saturate(.6)" : "none",
+                        transformOrigin: "50% 100%",
+                        transition:
+                          mode === "in"
+                            ? "clip-path 1.2s cubic-bezier(.75,0,.2,1) .1s, opacity .25s .1s, transform 1s cubic-bezier(.2,.7,.2,1), filter .6s"
+                            : "opacity .7s ease, transform .9s cubic-bezier(.4,0,.2,1), filter .7s ease, clip-path 0s .95s",
+                        animation: active
+                          ? `afaKen ${STEP_MS * WORDS_PER_SCENE}ms cubic-bezier(.2,.6,.3,1) both`
+                          : "none",
+                      }}
+                    >
+                      {scene.kind === "arch" && (
+                        <div
+                          className="absolute inset-0 translate-x-[3%] translate-y-[2%] bg-accent"
+                          style={{ borderRadius: rad }}
+                        />
+                      )}
+                      {/* eslint-disable-next-line @next/next/no-img-element -- dimensions en % d'une scène SVG, srcset fait main (export statique) */}
+                      <img
+                        src={load ? scene.img.src : undefined}
+                        srcSet={load ? scene.img.srcSet : undefined}
+                        sizes="(min-width: 1100px) 46vw, 92vw"
+                        alt={active ? scene.alt : ""}
+                        fetchPriority={k === 0 ? "high" : "auto"}
+                        decoding="async"
+                        className={
+                          scene.kind === "arch"
+                            ? "absolute inset-0 block size-full border-[2.5px] border-ink object-cover object-top"
+                            : "absolute inset-0 block size-full object-contain object-bottom"
+                        }
+                        style={scene.kind === "arch" ? { borderRadius: rad } : undefined}
+                      />
+                    </div>
+                  );
+                })}
                 <svg
                   viewBox="0 0 700 860"
                   preserveAspectRatio="xMidYMax meet"
                   className="absolute inset-0 block size-full overflow-visible"
                 >
                   <SceneLayer
-                    sc={SCENE}
-                    k={0}
+                    key={sc.key}
+                    sc={sc}
+                    k={si}
                     run={0}
                     open={open}
                     f={1}
@@ -413,6 +544,21 @@ function SceneLayer({
 }) {
   const p = sc.paper;
   const id = `wc-${k}-${run}`;
+  const [hov, setHov] = useState<number | null>(null);
+  const motions = useRef<(SVGAnimateMotionElement | null)[]>([]);
+  useEffect(() => {
+    const timers = motions.current.map((m, j) =>
+      window.setTimeout(
+        () => {
+          if (!m) return;
+          (m.parentElement as SVGElement | null)?.style.setProperty("opacity", "1");
+          m.beginElement();
+        },
+        (2.7 + j * 0.8) * 1000,
+      ),
+    );
+    return () => timers.forEach((t) => window.clearTimeout(t));
+  }, []);
   const lines = [];
   for (let ly = 38; ly < 140; ly += 30)
     lines.push(
@@ -432,21 +578,39 @@ function SceneLayer({
           const c1y = spot.y - (spot.y - ay) * 0.45;
           const c2x = ax + spot.bend * 0.25;
           const c2y = ay + (spot.y - ay) * 0.55;
+          const d = `M${spot.x},${spot.y} C${c1x},${c1y} ${c2x},${c2y} ${ax},${ay}`;
+          const lit = hov === j || open === j;
           return (
-            <path
-              key={`t${j}`}
-              d={`M${spot.x},${spot.y} C${c1x},${c1y} ${c2x},${c2y} ${ax},${ay}`}
-              fill="none"
-              stroke="currentColor"
-              strokeWidth={1.8}
-              strokeDasharray="1"
-              pathLength={1}
-              strokeDashoffset={1}
-              vectorEffect="non-scaling-stroke"
-              style={{
-                animation: `afaDraw ${0.9 * f}s ${(2.3 + j * 0.35) * f}s cubic-bezier(.6,0,.3,1) forwards`,
-              }}
-            />
+            <g key={`t${j}`} className={lit ? "hero-thread is-lit" : "hero-thread"}>
+              <path
+                id={`thr-${k}-${j}`}
+                d={d}
+                fill="none"
+                strokeDasharray="1"
+                pathLength={1}
+                strokeDashoffset={1}
+                vectorEffect="non-scaling-stroke"
+                style={{
+                  animation: `afaDraw ${0.9 * f}s ${(1.7 + j * 0.3) * f}s cubic-bezier(.6,0,.3,1) forwards`,
+                }}
+              />
+              {/* Lumière qui part du corps vers l'étiquette, en boucle, décalée d'un fil à l'autre */}
+              <circle r={4.5} className="hero-thread-dot">
+                <animateMotion
+                  ref={(el) => {
+                    motions.current[j] = el as SVGAnimateMotionElement | null;
+                  }}
+                  dur="2.4s"
+                  begin="indefinite"
+                  repeatCount="indefinite"
+                  calcMode="spline"
+                  keyTimes="0;1"
+                  keySplines=".45 0 .25 1"
+                >
+                  <mpath href={`#thr-${k}-${j}`} />
+                </animateMotion>
+              </circle>
+            </g>
           );
         })}
 
@@ -532,6 +696,10 @@ function SceneLayer({
               if (e.key === "Escape" && on) setOpen(null);
             }}
             className="hero-spot cursor-pointer outline-none"
+            onPointerEnter={() => setHov(j)}
+            onPointerLeave={() => setHov(null)}
+            onFocus={() => setHov(j)}
+            onBlur={() => setHov(null)}
           >
             <g style={{ animation: `afaPop .4s ${(1.9 + j * 0.3) * f}s both` }}>
               <circle r={30} fill="transparent" />
@@ -585,6 +753,8 @@ function SceneLayer({
             >
               <div
                 onClick={() => setOpen(on ? null : j)}
+                onPointerEnter={() => setHov(j)}
+                onPointerLeave={() => setHov(null)}
                 className="inline-flex max-w-[260px] cursor-pointer flex-col gap-1.5 rounded-[18px] border-2 border-ink px-4 pt-2.5 pb-3 font-sans shadow-[0_6px_0_rgba(29,36,23,.9)] transition-colors duration-[250ms]"
                 style={{
                   background: on ? INK : "var(--hcard,#f7f2e8)",
