@@ -1,5 +1,6 @@
 import { Suspense } from "react";
 import { AfaChrome } from "@/components/afa/AfaChrome";
+import { SearchPalette } from "@/components/search/SearchPalette";
 import { MobileTabBar, MobileTabBarView } from "@/components/layout/MobileTabBar";
 import { SiteFooter } from "@/components/layout/SiteFooter";
 
@@ -28,6 +29,7 @@ export default function SiteLayout({ children }: LayoutProps<"/">) {
       <Suspense fallback={null}>
         <AfaChrome />
       </Suspense>
+      <SearchPalette />
     </div>
   );
 }

@@ -6,6 +6,8 @@ import { useEffect, useRef, useState } from "react";
 import { links, menuNav } from "@/config/navigation";
 import { site } from "@/config/site";
 import { cn } from "@/lib/cn";
+import { openSearch } from "@/lib/search/client";
+import { NewsBadge } from "@/components/search/NewsBadge";
 
 /**
  * Bouton « Menu » et menu plein écran (fenêtre modale native : focus piégé, Échap pour fermer,
@@ -95,6 +97,21 @@ export function SiteMenu({ current, alwaysVisible = false }: { current?: string;
             </button>
           </div>
 
+          <button
+            type="button"
+            onClick={() => {
+              setOpen(false);
+              window.setTimeout(openSearch, 50);
+            }}
+            className="flex min-h-14 cursor-pointer items-center gap-3 rounded-full border-[1.5px] border-sand/30 px-5 text-left text-[17px] font-semibold text-sand/80 hover:border-sand hover:text-sand"
+          >
+            <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true">
+              <circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" strokeWidth="2.2" />
+              <path d="M16.5 16.5 L21 21" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" />
+            </svg>
+            Rechercher : manioc, attiéké, Nawa, prix…
+          </button>
+
           <nav aria-label="Menu principal" className="flex-1">
             <ol className="grid gap-x-10 sm:grid-cols-2">
               {menuNav.map((item, i) => {
@@ -111,6 +128,7 @@ export function SiteMenu({ current, alwaysVisible = false }: { current?: string;
                         {String(i + 1).padStart(2, "0")}
                       </span>
                       {item.label}
+                      {item.href === "/veille" && <NewsBadge />}
                     </Link>
                   </li>
                 );

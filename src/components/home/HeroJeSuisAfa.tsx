@@ -1,16 +1,11 @@
 "use client";
 
 import Link from "next/link";
-import { useCallback, useEffect, useRef, useState, type CSSProperties, type ReactNode } from "react";
+import { useEffect, useState, type CSSProperties, type ReactNode } from "react";
 import { links } from "@/config/navigation";
 import { results } from "@/content/afa";
-import { cn } from "@/lib/cn";
 
 const BASE = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
-const photo = (name: string) => ({
-  src: `${BASE}/photos/${name}.webp`,
-  srcSet: `${BASE}/photos/${name}-560.webp 560w, ${BASE}/photos/${name}.webp 900w`,
-});
 
 type Spot = {
   x: number;
@@ -23,309 +18,138 @@ type Spot = {
   tag?: string;
   src?: boolean;
 };
-type Scene = {
-  key: string;
-  load: string;
-  bg: string;
-  fg: string;
-  brush: string;
-  pulse: string;
-  ring: string;
-  num: string;
-  cap: [string, string];
-  top: string;
-  words: [string, string, string];
-  kind: "cut" | "arch";
-  img: { src: string; srcSet: string };
-  alt: string;
-  box: [number, number, number, number];
-  paper: { x: number; y: number; rot: number; w: number; text: string };
-  spots: Spot[];
+type SceneDef = { paper: { x: number; y: number; rot: number; w: number; text: string }; spots: Spot[] };
+
+/** Scène unique (photo fixe, décision de l'ONG) : la productrice à la houe, fond blanc. */
+const SCENE: SceneDef = {
+  paper: { x: -90, y: 450, rot: -6, w: 440, text: "Je suis AFA" },
+  spots: [
+    {
+      x: 411,
+      y: 232,
+      lx: 60,
+      ly: 10,
+      bend: -40,
+      t: "Femmes & revenus",
+      d: "Insertion économique des femmes et activités génératrices de revenus.",
+    },
+    {
+      x: 497,
+      y: 690,
+      lx: 430,
+      ly: -24,
+      bend: 230,
+      t: results.items[0].value,
+      d: results.items[0].label + ".",
+      src: true,
+    },
+  ],
 };
+const BOX: [number, number, number, number] = [150, 160, 523, 700];
 
-/** Trois scènes : la couleur du hero suit la photo. Faits repris du bilan déclaré (src/content/afa.ts). */
-const SCENES: Scene[] = [
-  {
-    key: "houe",
-    load: "#df8433",
-    bg: "#ffffff",
-    fg: "#1d2417",
-    brush: "#df8433",
-    pulse: "#df8433",
-    ring: "rgba(29,36,23,.14)",
-    num: "01",
-    cap: ["Production", "Région du N'Zi"],
-    top: "Je suis",
-    words: ["AFA", "la terre", "le manioc"],
-    kind: "cut",
-    img: photo("femme-houe"),
-    alt: "Une productrice souriante, casquette « Je suis AFA », houe sur l'épaule",
-    box: [150, 160, 523, 700],
-    paper: { x: -90, y: 450, rot: -6, w: 440, text: "Je suis AFA" },
-    spots: [
-      {
-        x: 411,
-        y: 232,
-        lx: -170,
-        ly: 20,
-        bend: -60,
-        t: "Femmes & revenus",
-        d: "Insertion économique des femmes et activités génératrices de revenus.",
-      },
-      {
-        x: 497,
-        y: 690,
-        lx: 430,
-        ly: -24,
-        bend: 230,
-        t: results.items[0].value,
-        d: results.items[0].label + ".",
-        src: true,
-      },
-    ],
-  },
-  {
-    key: "groupe",
-    load: "#4a7230",
-    bg: "#df8433",
-    fg: "#1d2417",
-    brush: "#f7f2e8",
-    pulse: "#f7f2e8",
-    ring: "rgba(29,36,23,.14)",
-    num: "02",
-    cap: ["Coopératives", "Région du N'Zi"],
-    top: "Nous sommes",
-    words: ["AFA", "unies", "le N'Zi"],
-    kind: "cut",
-    img: photo("femmes-groupe"),
-    alt: "Des productrices tenant maïs et manioc",
-    box: [0, 238, 700, 622],
-    paper: { x: -130, y: 640, rot: -4, w: 590, text: "Nous sommes AFA" },
-    spots: [
-      {
-        x: 273,
-        y: 292,
-        lx: -210,
-        ly: 40,
-        bend: -90,
-        t: "Coopératives",
-        d: "Structurées et accompagnées dans une dizaine de sous-préfectures du N'Zi.",
-        src: true,
-      },
-      {
-        x: 282,
-        y: 487,
-        lx: 120,
-        ly: -30,
-        bend: 40,
-        t: "Maïs",
-        d: "Seconde culture de l'objet d'AFA, de la production aux produits finis.",
-      },
-      {
-        x: 532,
-        y: 505,
-        lx: 440,
-        ly: 70,
-        bend: 60,
-        t: results.items[1].value,
-        d: results.items[1].label + ".",
-        src: true,
-      },
-    ],
-  },
-  {
-    key: "casquette",
-    load: "#df8433",
-    bg: "#4a7230",
-    fg: "#f7f2e8",
-    brush: "#2c4520",
-    pulse: "#f7f2e8",
-    ring: "rgba(247,242,232,.16)",
-    num: "03",
-    cap: ["Autonomie", "des femmes"],
-    top: "Je suis",
-    words: ["AFA", "autonome", "l'avenir"],
-    kind: "arch",
-    img: photo("femme-casquette"),
-    alt: "Une productrice souriante portant la casquette « Je suis AFA »",
-    box: [150, 170, 500, 690],
-    paper: { x: -100, y: 610, rot: -7, w: 440, text: "Je suis AFA" },
-    spots: [
-      {
-        x: 401,
-        y: 228,
-        lx: -190,
-        ly: 20,
-        bend: -60,
-        t: "Commercialisation",
-        tag: "Perspective",
-        d: "Financer la commercialisation et la bancarisation des commerçantes et des productrices.",
-      },
-      {
-        x: 401,
-        y: 562,
-        lx: 450,
-        ly: -14,
-        bend: 230,
-        t: "Autonomisation",
-        d: "Des activités génératrices de revenus pour les personnes défavorisées.",
-      },
-    ],
-  },
+type Status = "org" | "active" | "upcoming" | "later" | "country" | "people";
+/**
+ * Ce qui change : le grand mot après « Je suis ». Régions : articles d'usage ; statuts identiques à la
+ * carte (N'Zi implantée, Nawa prochaine étape, autres régions ensuite).
+ */
+const WORDS: { t: string; tag: string; status: Status }[] = [
+  { t: "AFA", tag: "ONG ivoirienne · depuis 2016", status: "org" },
+  { t: "le N'Zi", tag: "Région · AFA implantée", status: "active" },
+  { t: "la Nawa", tag: "Région · prochaine étape", status: "upcoming" },
+  { t: "le Bélier", tag: "Région · déploiement progressif", status: "later" },
+  { t: "le Gbêkê", tag: "Région · déploiement progressif", status: "later" },
+  { t: "l'Iffou", tag: "Région · déploiement progressif", status: "later" },
+  { t: "la Marahoué", tag: "Région · déploiement progressif", status: "later" },
+  { t: "le Poro", tag: "Région · déploiement progressif", status: "later" },
+  { t: "le Tonkpi", tag: "Région · déploiement progressif", status: "later" },
+  { t: "la Côte d'Ivoire", tag: "Tout le pays", status: "country" },
+  { t: "ivoirienne", tag: "Moi aussi, je suis AFA", status: "people" },
+  { t: "ivoirien", tag: "Moi aussi, je suis AFA", status: "people" },
 ];
-
-const N = SCENES.length;
+const STEP_MS = 2400;
 const INK = "#1d2417";
 const PEN = "#1f3f9e";
-/** Moments où le grand mot change, en part de la durée de la scène. */
-const WORD_STEPS = [0.42, 0.7];
 
-type Word = { key: string; t: string };
-type HeroState = {
-  i: number;
-  prev: number;
-  run: number;
-  w: number;
-  open: number | null;
-  paused: boolean;
-  prevWord: Word | null;
-  prevTop: { t: string; run: number } | null;
-  topRun: number;
-};
+function StatusMark({ status }: { status: Status }) {
+  const c =
+    status === "active" ? (
+      <circle cx="10" cy="10" r="7" fill="#4a7230" stroke="#1d2417" strokeWidth="1.6" />
+    ) : status === "upcoming" ? (
+      <circle cx="10" cy="10" r="7" fill="#fff" stroke="#df8433" strokeWidth="2" strokeDasharray="3 2.4" />
+    ) : status === "later" ? (
+      <circle cx="10" cy="10" r="7" fill="#efe6d2" stroke="#1d2417" strokeWidth="1.4" />
+    ) : (
+      <circle cx="10" cy="10" r="7" fill="#df8433" stroke="#1d2417" strokeWidth="1.6" />
+    );
+  return (
+    <svg width="16" height="16" viewBox="0 0 20 20" aria-hidden="true" className="flex-none">
+      {c}
+    </svg>
+  );
+}
 
-const wordOf = (s: HeroState) => SCENES[s.i].words[s.w] ?? "AFA";
-
-/** Taille du grand mot selon sa longueur ; la hauteur du bloc reste fixe. */
+/** Taille du grand mot selon sa longueur (desktop `--wd`, mobile `--wm`). */
 function wordVars(t: string): CSSProperties {
   const n = t.replace(/'/g, "").length;
   if (n <= 3)
-    return { ["--wd" as string]: "clamp(120px,21vw,390px)", ["--wm" as string]: "clamp(96px,30vw,190px)" };
+    return { ["--wd" as string]: "clamp(120px,21vw,390px)", ["--wm" as string]: "clamp(92px,29vw,190px)" };
   const d = Math.min(21, 46 / (0.66 * n)).toFixed(2);
-  const m = Math.min(30, 128 / n).toFixed(2);
+  const m = Math.min(29, 124 / n).toFixed(2);
   const max = Math.round(Math.min(390, 1140 / n));
   return {
-    ["--wd" as string]: `clamp(64px,${d}vw,${max}px)`,
+    ["--wd" as string]: `clamp(56px,${d}vw,${max}px)`,
     ["--wm" as string]: `clamp(34px,${m}vw,${max}px)`,
   };
 }
 
 /**
- * Hero « Je suis AFA » (accueil). Trois scènes de 7 s ; le compteur circulaire se remplit et,
- * plein, passe à l'image suivante. Pause et lecture conservent la progression.
- * Animations complètes pour tous les visiteurs (décision de l'ONG, T45) ; le bouton pause arrête le défilement.
- * `header` : en-tête du site, rendu côté serveur, dont les couleurs suivent la scène.
+ * Hero « Je suis AFA » (accueil). Photo fixe ; seul le grand mot change toutes les 2,4 s
+ * (AFA, le N'Zi, la Nawa, les régions, la Côte d'Ivoire, ivoirienne, ivoirien), avec une étiquette de
+ * contexte. Bouton pause (WCAG 2.2.2). Points cliquables sur la photo.
+ * `header` : en-tête du site, rendu côté serveur.
  */
-export function HeroJeSuisAfa({
-  header,
-  intervalSeconds = 7,
-}: {
-  header: ReactNode;
-  intervalSeconds?: number;
-}) {
-  const ms = intervalSeconds * 1000;
-  /** Animations toujours actives (décision T45) ; conservé comme interrupteur unique. */
-  const rm = false;
-  const [s, setS] = useState<HeroState>({
-    i: 0,
-    prev: -1,
-    run: 0,
-    w: 0,
-    open: null,
-    paused: false,
-    prevWord: null,
-    prevTop: null,
-    topRun: 0,
-  });
-  const clock = useRef<{ t0: number; pausedAt: number | null }>({ t0: 0, pausedAt: null });
-  const lastRun = useRef(-1);
+export function HeroJeSuisAfa({ header }: { header: ReactNode }) {
+  const [{ w, prev }, setWords] = useState<{ w: number; prev: number | null }>({ w: 0, prev: null });
+  const [paused, setPaused] = useState(false);
+  const [open, setOpen] = useState<number | null>(null);
+  const [compact, setCompact] = useState(false);
 
-  const go = useCallback((n: number) => {
-    setS((p) => {
-      const i = ((n % N) + N) % N;
-      const cur = SCENES[p.i];
-      const next = SCENES[i];
-      const topChanged = cur.top !== next.top;
-      return {
-        i,
-        prev: p.i,
-        run: p.run + 1,
-        w: 0,
-        open: null,
-        paused: false,
-        prevWord: { key: `${p.i}:${p.w}:${p.run}`, t: wordOf(p) },
-        prevTop: topChanged ? { t: cur.top, run: p.topRun } : null,
-        topRun: topChanged ? p.topRun + 1 : p.topRun,
-      };
-    });
+  useEffect(() => {
+    if (paused || open !== null) return;
+    const t = window.setInterval(() => {
+      setWords((cur) => ({ prev: cur.w, w: (cur.w + 1) % WORDS.length }));
+    }, STEP_MS);
+    return () => window.clearInterval(t);
+  }, [paused, open]);
+
+  useEffect(() => {
+    const mq = window.matchMedia("(max-width: 1099px)");
+    const apply = () => setCompact(mq.matches);
+    apply();
+    mq.addEventListener("change", apply);
+    return () => mq.removeEventListener("change", apply);
   }, []);
 
-  // Horloge : mots à 42 % et 70 % de la scène ; la pause fige le temps écoulé.
-  const stopped = s.paused || s.open !== null;
-  useEffect(() => {
-    const c = clock.current;
-    const now = Date.now();
-    if (lastRun.current !== s.run) {
-      lastRun.current = s.run;
-      c.t0 = now;
-      c.pausedAt = null;
-    }
-    if (stopped) {
-      if (c.pausedAt === null) c.pausedAt = now;
-      return;
-    }
-    if (c.pausedAt !== null) {
-      c.t0 += now - c.pausedAt;
-      c.pausedAt = null;
-    }
-    const el = now - c.t0;
-    const timers = WORD_STEPS.map((p, k) => {
-      const at = ms * p - el;
-      return at > 0
-        ? window.setTimeout(
-            () =>
-              setS((st) =>
-                st.w >= k + 1
-                  ? st
-                  : { ...st, w: k + 1, prevWord: { key: `${st.i}:${st.w}:${st.run}`, t: wordOf(st) } },
-              ),
-            at,
-          )
-        : 0;
-    });
-    return () => timers.forEach((t) => t && window.clearTimeout(t));
-  }, [s.run, stopped, ms]);
-
-  const sc = SCENES[s.i];
+  const word = WORDS[w];
   const vars = {
-    "--hbg": sc.bg,
-    "--hfg": sc.fg,
-    "--hbrush": sc.brush,
-    "--hpulse": sc.pulse,
+    "--hbg": "#ffffff",
+    "--hfg": "#1d2417",
+    "--hbrush": "#df8433",
+    "--hpulse": "#df8433",
     "--hcard": "#f7f2e8",
-    "--hring": sc.ring,
+    "--hring": "rgba(29,36,23,.14)",
   } as CSSProperties;
-  const word = wordOf(s);
-  const wordKey = `${s.i}:${s.w}:${s.run}`;
-  const melt = (on: boolean) =>
-    rm ? "none" : on ? "afaMeltIn .9s cubic-bezier(.2,.8,.2,1) both" : "afaMeltOut .7s ease-in both";
-  const play = stopped ? "paused" : "running";
-  const openSpot = s.open !== null ? sc.spots[s.open] : null;
+  const openSpot = open !== null ? SCENE.spots[open] : null;
+  const pc = (v: number, t: number) => `${(v / t) * 100}%`;
+  const [bx, by, bw, bh] = BOX;
 
   return (
     <div className="panel-frame">
       <div
         data-hero=""
         style={{ ...vars, background: "var(--hbg)", color: "var(--hfg)" }}
-        className="relative flex flex-col overflow-hidden rounded-[22px] p-[clamp(12px,2vw,26px)] transition-[background-color,color] duration-[900ms] ease-out sm:rounded-[28px] min-[1100px]:min-h-[calc(100svh-24px)]"
+        className="relative flex flex-col overflow-hidden rounded-[22px] p-[clamp(12px,2vw,26px)] sm:rounded-[28px] min-[1100px]:min-h-[calc(100svh-24px)]"
       >
-        {s.run > 0 && !rm && (
-          <div
-            key={`b${s.run}`}
-            aria-hidden="true"
-            className="pointer-events-none absolute top-[20%] left-[7%] z-0 size-[320vmax] rounded-full"
-            style={{ background: sc.bg, animation: "afaBlot 1.1s cubic-bezier(.7,0,.25,1) both" }}
-          />
-        )}
         {header}
 
         <div
@@ -333,175 +157,64 @@ export function HeroJeSuisAfa({
           tabIndex={-1}
           className="relative mt-3.5 grid flex-1 grid-cols-1 outline-none [grid-template-areas:'a'_'s'_'b'] min-[1100px]:grid-cols-2 min-[1100px]:grid-rows-[auto_1fr] min-[1100px]:[grid-template-areas:'a_s'_'b_s']"
         >
-          {/* a — compteur et titre */}
-          <div className="relative z-[1] flex flex-col gap-[18px] pt-2 pl-1 [grid-area:a]">
-            <div className="flex flex-wrap items-center gap-3.5">
+          {/* a — étiquette et titre */}
+          <div className="relative z-[1] flex flex-col gap-3 pt-3 pl-1 [grid-area:a]">
+            <div className="flex items-center gap-2">
+              <p
+                aria-hidden="true"
+                key={`tag${w}`}
+                className="inline-flex min-h-9 items-center gap-2 rounded-full border-[1.5px] border-ink bg-sand py-1 pr-4 pl-2.5 text-[12px] font-extrabold tracking-[0.08em] uppercase"
+                style={{ animation: "afaPop .5s cubic-bezier(.2,.8,.2,1) both" }}
+              >
+                <StatusMark status={word.status} />
+                {word.tag}
+              </p>
               <button
                 type="button"
-                onClick={() => go(s.i + 1)}
-                aria-label={`Image suivante (${sc.num} sur 0${N})`}
-                title="Image suivante"
-                className="relative size-[76px] flex-none cursor-pointer rounded-full"
+                onClick={() => setPaused((p) => !p)}
+                aria-label={paused ? "Relancer l'animation du titre" : "Mettre en pause l'animation du titre"}
+                className="grid size-11 cursor-pointer place-items-center rounded-full text-ink/70 hover:bg-ink/8 hover:text-ink"
               >
-                <svg width="76" height="76" viewBox="0 0 76 76" className="block" aria-hidden="true">
-                  <defs>
-                    <clipPath id="afa-disc">
-                      <circle cx="38" cy="38" r="35.5" />
-                    </clipPath>
-                  </defs>
-                  <circle cx="38" cy="38" r="36" fill="#f7f2e8" />
-                  <g clipPath="url(#afa-disc)">
-                    <circle
-                      key={`p${s.run}`}
-                      cx="38"
-                      cy="38"
-                      r="18"
-                      fill="none"
-                      stroke={sc.load}
-                      strokeWidth="37"
-                      pathLength={1}
-                      strokeDasharray="1"
-                      strokeDashoffset="1"
-                      transform="rotate(-90 38 38)"
-                      style={{
-                        transition: "stroke .9s",
-                        animation: rm ? "none" : `afaRing ${ms}ms linear forwards`,
-                        animationPlayState: play,
-                      }}
-                      onAnimationEnd={() => {
-                        if (!rm) go(s.i + 1);
-                      }}
-                    />
-                  </g>
-                  <circle cx="38" cy="38" r="36" fill="none" stroke={INK} strokeWidth="2.5" />
-                  <text
-                    key={`n${s.run}`}
-                    x="38"
-                    y="46"
-                    textAnchor="middle"
-                    stroke="#f7f2e8"
-                    strokeWidth="5"
-                    strokeLinejoin="round"
-                    paintOrder="stroke"
-                    fill={INK}
-                    style={{ font: "400 23px var(--font-ink)", animation: "afaPop .5s both" }}
-                  >
-                    {sc.num}
-                  </text>
+                <svg width="14" height="14" viewBox="0 0 16 16" aria-hidden="true">
+                  {paused ? (
+                    <path d="M4 2 L13 8 L4 14 Z" fill="currentColor" />
+                  ) : (
+                    <path d="M4 2 V14 M11 2 V14" stroke="currentColor" strokeWidth="2.5" />
+                  )}
                 </svg>
               </button>
-              <div aria-live={stopped ? "polite" : "off"} className="flex min-w-[120px] flex-col gap-0.5">
-                <span
-                  key={`c${s.run}`}
-                  className="text-[12px] leading-[1.3] font-extrabold tracking-[0.1em] uppercase"
-                  style={{ animation: "afaPop .6s both" }}
-                >
-                  {sc.cap[0]}
-                </span>
-                <span
-                  key={`d${s.run}`}
-                  className="text-[12px] leading-[1.3] font-semibold tracking-[0.06em] uppercase opacity-85"
-                  style={{ animation: "afaPop .6s .1s both" }}
-                >
-                  {sc.cap[1]}
-                </span>
-              </div>
-              <div className="ml-1 flex items-center">
-                {SCENES.map((scene, k) => {
-                  const on = k === s.i;
-                  const done = k < s.i;
-                  return (
-                    <button
-                      key={scene.key}
-                      type="button"
-                      onClick={() => go(k)}
-                      aria-label={`Scène ${k + 1} : ${scene.cap[0]}`}
-                      aria-current={on ? "true" : undefined}
-                      className="grid h-11 min-w-6 cursor-pointer place-items-center px-1"
-                    >
-                      <span
-                        className="relative block h-3 overflow-hidden rounded-full border-[1.5px] border-current transition-[width] duration-[600ms] ease-[cubic-bezier(.2,.8,.2,1)]"
-                        style={{ width: on ? 46 : 12, background: done ? "currentColor" : "transparent" }}
-                      >
-                        {on && (
-                          <span
-                            key={`f${s.run}`}
-                            className="absolute inset-0 origin-left bg-current"
-                            style={{
-                              animation: rm ? "none" : `afaFill ${ms}ms linear both`,
-                              animationPlayState: play,
-                            }}
-                          />
-                        )}
-                      </span>
-                    </button>
-                  );
-                })}
-                <button
-                  type="button"
-                  onClick={() => setS((p) => ({ ...p, paused: !p.paused }))}
-                  aria-label={s.paused ? "Lancer le défilement" : "Mettre en pause"}
-                  className="grid size-11 cursor-pointer place-items-center"
-                >
-                  <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true">
-                    {s.paused ? (
-                      <path d="M4 2 L13 8 L4 14 Z" fill="currentColor" />
-                    ) : (
-                      <path d="M4 2 V14 M11 2 V14" stroke="currentColor" strokeWidth="2.5" />
-                    )}
-                  </svg>
-                </button>
-              </div>
             </div>
 
             <h1 className="m-0 font-ink leading-none font-normal whitespace-nowrap text-(--hfg)">
               <span className="sr-only">
-                Je suis AFA. Nous sommes AFA : des femmes qui font pousser l&apos;avenir.
+                Je suis AFA, je suis la Côte d&apos;Ivoire : des femmes qui font pousser l&apos;avenir.
               </span>
-              <span aria-hidden="true" className="hero-ink block py-[0.04em] pb-[0.1em]">
-                <span className="hero-top grid leading-[1.02]">
-                  {s.prevTop && !rm && (
+              <span aria-hidden="true" className="hero-ink block pb-[0.08em]">
+                <span className="hero-top block leading-[0.95]">Je suis</span>
+                <span className="hero-word ml-[0.06em] grid items-start leading-[0.9]">
+                  {prev !== null && (
                     <span
-                      key={`pt${s.prevTop.t}${s.prevTop.run}`}
-                      className="[grid-area:1/1]"
-                      style={{ animation: melt(false) }}
-                    >
-                      {s.prevTop.t}
-                    </span>
-                  )}
-                  <span
-                    key={`t${sc.top}${s.topRun}`}
-                    className="[grid-area:1/1]"
-                    style={{ animation: s.prevTop ? melt(true) : "none" }}
-                  >
-                    {sc.top}
-                  </span>
-                </span>
-                <span className="hero-word -mt-[0.04em] ml-[0.1em] grid items-center leading-[0.92]">
-                  {s.prevWord && !rm && (
-                    <span
-                      key={`pw${s.prevWord.key}`}
+                      key={`pw${prev}-${w}`}
                       className="hero-word-size [grid-area:1/1]"
-                      style={{ ...wordVars(s.prevWord.t), animation: melt(false) }}
+                      style={{ ...wordVars(WORDS[prev].t), animation: "afaMeltOut .45s ease-in both" }}
                     >
-                      {s.prevWord.t}
+                      {WORDS[prev].t}
                     </span>
                   )}
                   <span
-                    key={`w${wordKey}`}
+                    key={`w${w}`}
                     className="hero-word-size [grid-area:1/1]"
-                    style={{ ...wordVars(word), animation: s.prevWord ? melt(true) : "none" }}
+                    style={{
+                      ...wordVars(word.t),
+                      animation: prev !== null ? "afaMeltIn .6s cubic-bezier(.2,.8,.2,1) both" : "none",
+                    }}
                   >
                     <span className="inline-flex whitespace-nowrap">
-                      {[...word].map((ch, k) => (
+                      {[...word.t].map((ch, k) => (
                         <span
                           key={k}
                           className="inline-block whitespace-pre"
-                          style={{
-                            animation: rm
-                              ? "none"
-                              : `afaLetter .7s ${k * 55}ms cubic-bezier(.2,.9,.25,1.2) both`,
-                          }}
+                          style={{ animation: `afaLetter .55s ${k * 32}ms cubic-bezier(.2,.9,.25,1.2) both` }}
                         >
                           {ch}
                         </span>
@@ -513,11 +226,47 @@ export function HeroJeSuisAfa({
             </h1>
           </div>
 
-          {/* s — scène photo */}
-          <div className="relative z-[2] [grid-area:s] max-[1099px]:-mx-[clamp(12px,2vw,26px)] max-[1099px]:-mt-[14%] min-[1100px]:min-h-[min(78vh,760px)]">
+          {/* s — photo */}
+          <div className="relative z-[2] [grid-area:s] max-[1099px]:-mx-[clamp(12px,2vw,26px)] max-[1099px]:-mt-[10%] min-[1100px]:min-h-[min(78vh,760px)]">
             <div className="absolute inset-0 flex items-end justify-center [container-type:size] max-[1099px]:relative max-[1099px]:[container-type:normal]">
               <div className="relative aspect-[700/860] w-[min(100cqw,calc(100cqh*700/860))] max-[1099px]:w-[min(100%,calc(68svh*700/860))]">
-                <Stage s={s} rm={rm} ms={ms} setOpen={(open) => setS((p) => ({ ...p, open }))} />
+                <div
+                  className="absolute inset-0"
+                  style={{
+                    left: pc(bx, 700),
+                    top: pc(by, 860),
+                    width: pc(bw, 700),
+                    height: pc(bh, 860),
+                    transformOrigin: "50% 100%",
+                    animation: "afaHeroIn 1.25s cubic-bezier(.75,0,.2,1) .1s both",
+                  }}
+                >
+                  {/* eslint-disable-next-line @next/next/no-img-element -- dimensions en % d'une scène SVG, srcset fait main (export statique) */}
+                  <img
+                    src={`${BASE}/photos/femme-houe.webp`}
+                    srcSet={`${BASE}/photos/femme-houe-560.webp 560w, ${BASE}/photos/femme-houe.webp 900w`}
+                    sizes="(min-width: 1100px) 46vw, 92vw"
+                    alt="Une productrice souriante, casquette « Je suis AFA », houe sur l'épaule"
+                    fetchPriority="high"
+                    decoding="async"
+                    className="absolute inset-0 block size-full object-contain object-bottom"
+                  />
+                </div>
+                <svg
+                  viewBox="0 0 700 860"
+                  preserveAspectRatio="xMidYMax meet"
+                  className="absolute inset-0 block size-full overflow-visible"
+                >
+                  <SceneLayer
+                    sc={SCENE}
+                    k={0}
+                    run={0}
+                    open={open}
+                    f={1}
+                    compact={compact}
+                    setOpen={setOpen}
+                  />
+                </svg>
               </div>
             </div>
             {openSpot && (
@@ -541,7 +290,6 @@ export function HeroJeSuisAfa({
               </div>
             )}
           </div>
-
           {/* b — accroche et appels */}
           <div className="relative z-[1] mt-6 flex flex-col gap-[22px] self-end [grid-area:b] min-[1100px]:mt-0">
             <p className="m-0 flex flex-col items-start pl-[clamp(0px,8vw,140px)] text-[clamp(26px,3.3vw,52px)] leading-[0.98] font-extrabold tracking-[-0.015em] uppercase">
@@ -646,136 +394,6 @@ function Brush() {
   );
 }
 
-function Stage({
-  s,
-  rm,
-  ms,
-  setOpen,
-}: {
-  s: HeroState;
-  rm: boolean;
-  ms: number;
-  setOpen: (o: number | null) => void;
-}) {
-  const [compact, setCompact] = useState(false);
-  useEffect(() => {
-    const mq = window.matchMedia("(max-width: 1099px)");
-    const apply = () => setCompact(mq.matches);
-    apply();
-    mq.addEventListener("change", apply);
-    return () => mq.removeEventListener("change", apply);
-  }, []);
-
-  // Photos des scènes 2 et 3 : téléchargées après le chargement de la page (hors chemin critique).
-  const [later, setLater] = useState(false);
-  useEffect(() => {
-    const go = () => window.setTimeout(() => setLater(true), 300);
-    if (document.readyState === "complete") go();
-    else window.addEventListener("load", go, { once: true });
-    return () => window.removeEventListener("load", go);
-  }, []);
-
-  const f = Math.min(1, ms / 5000);
-  const pc = (v: number, t: number) => `${(v / t) * 100}%`;
-
-  return (
-    <>
-      <div className="absolute inset-0">
-        {SCENES.map((sc, k) => {
-          const active = k === s.i;
-          const mode = active ? "in" : k === s.prev ? "out" : "wait";
-          const [bx, by, bw, bh] = sc.box;
-          const figSt: CSSProperties = {
-            position: "absolute",
-            left: pc(bx, 700),
-            top: pc(by, 860),
-            width: pc(bw, 700),
-            height: pc(bh, 860),
-            opacity: mode === "in" ? 1 : 0,
-            clipPath: mode === "wait" ? "circle(0% at 50% 82%)" : "circle(140% at 50% 82%)",
-            transform: mode === "out" ? "scale(.9) translateX(-6%)" : "none",
-            filter: mode === "out" ? "blur(12px) saturate(.6)" : "none",
-            transformOrigin: "50% 100%",
-            transition:
-              mode === "in"
-                ? "clip-path 1.25s cubic-bezier(.75,0,.2,1) .12s, opacity .25s .12s, transform 1s cubic-bezier(.2,.7,.2,1), filter .6s"
-                : "opacity .7s ease, transform .9s cubic-bezier(.4,0,.2,1), filter .7s ease, clip-path 0s .95s",
-            animation: active && !rm ? `afaKen ${ms + 1500}ms cubic-bezier(.2,.6,.3,1) both` : "none",
-          };
-          const rad = `50% 50% 0 0 / ${((bw / 2 / bh) * 100).toFixed(2)}% ${((bw / 2 / bh) * 100).toFixed(2)}% 0 0`;
-          const img = (
-            // eslint-disable-next-line @next/next/no-img-element -- dimensions en % d'une scène SVG, srcset fait main (export statique)
-            <img
-              src={k === 0 || later || k === s.i ? sc.img.src : undefined}
-              srcSet={k === 0 || later || k === s.i ? sc.img.srcSet : undefined}
-              sizes="(min-width: 1100px) 46vw, 92vw"
-              alt={active ? sc.alt : ""}
-              aria-hidden={!active}
-              loading={k === 0 ? "eager" : "lazy"}
-              fetchPriority={k === 0 ? "high" : "auto"}
-              decoding="async"
-              className={cn(
-                "absolute inset-0 block size-full",
-                sc.kind === "arch"
-                  ? "border-[2.5px] border-ink object-cover object-top"
-                  : "object-contain object-bottom",
-              )}
-              style={sc.kind === "arch" ? { borderRadius: rad } : undefined}
-            />
-          );
-          return (
-            <div key={sc.key} style={figSt}>
-              {sc.kind === "arch" && (
-                <div
-                  className="absolute inset-0 translate-x-[3%] translate-y-[2%] bg-accent"
-                  style={{ borderRadius: rad }}
-                />
-              )}
-              {img}
-            </div>
-          );
-        })}
-      </div>
-
-      <svg
-        viewBox="0 0 700 860"
-        preserveAspectRatio="xMidYMax meet"
-        className="absolute inset-0 block size-full overflow-visible"
-      >
-        {SCENES.map((sc, k) => {
-          const active = k === s.i;
-          const tx = active ? 0 : k === s.prev ? -160 : 180;
-          return (
-            <g
-              key={sc.key}
-              aria-hidden={!active}
-              style={{
-                opacity: active ? 1 : 0,
-                transform: `translateX(${tx}px)`,
-                transition: "opacity .7s ease, transform 1s cubic-bezier(.2,.7,.2,1)",
-                pointerEvents: active ? "auto" : "none",
-              }}
-            >
-              {active && (
-                <SceneLayer
-                  key={`${k}-${s.run}`}
-                  sc={sc}
-                  k={k}
-                  run={s.run}
-                  open={s.open}
-                  f={f}
-                  compact={compact}
-                  setOpen={setOpen}
-                />
-              )}
-            </g>
-          );
-        })}
-      </svg>
-    </>
-  );
-}
-
 function SceneLayer({
   sc,
   k,
@@ -785,7 +403,7 @@ function SceneLayer({
   compact,
   setOpen,
 }: {
-  sc: Scene;
+  sc: SceneDef;
   k: number;
   run: number;
   open: number | null;

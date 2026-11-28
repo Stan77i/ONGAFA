@@ -72,7 +72,8 @@ Toute nouvelle couleur doit être vérifiée (WCAG AA : 4,5:1 texte, 3:1 grands 
 
 Refonte v2 : `afa/` (`Panel`, `SectionHead`, `PillLink`, `AnchorPills`, `CtaBand`, `Crumbs`, `Notebook`, `Declared`,
 `AfaIcon`, `InkFilter`, `AfaChrome`), `home/HeroJeSuisAfa`, `layout/HeroPanel`, `layout/SiteMenu`,
-`layout/VivrierHero`, `map/AfaMap3D` (+ `afa-map3d.js`), `join/ProfilePicker`. Photos de l'ONG dans
+`layout/VivrierHero`, `map/AfaMap`, `join/ProfilePicker`, `search/` (`SearchPalette`, `SearchButton`, `NewsBadge`),
+`afa/dataviz` (`DeploymentBar`, `VeillePulse`, `UsesRing`). Photos de l'ONG dans
 `public/photos/` (WebP, variante 560 px pour le mobile).
 
 ## Règles d'usage
@@ -88,11 +89,12 @@ Refonte v2 : `afa/` (`Panel`, `SectionHead`, `PillLink`, `AnchorPills`, `CtaBand
 
 ## Mouvement
 
-- Hero « Je suis AFA » (`HeroJeSuisAfa`) : 3 scènes de 7 s, compteur circulaire, mot qui change à 42 % et 70 %.
-  Bouton pause ; les photos des scènes 2 et 3 sont chargées après la page.
+- Hero « Je suis AFA » (`HeroJeSuisAfa`) : photo fixe ; le mot après « Je suis » change toutes les 2,4 s (fonte d'encre,
+  lettres qui montent), avec une étiquette de contexte ; bouton pause.
 - `AfaChrome` + `useAfaFx` : barre flottante (ordinateur), progression, retour en haut, apparitions en cascade,
   icônes qui se dessinent, compteur « 4 000 ha » (`data-count`), cartes inclinables, pilules magnétiques, pollen.
-- Carte immersive (`AfaMap3D`, three.js) chargée à l'approche, arrêtée hors écran, repli SVG sans WebGL.
+- Carte nationale (`AfaMap`, SVG 2,5D) : inclinaison qui suit la souris, régions qui se soulèvent au survol, zoom doux,
+  glisser une fois zoomé ; tracés chargés à l'approche. Pas de radar ni d'éclairage.
 - **Animations complètes pour tous** (décision T45), y compris si le système demande de réduire les animations.
 
 ## Responsive
