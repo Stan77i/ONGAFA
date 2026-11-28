@@ -3,7 +3,7 @@ import { cn } from "@/lib/cn";
 export function Spinner({ className, label = "Chargement" }: { className?: string; label?: string }) {
   return (
     <span role="status" className={cn("inline-block", className)}>
-      <svg viewBox="0 0 24 24" className="size-full motion-safe:animate-spin" aria-hidden="true">
+      <svg viewBox="0 0 24 24" className="size-full animate-spin" aria-hidden="true">
         <circle
           cx="12"
           cy="12"

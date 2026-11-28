@@ -58,7 +58,6 @@ export default function CassavaPage() {
               width={1100}
               height={978}
               alt="Des productrices tenant maïs et manioc"
-              fetchPriority="high"
               className="block h-auto w-full"
             />
             <div className="absolute top-[4%] right-[2%]">
@@ -202,7 +201,7 @@ export default function CassavaPage() {
           {cassava.derivatives.map((g) => (
             <article
               key={g.group}
-              className="sticker flex flex-col gap-4 bg-white p-[clamp(22px,2.5vw,32px)]"
+              className="afa-card sticker flex flex-col gap-4 bg-white p-[clamp(22px,2.5vw,32px)]"
             >
               <div className="flex items-center gap-3.5">
                 <span className="grid size-16 flex-none place-items-center rounded-full border-[1.5px] border-ink bg-cream">

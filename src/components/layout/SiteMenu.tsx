@@ -59,7 +59,7 @@ export function SiteMenu({ current, alwaysVisible = false }: { current?: string;
         aria-label="Menu"
         className="on-dark m-0 h-dvh max-h-none w-full max-w-none overflow-y-auto bg-ink p-0 text-sand backdrop:bg-ink/60"
       >
-        <div className="mx-auto flex min-h-full max-w-6xl flex-col gap-8 px-5 py-4 sm:px-8 sm:py-6 motion-safe:animate-[afaPop_.45s_var(--ease-afa)_both]">
+        <div className="mx-auto flex min-h-full max-w-6xl flex-col gap-8 px-5 py-4 sm:px-8 sm:py-6 animate-[afaPop_.45s_var(--ease-afa)_both]">
           <div className="flex items-center justify-between gap-4">
             <Link
               href="/"

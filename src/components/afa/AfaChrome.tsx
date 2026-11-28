@@ -9,15 +9,12 @@ import { site } from "@/config/site";
 import { cn } from "@/lib/cn";
 import { useAfaFx } from "./useAfaFx";
 
-const reducedMotion = () =>
-  typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
 /**
  * Habillage vivant commun à toutes les pages :
  *  - barre de navigation flottante (ordinateur), qui apparaît après le premier écran ;
  *  - barre de progression de lecture (orange) ;
  *  - bouton « Revenir en haut » ;
- *  - effets au défilement et au survol (useAfaFx), coupés si l'utilisateur réduit les animations.
+ *  - effets au défilement et au survol (useAfaFx).
  */
 export function AfaChrome() {
   const pathname = usePathname() ?? "";
@@ -101,7 +98,7 @@ export function AfaChrome() {
         aria-label="Revenir en haut"
         tabIndex={top ? 0 : -1}
         aria-hidden={!top}
-        onClick={() => window.scrollTo({ top: 0, behavior: reducedMotion() ? "auto" : "smooth" })}
+        onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
         className={cn(
           "fixed right-3 bottom-[calc(5.5rem+env(safe-area-inset-bottom))] z-[70] grid size-[52px] cursor-pointer place-items-center rounded-full border-[1.5px] border-ink bg-sand text-ink shadow-[0_5px_0_#1d2417] transition-[opacity,transform] duration-300 ease-(--ease-afa) lg:right-5 lg:bottom-5",
           top

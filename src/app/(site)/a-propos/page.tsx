@@ -51,7 +51,6 @@ export default function AboutPage() {
                 width={900}
                 height={1200}
                 alt="Une productrice souriante portant la casquette « Je suis AFA »"
-                fetchPriority="high"
                 className="absolute inset-0 block size-full rounded-[999px_999px_22px_22px] border-[2.5px] border-ink object-cover object-top"
               />
             </div>
@@ -185,7 +184,7 @@ export default function AboutPage() {
           {results.items.map((r, i) => (
             <div
               key={r.label}
-              className="flex flex-col gap-2.5 rounded-[22px] border-[1.5px] border-sand/30 p-7"
+              className="afa-card flex flex-col gap-2.5 rounded-[22px] border-[1.5px] border-sand/30 p-7"
             >
               <AfaIconDark name={resultIcons[i]} />
               <p
@@ -214,7 +213,7 @@ export default function AboutPage() {
           intro="Après le N'Zi, AFA prévoit de se déployer dans la Nawa puis progressivement dans les autres régions, en travaillant sur toute la chaîne de valeur avec les structures d'encadrement du secteur."
         />
         <div className="grid gap-4 lg:grid-cols-2">
-          <div className="sticker flex flex-col gap-[18px] bg-white p-[clamp(22px,2.5vw,36px)]">
+          <div className="afa-card sticker flex flex-col gap-[18px] bg-white p-[clamp(22px,2.5vw,36px)]">
             <h3 className="text-[clamp(22px,2.2vw,26px)] font-extrabold tracking-[-0.02em]">
               Pour y parvenir, AFA prévoit de :
             </h3>
@@ -227,7 +226,7 @@ export default function AboutPage() {
               ))}
             </ul>
           </div>
-          <div className="sticker on-dark flex flex-col gap-[18px] bg-afa p-[clamp(22px,2.5vw,36px)] text-white">
+          <div className="afa-card sticker on-dark flex flex-col gap-[18px] bg-afa p-[clamp(22px,2.5vw,36px)] text-white">
             <h3 className="text-[clamp(22px,2.2vw,26px)] font-extrabold tracking-[-0.02em]">
               À terme, AFA vise à :
             </h3>
@@ -255,7 +254,7 @@ export default function AboutPage() {
             La présidence de l&apos;ONG.
           </h2>
         </div>
-        <figure className="sticker flex flex-wrap items-center gap-6 bg-white p-7">
+        <figure className="afa-card sticker flex flex-wrap items-center gap-6 bg-white p-7">
           {president.photo ? (
             <Image
               src={president.photo}

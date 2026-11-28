@@ -37,7 +37,7 @@ export default function MapPage() {
             <div
               id="contenu"
               tabIndex={-1}
-              className="mt-[clamp(18px,3vw,40px)] flex max-w-[620px] flex-col gap-2.5 px-[clamp(6px,2vw,38px)] outline-none"
+              className="map-title mt-[clamp(18px,3vw,40px)] flex max-w-[620px] flex-col gap-2.5 px-[clamp(6px,2vw,38px)] outline-none"
             >
               <div className="pointer-events-auto text-mint [&_a]:text-mint">
                 <Crumbs items={[{ href: "/", label: "Accueil" }, { label: "Carte nationale" }]} />
@@ -76,7 +76,7 @@ export default function MapPage() {
               sous-préfectures.
             </span>
           </li>
-          <li className="flex flex-col gap-3 rounded-[22px] border-[1.5px] border-dashed border-ink bg-white p-[26px]">
+          <li className="afa-card flex flex-col gap-3 rounded-[22px] border-[1.5px] border-dashed border-ink bg-white p-[26px]">
             <span className="text-[13px] font-extrabold tracking-[0.1em] text-accent-text uppercase">
               Prochaine étape
             </span>
@@ -87,7 +87,7 @@ export default function MapPage() {
               Chef-lieu : Soubré. Première étape du déploiement national annoncé par AFA.
             </span>
           </li>
-          <li className="flex flex-col gap-3 rounded-[22px] border-[1.5px] border-dashed border-ink bg-cream p-[26px]">
+          <li className="afa-card flex flex-col gap-3 rounded-[22px] border-[1.5px] border-dashed border-ink bg-cream p-[26px]">
             <span className="text-[13px] font-extrabold tracking-[0.1em] text-accent-text uppercase">
               Ensuite
             </span>

@@ -15,12 +15,11 @@ type Animated = Element & { __afaAnim?: Animation; __afaDraws?: Animation[] };
  *  - les cartes `.afa-card` s'inclinent et reçoivent un reflet qui suit le pointeur ;
  *  - les pilules `[data-magnetic]` de 52 px et plus sont légèrement magnétiques ;
  *  - pollen lumineux dans le premier panneau.
- * Rien n'est appliqué si l'utilisateur a demandé à réduire les animations.
+ * Appliqué pour tous les visiteurs (décision T45).
  * N'écrit que des animations Web (WAAPI) et des propriétés CSS indépendantes (`rotate`, `translate`).
  */
 export function useAfaFx(pathname: string) {
   useEffect(() => {
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     const main = document.querySelector("main");
     if (!main) return;
     const cleanups: Array<() => void> = [];

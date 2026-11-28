@@ -38,7 +38,7 @@ export default async function VeillePage() {
         <NewsExplorer items={items} categories={categories} crops={crops} headingId="t-veille" />
 
         <div className="mt-4 grid grid-cols-[repeat(auto-fit,minmax(min(100%,420px),1fr))] gap-4">
-          <div className="on-dark flex flex-col gap-3.5 rounded-[22px] border-[1.5px] border-ink bg-forest px-7 py-6 text-sand">
+          <div className="afa-card on-dark flex flex-col gap-3.5 rounded-[22px] border-[1.5px] border-ink bg-forest px-7 py-6 text-sand">
             <p className="eyebrow text-mint">Transparence — nos sources</p>
             <ul className="flex flex-wrap gap-2">
               {sources.length > 0

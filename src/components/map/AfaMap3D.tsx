@@ -31,6 +31,12 @@ export function AfaMap3D({
     if (el) el.navigate = (path: string) => router.push(path);
   }, [router]);
 
+  // Arrivée depuis l'aperçu de l'accueil (/carte#r=<région>) : la carte occupe le haut de la page.
+  useEffect(() => {
+    if (mode === "full" && /^#r=/.test(window.location.hash))
+      window.scrollTo({ top: 0, behavior: "instant" });
+  }, [mode]);
+
   useEffect(() => {
     let alive = true;
     import("./afa-map3d").then((m) => {

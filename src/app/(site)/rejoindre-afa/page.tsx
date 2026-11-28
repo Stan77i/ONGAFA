@@ -51,7 +51,6 @@ export default function JoinPage() {
               width={896}
               height={1200}
               alt="Une productrice souriante, casquette « Je suis AFA », houe sur l'épaule"
-              fetchPriority="high"
               className="block h-auto w-full"
             />
           </div>

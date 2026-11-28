@@ -29,7 +29,8 @@ export function defineAfaMap3D() {
     "Vous le saurez ici.",
     "Le réseau continue.",
   ];
-  const RM = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  // Animations complètes pour tous (décision T45) : le repli SVG ne sert que sans WebGL.
+  const RM = false;
   const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
   const lerp = (a, b, t) => a + (b - a) * t;
   const ss = (a, b, x) => {
@@ -166,7 +167,7 @@ afa-map3d button:focus-visible,afa-map3d a:focus-visible{outline:2px solid ${C.o
 .am-fb path[data-slug]:focus{outline:none}
 .am-fb path[data-slug]:focus-visible,.am-fb path[data-slug].sel{stroke:${C.orange};stroke-width:5}
 @media (max-width:1000px){.am-panel{top:auto;bottom:12px;left:12px;right:12px;width:auto;transform:none}}@media (max-width:700px){.am-hint{display:none}.am-nm{font-size:24px}.am-hud{gap:10px}}
-@media (prefers-reduced-motion:reduce){afa-map3d canvas{transition:none}.am-hint span:after{animation:none}}
+
 `;
     document.head.appendChild(s);
   }
@@ -474,9 +475,11 @@ afa-map3d button:focus-visible,afa-map3d a:focus-visible{outline:2px solid ${C.o
       this.sel = null;
       this.hidePanel();
       if (this.fb) this.fbEl.querySelectorAll(".sel").forEach((p) => p.classList.remove("sel"));
+      this.syncEngaged();
     }
     home() {
       this.clearSel();
+      this.syncEngaged();
       if (!this.goal) return;
       this.goal.tx = 0;
       this.goal.tz = 30;
@@ -489,6 +492,15 @@ afa-map3d button:focus-visible,afa-map3d a:focus-visible{outline:2px solid ${C.o
     interacted() {
       if (this.hint) this.hint.style.opacity = 0;
       this._interacted = true;
+      this.syncEngaged();
+    }
+    /** `data-engaged` : la carte est explorée (zoom ou région choisie) ; la page peut alors s'effacer. */
+    syncEngaged() {
+      const on = !!this.sel || (this.goal ? this.goal.z > 0.06 : false);
+      if (on !== this._engaged) {
+        this._engaged = on;
+        this.toggleAttribute("data-engaged", on);
+      }
     }
     onKey(e) {
       if (e.target.closest && e.target.closest("a,input")) return;
@@ -1086,6 +1098,7 @@ afa-map3d button:focus-visible,afa-map3d a:focus-visible{outline:2px solid ${C.o
       const dt = Math.min(0.05, (now - this.last) / 1000);
       this.last = now;
       this.t += dt;
+      this.syncEngaged();
       const t = this.t,
         T = this.T,
         cam = this.camera;

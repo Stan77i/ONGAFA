@@ -89,11 +89,11 @@ Refonte v2 : `afa/` (`Panel`, `SectionHead`, `PillLink`, `AnchorPills`, `CtaBand
 ## Mouvement
 
 - Hero « Je suis AFA » (`HeroJeSuisAfa`) : 3 scènes de 7 s, compteur circulaire, mot qui change à 42 % et 70 %.
-  Mouvement réduit : pas de défilement automatique, boutons conservés.
+  Bouton pause ; les photos des scènes 2 et 3 sont chargées après la page.
 - `AfaChrome` + `useAfaFx` : barre flottante (ordinateur), progression, retour en haut, apparitions en cascade,
   icônes qui se dessinent, compteur « 4 000 ha » (`data-count`), cartes inclinables, pilules magnétiques, pollen.
-- Carte immersive (`AfaMap3D`, three.js) chargée à l'approche, arrêtée hors écran, repli SVG.
-- **Tout est désactivé** si l'utilisateur a demandé à réduire les animations.
+- Carte immersive (`AfaMap3D`, three.js) chargée à l'approche, arrêtée hors écran, repli SVG sans WebGL.
+- **Animations complètes pour tous** (décision T45), y compris si le système demande de réduire les animations.
 
 ## Responsive
 

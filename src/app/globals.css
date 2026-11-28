@@ -77,11 +77,6 @@
       scroll-padding-bottom: 0;
     }
   }
-  @media (prefers-reduced-motion: reduce) {
-    html {
-      scroll-behavior: auto;
-    }
-  }
   body {
     background: var(--color-ink);
     color: var(--color-ink);
@@ -387,28 +382,15 @@ body::after {
   background: linear-gradient(90deg, var(--color-cream) 25%, var(--color-sand) 50%, var(--color-cream) 75%);
   background-size: 200% 100%;
 }
-@media (prefers-reduced-motion: no-preference) {
-  .skeleton {
-    animation: afa-shimmer 1.4s linear infinite;
-  }
-  .anim-bob {
-    animation: afaBob 3.2s cubic-bezier(0.45, 0, 0.55, 1) infinite;
-  }
-  .anim-float {
-    animation: afaFloat 7s ease-in-out infinite;
-  }
+/* Animations complètes pour tous les visiteurs (décision T45). */
+.skeleton {
+  animation: afa-shimmer 1.4s linear infinite;
 }
-
-/* Mouvement réduit : tout est coupé, sans exception. */
-@media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    animation-duration: 1ms !important;
-    animation-delay: 0s !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 1ms !important;
-  }
+.anim-bob {
+  animation: afaBob 3.2s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+}
+.anim-float {
+  animation: afaFloat 7s ease-in-out infinite;
 }
 
 /* ───────── Cartes « fiches » : zoom, reflet qui suit le pointeur, écrasement au clic ───────── */
@@ -443,7 +425,7 @@ body::after {
     rotate 0.5s cubic-bezier(0.2, 0.9, 0.3, 1.4),
     scale 0.5s cubic-bezier(0.2, 0.9, 0.3, 1.4);
 }
-@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+@media (hover: hover) {
   .afa-card:hover {
     scale: 1.035;
     translate: 0 -6px;
@@ -479,12 +461,10 @@ html:has(dialog[open]) {
 }
 
 /* Trait d'encre (InkUnderline, design system). */
-@media (prefers-reduced-motion: no-preference) {
-  .ink-draw path {
-    stroke-dasharray: 1;
-    stroke-dashoffset: 1;
-    animation: afaDraw 900ms 200ms cubic-bezier(0.65, 0, 0.35, 1) forwards;
-  }
+.ink-draw path {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: afaDraw 900ms 200ms cubic-bezier(0.65, 0, 0.35, 1) forwards;
 }
 
 /* ───────── Hero « Je suis AFA » ───────── */
@@ -521,4 +501,17 @@ html:has(dialog[open]) {
 }
 .hero-spot:focus-visible .hero-spot-focus {
   opacity: 1;
+}
+
+/* Carte nationale : le titre s'efface dès que l'on explore la carte (zoom, région, liste clavier). */
+.map-title {
+  transition:
+    opacity 0.6s var(--ease-afa),
+    translate 0.6s var(--ease-afa);
+}
+:has(> afa-map3d[data-engaged]) .map-title,
+:has(> afa-map3d .am-sr:focus-within) .map-title {
+  opacity: 0;
+  translate: 0 -12px;
+  pointer-events: none;
 }

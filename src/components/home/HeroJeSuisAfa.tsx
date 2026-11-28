@@ -212,7 +212,7 @@ function wordVars(t: string): CSSProperties {
 /**
  * Hero « Je suis AFA » (accueil). Trois scènes de 7 s ; le compteur circulaire se remplit et,
  * plein, passe à l'image suivante. Pause et lecture conservent la progression.
- * Mouvement réduit : pas de défilement automatique (bouton « image suivante » et pastilles restent).
+ * Animations complètes pour tous les visiteurs (décision de l'ONG, T45) ; le bouton pause arrête le défilement.
  * `header` : en-tête du site, rendu côté serveur, dont les couleurs suivent la scène.
  */
 export function HeroJeSuisAfa({
@@ -223,7 +223,8 @@ export function HeroJeSuisAfa({
   intervalSeconds?: number;
 }) {
   const ms = intervalSeconds * 1000;
-  const [rm, setRm] = useState(false);
+  /** Animations toujours actives (décision T45) ; conservé comme interrupteur unique. */
+  const rm = false;
   const [s, setS] = useState<HeroState>({
     i: 0,
     prev: -1,
@@ -237,18 +238,6 @@ export function HeroJeSuisAfa({
   });
   const clock = useRef<{ t0: number; pausedAt: number | null }>({ t0: 0, pausedAt: null });
   const lastRun = useRef(-1);
-  const rmRef = useRef(false);
-
-  useEffect(() => {
-    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
-    const apply = () => {
-      setRm(mq.matches);
-      if (mq.matches) setS((p) => ({ ...p, paused: true }));
-    };
-    apply();
-    mq.addEventListener("change", apply);
-    return () => mq.removeEventListener("change", apply);
-  }, []);
 
   const go = useCallback((n: number) => {
     setS((p) => {
@@ -262,16 +251,13 @@ export function HeroJeSuisAfa({
         run: p.run + 1,
         w: 0,
         open: null,
-        paused: rmRef.current ? true : false,
+        paused: false,
         prevWord: { key: `${p.i}:${p.w}:${p.run}`, t: wordOf(p) },
         prevTop: topChanged ? { t: cur.top, run: p.topRun } : null,
         topRun: topChanged ? p.topRun + 1 : p.topRun,
       };
     });
   }, []);
-  useEffect(() => {
-    rmRef.current = rm;
-  }, [rm]);
 
   // Horloge : mots à 42 % et 70 % de la scène ; la pause fige le temps écoulé.
   const stopped = s.paused || s.open !== null;
@@ -680,6 +666,15 @@ function Stage({
     return () => mq.removeEventListener("change", apply);
   }, []);
 
+  // Photos des scènes 2 et 3 : téléchargées après le chargement de la page (hors chemin critique).
+  const [later, setLater] = useState(false);
+  useEffect(() => {
+    const go = () => window.setTimeout(() => setLater(true), 300);
+    if (document.readyState === "complete") go();
+    else window.addEventListener("load", go, { once: true });
+    return () => window.removeEventListener("load", go);
+  }, []);
+
   const f = Math.min(1, ms / 5000);
   const pc = (v: number, t: number) => `${(v / t) * 100}%`;
 
@@ -711,8 +706,8 @@ function Stage({
           const img = (
             // eslint-disable-next-line @next/next/no-img-element -- dimensions en % d'une scène SVG, srcset fait main (export statique)
             <img
-              src={sc.img.src}
-              srcSet={sc.img.srcSet}
+              src={k === 0 || later || k === s.i ? sc.img.src : undefined}
+              srcSet={k === 0 || later || k === s.i ? sc.img.srcSet : undefined}
               sizes="(min-width: 1100px) 46vw, 92vw"
               alt={active ? sc.alt : ""}
               aria-hidden={!active}
