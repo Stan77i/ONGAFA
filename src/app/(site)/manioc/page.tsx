@@ -166,19 +166,53 @@ export default function CassavaPage() {
           }
           intro="En Côte d'Ivoire, le manioc se répartit en deux grandes catégories, auxquelles s'ajoutent des variétés locales traditionnelles et des variétés améliorées diffusées par la recherche agronomique."
         />
-        <div className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,400px),1fr))] gap-4">
-          {cassava.categories.map((c, i) => (
-            <article
-              key={c.name}
-              className="afa-card sticker flex flex-col gap-3.5 bg-white p-[clamp(22px,2.5vw,36px)]"
-            >
-              <div className="flex items-center gap-3.5">
-                <AfaIcon name={i === 0 ? "doux" : "amer"} size={52} data-card-icon="" />
-                <h3 className="text-[clamp(24px,2.4vw,30px)] font-extrabold tracking-[-0.02em]">{c.name}</h3>
-              </div>
-              <p className="text-[17px] leading-[1.55] text-ink-soft">{c.text}</p>
-            </article>
-          ))}
+        <div className="flex flex-wrap items-center gap-4">
+          <div className="relative z-[2] mx-auto -mb-6 max-w-[560px] min-w-0 flex-[1.15_1_320px]">
+            {/* eslint-disable-next-line @next/next/no-img-element -- export statique */}
+            <img
+              src={`${BASE}/photos/manioc-detoure.webp`}
+              width={1030}
+              height={524}
+              alt="Racines de manioc, dont deux coupées montrant la chair blanche"
+              className="-ml-[6%] block h-auto w-[112%] max-w-none drop-shadow-[0_18px_14px_rgba(29,36,23,.28)]"
+            />
+          </div>
+          <div className="grid min-w-0 flex-[2_1_560px] grid-cols-[repeat(auto-fit,minmax(min(100%,280px),1fr))] gap-4">
+            {cassava.categories.map((c, i) => (
+              <article key={c.name} className="afa-card sticker flex flex-col bg-white p-2.5">
+                <div
+                  className="flex min-h-[210px] flex-col justify-between gap-5 rounded-[15px] rounded-br-none p-[clamp(20px,2.2vw,30px)]"
+                  style={{ background: i === 0 ? "#efe6d2" : "#df8433" }}
+                >
+                  <span
+                    className={
+                      i === 0
+                        ? "self-start rounded-full border-[1.5px] border-ink bg-white px-3 py-1.5 text-[12px] font-extrabold tracking-[0.12em] uppercase"
+                        : "self-start rounded-full bg-ink px-3 py-1.5 text-[12px] font-extrabold tracking-[0.12em] text-sand uppercase"
+                    }
+                  >
+                    {i === 0 ? "Se cuisine vite" : "Traitement obligatoire"}
+                  </span>
+                  <p className="text-[clamp(17px,1.3vw,19px)] leading-normal font-medium">{c.text}</p>
+                </div>
+                <div className="grid grid-cols-[minmax(0,1fr)_auto] items-end gap-3">
+                  <h3 className="pt-[18px] pr-2 pb-2 pl-2.5 text-[clamp(34px,3.4vw,52px)] leading-[0.92] font-black tracking-[-0.045em]">
+                    {c.name}
+                  </h3>
+                  <span
+                    aria-hidden="true"
+                    className="self-start rounded-b-[15px] px-[18px] pt-1 pb-3 font-ink text-[30px] leading-none"
+                    style={{
+                      background: i === 0 ? "#efe6d2" : "#df8433",
+                      color: i === 0 ? "#c26418" : "#1d2417",
+                    }}
+                  >
+                    {String(i + 1).padStart(2, "0")}
+                  </span>
+                </div>
+              </article>
+            ))}
+          </div>
         </div>
         <div
           role="note"

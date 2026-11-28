@@ -168,10 +168,14 @@ export function NewsExplorer({
           </ul>
         </div>
       ) : (
-        <ul className="grid gap-4 md:grid-cols-2">
-          {filtered.slice(0, shown).map((it) => (
+        <ul className="grid gap-5 md:grid-cols-2">
+          {filtered.slice(0, shown).map((it, i) => (
             <li key={it.id} className="flex">
-              <NewsListItem item={it} isNew={seenAt !== null && Date.parse(it.publishedAt) > seenAt} />
+              <NewsListItem
+                index={i}
+                item={it}
+                isNew={seenAt !== null && Date.parse(it.publishedAt) > seenAt}
+              />
             </li>
           ))}
         </ul>

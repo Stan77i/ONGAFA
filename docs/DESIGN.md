@@ -79,8 +79,10 @@ Toute nouvelle carte claire doit porter `.sticker` ou un fond `bg-white`/`bg-san
 Refonte v2 : `afa/` (`Panel`, `SectionHead`, `PillLink`, `AnchorPills`, `CtaBand`, `Crumbs`, `Notebook`, `Declared`,
 `AfaIcon`, `InkFilter`, `AfaChrome`), `home/HeroJeSuisAfa`, `layout/HeroPanel`, `layout/SiteMenu`,
 `layout/VivrierHero`, `map/AfaMap`, `join/ProfilePicker`, `search/` (`SearchPalette`, `SearchButton`, `NewsBadge`),
-`afa/dataviz` (`DeploymentBar`, `VeillePulse`, `UsesRing`). Photos de l'ONG dans
-`public/photos/` (WebP, variante 560 px pour le mobile).
+`afa/dataviz` (`DeploymentBar`, `VeillePulse`, `UsesRing`), `afa/Signpost` (carrefour de la veille),
+`content/NewsTicker` (annonce défilante), `content/NewsListItem` (carte « une de journal » sur baguette porte-journal,
+sans fond coloré, deux mises en page alternées selon `index`). Photos de l'ONG dans `public/photos/` (WebP, variante
+560 px pour le mobile) ; photos détourées `manioc-detoure.webp` et `mais-detoure.webp`, collées aux cartes « affiche ».
 
 ## Règles d'usage
 
@@ -101,6 +103,10 @@ Refonte v2 : `afa/` (`Panel`, `SectionHead`, `PillLink`, `AnchorPills`, `CtaBand
   icônes qui se dessinent, compteur « 4 000 ha » (`data-count`), cartes inclinables, pilules magnétiques, pollen.
 - Carte nationale (`AfaMap`, SVG 2,5D) : inclinaison qui suit la souris, régions qui se soulèvent au survol, zoom doux,
   glisser une fois zoomé ; tracés chargés à l'approche. Pas de radar ni d'éclairage.
+- Carrefour de la veille (`Signpost`) : plaques qui pivotent tour à tour (pause au survol, choix au clic), fil animé
+  vers une fiche ; plaques « actualité » alimentées par les vraies dernières informations (`getRecentNews()`).
+- Annonce défilante (`NewsTicker`, `@keyframes afaTicker`) : fixée en bas de l'écran tant que `#veille` est visible,
+  au-dessus de la barre mobile ; pause au survol ou au focus.
 - **Animations complètes pour tous** (décision T45), y compris si le système demande de réduire les animations.
 
 ## Responsive

@@ -55,45 +55,85 @@ export default function ActionsPage() {
 
       <Panel tone="sand" label="Domaines d'intervention" className="py-[clamp(20px,3vw,48px)]">
         <ol className="flex flex-col">
-          {domains.map((d, i) => (
-            <li
-              key={d.slug}
-              id={d.slug}
-              className="grid scroll-mt-24 grid-cols-[repeat(auto-fit,minmax(min(100%,320px),1fr))] items-center gap-[clamp(16px,3vw,48px)] border-b-[1.5px] border-rule py-[clamp(24px,3vw,40px)]"
-            >
-              <div className="flex items-center gap-[clamp(14px,2vw,28px)]">
-                <span
-                  aria-hidden="true"
-                  className="min-w-[1.3em] font-ink sm:min-w-[1.6em] text-[clamp(36px,4vw,64px)] leading-none text-accent-deep"
-                >
-                  {String(i + 1).padStart(2, "0")}
-                </span>
-                <span
-                  className="grid size-[clamp(52px,6vw,96px)] flex-none place-items-center rounded-full border-[1.5px] border-ink"
-                  style={{ background: i === 0 ? "#efe6d2" : "#fff" }}
-                >
-                  <AfaIcon name={domainIcon[d.slug]} size={52} className="h-auto w-[56%]" />
-                </span>
-                <h2 className="min-w-0 text-[clamp(22px,2.6vw,40px)] leading-[1.05] font-extrabold tracking-[-0.025em] hyphens-auto [overflow-wrap:break-word]">
-                  {d.title}
-                </h2>
-              </div>
-              <div className="flex flex-col items-start gap-3">
-                <p className="max-w-[56ch] text-[17px] leading-[1.55] text-ink-soft sm:text-[18px]">
-                  {d.text}
-                </p>
-                {"href" in d && (
-                  <Link
-                    href={d.href}
-                    data-magnetic=""
-                    className="inline-flex min-h-12 items-center gap-2.5 rounded-full border-[1.5px] border-ink bg-afa px-[22px] text-[15px] font-extrabold whitespace-nowrap text-white hover:bg-forest"
+          {domains.map((d, i) =>
+            d.slug === "mais" ? (
+              <li
+                key={d.slug}
+                id={d.slug}
+                className="flex scroll-mt-24 flex-wrap-reverse items-center gap-4 border-b-[1.5px] border-rule py-[clamp(24px,3vw,40px)]"
+              >
+                <article className="afa-card sticker flex min-w-0 flex-[1_1_420px] flex-col bg-white p-2.5">
+                  <div className="flex min-h-[220px] flex-col justify-between gap-5 rounded-[15px] rounded-br-none bg-harvest p-[clamp(20px,2.4vw,34px)]">
+                    <span className="self-start rounded-full bg-ink px-3 py-1.5 text-[12px] font-extrabold tracking-[0.12em] text-sand uppercase">
+                      Seconde culture
+                    </span>
+                    <p className="max-w-[44ch] text-[clamp(18px,1.5vw,22px)] leading-[1.45] font-semibold">
+                      {d.text}
+                    </p>
+                  </div>
+                  <div className="grid grid-cols-[minmax(0,1fr)_auto] items-end gap-3">
+                    <h2 className="pt-[18px] pr-2 pb-2 pl-2.5 text-[clamp(48px,6vw,96px)] leading-[0.88] font-black tracking-[-0.05em]">
+                      {d.title}
+                    </h2>
+                    <span
+                      aria-hidden="true"
+                      className="self-start rounded-b-[15px] bg-harvest px-[18px] pt-1 pb-3 font-ink text-[30px] leading-none"
+                    >
+                      {String(i + 1).padStart(2, "0")}
+                    </span>
+                  </div>
+                </article>
+                <div className="relative z-[2] mx-auto -mb-6 max-w-[560px] min-w-0 flex-[1_1_320px]">
+                  {/* eslint-disable-next-line @next/next/no-img-element -- export statique */}
+                  <img
+                    src={`${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/photos/mais-detoure.webp`}
+                    width={945}
+                    height={562}
+                    alt="Épis de maïs, certains encore dans leurs feuilles"
+                    className="-ml-[6%] block h-auto w-[112%] max-w-none drop-shadow-[0_18px_14px_rgba(29,36,23,.28)]"
+                  />
+                </div>
+              </li>
+            ) : (
+              <li
+                key={d.slug}
+                id={d.slug}
+                className="grid scroll-mt-24 grid-cols-[repeat(auto-fit,minmax(min(100%,320px),1fr))] items-center gap-[clamp(16px,3vw,48px)] border-b-[1.5px] border-rule py-[clamp(24px,3vw,40px)]"
+              >
+                <div className="flex items-center gap-[clamp(14px,2vw,28px)]">
+                  <span
+                    aria-hidden="true"
+                    className="min-w-[1.3em] font-ink sm:min-w-[1.6em] text-[clamp(36px,4vw,64px)] leading-none text-accent-deep"
                   >
-                    Explorer l&apos;espace manioc <Arrow />
-                  </Link>
-                )}
-              </div>
-            </li>
-          ))}
+                    {String(i + 1).padStart(2, "0")}
+                  </span>
+                  <span
+                    className="grid size-[clamp(52px,6vw,96px)] flex-none place-items-center overflow-visible rounded-full border-[1.5px] border-ink"
+                    style={{ background: i === 0 ? "#efe6d2" : "#fff" }}
+                  >
+                    <AfaIcon name={domainIcon[d.slug]} size={52} className="h-auto w-[56%]" />
+                  </span>
+                  <h2 className="min-w-0 text-[clamp(22px,2.6vw,40px)] leading-[1.05] font-extrabold tracking-[-0.025em] hyphens-auto [overflow-wrap:break-word]">
+                    {d.title}
+                  </h2>
+                </div>
+                <div className="flex flex-col items-start gap-3">
+                  <p className="max-w-[56ch] text-[17px] leading-[1.55] text-ink-soft sm:text-[18px]">
+                    {d.text}
+                  </p>
+                  {"href" in d && (
+                    <Link
+                      href={d.href}
+                      data-magnetic=""
+                      className="inline-flex min-h-12 items-center gap-2.5 rounded-full border-[1.5px] border-ink bg-afa px-[22px] text-[15px] font-extrabold whitespace-nowrap text-white hover:bg-forest"
+                    >
+                      Explorer l&apos;espace manioc <Arrow />
+                    </Link>
+                  )}
+                </div>
+              </li>
+            ),
+          )}
         </ol>
       </Panel>
 
