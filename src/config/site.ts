@@ -28,5 +28,7 @@ export const site = {
   logos: {
     seal: `${BASE_PATH}/brand/logo-sceau-ong-afa.webp`,
     symbol: `${BASE_PATH}/brand/symbole-afa.webp`,
+    /** Sceau détouré, affiché sans cercle (menu, pied de page). */
+    mark: `${BASE_PATH}/brand/logo-afa.webp`,
   },
 } as const;

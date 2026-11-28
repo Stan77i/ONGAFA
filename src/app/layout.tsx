@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { site } from "@/config/site";
-import { fraunces, sourceSans } from "./fonts";
+import { InkFilter } from "@/components/afa/InkFilter";
+import { archivo, reenieBeanie, shrikhand } from "./fonts";
 import "./globals.css";
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
@@ -18,15 +19,21 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: site.colors.green,
+  themeColor: "#1d2417",
   width: "device-width",
   initialScale: 1,
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="fr" className={`${fraunces.variable} ${sourceSans.variable} h-full antialiased`}>
-      <body className="min-h-full flex flex-col">{children}</body>
+    <html
+      lang="fr"
+      className={`${archivo.variable} ${shrikhand.variable} ${reenieBeanie.variable} h-full antialiased`}
+    >
+      <body className="flex min-h-full flex-col">
+        <InkFilter />
+        {children}
+      </body>
     </html>
   );
 }

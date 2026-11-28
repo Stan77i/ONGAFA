@@ -42,10 +42,7 @@ export function PriceTable({ rows, caption }: { rows: PriceRow[]; caption: strin
       {/* Mobile : cartes */}
       <ul className="space-y-3 md:hidden" aria-label={caption}>
         {rows.map((r) => (
-          <li
-            key={`${r.product}-${r.market}-${r.observedOn}`}
-            className="rounded-card bg-white text-ink p-4 ring-1 ring-rule"
-          >
+          <li key={`${r.product}-${r.market}-${r.observedOn}`} className="sticker bg-sand p-4 text-ink">
             <div className="flex items-start justify-between gap-3">
               <div>
                 <p className="font-semibold text-ink">{r.product}</p>
@@ -53,7 +50,7 @@ export function PriceTable({ rows, caption }: { rows: PriceRow[]; caption: strin
                   {r.market} · par {r.unit}
                 </p>
               </div>
-              <p className="text-right font-display text-xl font-semibold text-forest tabular-nums">
+              <p className="text-right text-xl font-extrabold text-ink tabular-nums">
                 {formatFcfa(r.amount)}
               </p>
             </div>
@@ -69,10 +66,10 @@ export function PriceTable({ rows, caption }: { rows: PriceRow[]; caption: strin
       </ul>
 
       {/* Tablette et ordinateur : tableau */}
-      <div className="hidden overflow-x-auto rounded-card ring-1 ring-rule md:block">
-        <table className="w-full border-collapse bg-white text-left">
+      <div className="hidden overflow-x-auto rounded-[22px] border-[1.5px] border-ink shadow-[0_8px_0_#1d2417] md:block">
+        <table className="w-full border-collapse bg-sand text-left">
           <caption className="sr-only">{caption}</caption>
-          <thead className="bg-sand text-meta font-semibold text-ink">
+          <thead className="bg-ink text-[13px] font-extrabold tracking-[0.08em] text-sand uppercase">
             <tr>
               <th scope="col" className="px-4 py-3">
                 Produit

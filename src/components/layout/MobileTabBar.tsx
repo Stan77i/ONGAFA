@@ -30,10 +30,10 @@ export function MobileTabBarView({ pathname = "" }: { pathname?: string }) {
   return (
     <nav
       aria-label="Navigation rapide"
-      className="fixed inset-x-0 bottom-0 z-40 border-t border-rule bg-white/95 pb-[env(safe-area-inset-bottom)] backdrop-blur lg:hidden"
+      className="fixed inset-x-2 bottom-[calc(6px+env(safe-area-inset-bottom))] z-40 rounded-full bg-ink/95 shadow-[0_10px_30px_rgba(29,36,23,0.35)] ring-1 ring-sand/15 backdrop-blur-md lg:hidden"
     >
       <ul
-        className="mx-auto grid h-[4.5rem] max-w-lg"
+        className="mx-auto grid h-16 max-w-lg px-1.5"
         style={{ gridTemplateColumns: `repeat(${mobileTabs.length}, minmax(0, 1fr))` }}
       >
         {mobileTabs.map((tab) => {
@@ -41,23 +41,16 @@ export function MobileTabBarView({ pathname = "" }: { pathname?: string }) {
           const active =
             pathname !== "" && (tab.href === "/" ? pathname === "/" : pathname.startsWith(tab.href));
           return (
-            <li key={tab.href}>
+            <li key={tab.href} className="flex items-center">
               <Link
                 href={tab.href}
                 aria-current={active ? "page" : undefined}
                 className={cn(
-                  "flex h-full flex-col items-center justify-center gap-1 text-xs font-semibold",
-                  active ? "text-forest" : "text-ink-soft",
+                  "flex h-[52px] w-full flex-col items-center justify-center gap-0.5 rounded-full text-[11px] font-bold tracking-[0.02em] transition-colors",
+                  active ? "bg-sand text-ink" : "text-sand/85 hover:text-white",
                 )}
               >
-                <span
-                  className={cn(
-                    "grid h-8 w-14 place-items-center rounded-full transition-colors",
-                    active && "bg-leaf/15",
-                  )}
-                >
-                  <Icon className="size-5" aria-hidden="true" strokeWidth={active ? 2.4 : 2} />
-                </span>
+                <Icon className="size-5" aria-hidden="true" strokeWidth={active ? 2.4 : 2} />
                 {tab.label}
               </Link>
             </li>
