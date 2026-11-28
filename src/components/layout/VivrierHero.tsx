@@ -73,11 +73,14 @@ export function VivrierHero({
   crumb,
   title,
   intro,
+  art,
 }: {
   current: (typeof tabs)[number]["href"];
   crumb: string;
   title: ReactNode;
   intro: ReactNode;
+  /** Illustration de droite (par défaut : le journal). La veille y pose son carrefour. */
+  art?: ReactNode;
 }) {
   return (
     <HeroPanel tone="cream" current={current}>
@@ -102,9 +105,11 @@ export function VivrierHero({
             ))}
           </nav>
         </div>
-        <div className="relative aspect-square w-full max-w-[min(470px,80vw)] justify-self-center max-lg:max-w-[320px]">
-          <NewspaperArt />
-        </div>
+        {art ?? (
+          <div className="relative aspect-square w-full max-w-[min(470px,80vw)] justify-self-center max-lg:max-w-[320px]">
+            <NewspaperArt />
+          </div>
+        )}
       </div>
     </HeroPanel>
   );

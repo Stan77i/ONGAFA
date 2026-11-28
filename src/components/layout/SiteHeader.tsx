@@ -58,6 +58,28 @@ export function SiteHeader({
           aria-label="Navigation principale"
           className="no-scrollbar ml-auto hidden min-w-0 items-center gap-0.5 overflow-x-auto rounded-full border-[1.5px] border-current p-[3px] lg:flex"
         >
+          <Link
+            href="/"
+            aria-current={current === "/" ? "page" : undefined}
+            className="flex min-h-10 items-center gap-1.5 rounded-full bg-accent px-3.5 pl-2.5 text-[12.5px] font-extrabold tracking-[0.06em] whitespace-nowrap text-ink uppercase transition-colors duration-200 hover:bg-accent-hover"
+          >
+            <svg
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2.2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              aria-hidden="true"
+            >
+              <path d="M3 11.5 12 4l9 7.5" />
+              <path d="M5.5 10v9.5h13V10" />
+              <path d="M10 19.5v-5h4v5" />
+            </svg>
+            Accueil
+          </Link>
           {nav.map((item) => {
             const active = isActive(current, item.href);
             return (

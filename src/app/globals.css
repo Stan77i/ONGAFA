@@ -1003,6 +1003,16 @@ html[data-theme="dark"] .afa-search {
   --color-accent-text: #f0a25e;
 }
 
+/* ───────── Annonce défilante de la veille (NewsTicker) ───────── */
+@keyframes afaTicker {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
 /* ───────── Photos racontées (PhotoStory) : points, fils, lumière ───────── */
 @keyframes afaDrawFrom {
   from {
