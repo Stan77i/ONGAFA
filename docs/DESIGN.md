@@ -1,8 +1,9 @@
 # Design system — ONG AFA
 
-Direction **« Terre et trait »** (validée le 2026-11-25) : un journal de terrain institutionnel.
-Rigueur d'une organisation nationale (grilles, données datées, typographie posée), habitée par le trait
-d'encre dessiné à la main du logo et par les vraies photos du terrain.
+Direction **« Terre et trait » v2** (refonte du 2026-11-28, maquettes haute fidélité de l'ONG) :
+chaque section est une feuille arrondie (28 px) posée dans un cadre de 16 px sur un fond encre. Titres géants
+à l'encre (Shrikhand), interface en Archivo, notes au bic sur papier ligné, cartes « autocollant » à ombre dure,
+vraies photos du terrain. Les données restent datées et sourcées.
 
 Démonstration vivante : `/design-system` (en développement uniquement ; en production, 404 sauf si
 `SHOW_DESIGN_SYSTEM=1` au moment du build).
@@ -19,6 +20,10 @@ Définies dans `src/app/globals.css` (`@theme`). Classes Tailwind : `bg-afa`, `t
 | `leaf-light`   | `#a9c98f` | Texte et accents sur fond `forest`                     | 5,8:1 sur forêt                  |
 | `accent`       | `#df8433` | Orange : boutons et surfaces, **toujours texte `ink`** | encre dessus 5,7:1               |
 | `accent-hover` | `#eb9652` | Survol du bouton orange                                | encre dessus 6,9:1               |
+| `accent-deep`  | `#c26418` | Grands numéros orange sur fond clair (≥ 36 px)         | ≥ 3,3:1 sur blanc, crème, sable  |
+| `night`        | `#141a10` | Fond de la carte immersive                             | —                                |
+| `pen`          | `#1f3f9e` | Écriture au bic (Reenie Beanie)                        | ≥ 3,3:1 sur orange, 8:1 papier   |
+| `paper`        | `#fbf7ee` | Papier ligné                                           | —                                |
 | `accent-text`  | `#9a4c15` | Orange lisible : catégories, surtitres                 | ≥ 4,9:1 sur blanc, sable, crème  |
 | `laterite`     | `#8c4a2f` | Touche terre : filets, citations                       | 6,7:1                            |
 | `harvest`      | `#e9b44c` | Statut « en cours », focus sur fond sombre             | encre dessus 8,4:1               |
@@ -37,18 +42,22 @@ Toute nouvelle couleur doit être vérifiée (WCAG AA : 4,5:1 texte, 3:1 grands 
 
 ## Typographie
 
-- **Fraunces** (titres, `font-display`) et **Source Sans 3** (texte, `font-sans`), chargées par
-  `src/app/fonts.ts`, auto-hébergées au build, sous-ensembles latin et latin étendu.
-- Échelle fluide : `text-display`, `text-h1`, `text-h2`, `text-h3`, `text-body` (17 → 18 px), `text-meta` (14 px).
-- Surtitres : `text-meta font-semibold uppercase tracking-[0.12em]` en `accent-text` (ou `leaf-light` sur sombre).
-- Lignes de texte limitées à environ 68 caractères (`max-w-[68ch]` ou `max-w-prose`).
+- **Archivo** (400 à 900) : interface et texte (`font-sans`, `font-display`).
+- **Shrikhand** (`font-ink`) : titres géants, toujours avec la classe `.ink-title` (filtre « encre » `#afa-goo`,
+  remplacé par `#afa-goo-sm` sous 768 px, sinon les lettres sont rongées). Jamais de fondu d'opacité sur ces titres.
+- **Reenie Beanie** (`.hand`) : notes manuscrites, en `pen` sur papier ou en menthe / orange sur fond sombre.
+- Polices chargées par `src/app/fonts.ts`, auto-hébergées au build.
+- Surtitres `.eyebrow` (13 px, 700, `.12em`, majuscules) : brique `accent-text` sur clair, menthe sur sombre, encre sur orange.
+- Titres de section `.h-section` : 800, `clamp(34px, 4.4vw, 68px)`, interligne 0,98.
 
 ## Signature visuelle
 
-- **Trait d'encre** (`InkUnderline`, `InkMark`) : sous le slogan ou un mot-clé, une fois par écran au plus.
-- **Chaîne de valeur** (`ValueChain`) : Production → Collecte → Transformation → Valorisation →
-  Commercialisation → Débouchés → Autonomisation. Verticale sur mobile, horizontale dès la tablette.
-- **Données datées** : tout chiffre (`KeyFigure`) et toute donnée (`DataStamp`, `PriceTable`) portent date et source.
+- **Panneaux** (`Panel`, `HeroPanel`) : tons `sand`, `cream`, `forest`, `orange`, `green`, `night`.
+- **Cartes autocollant** (`.sticker`) : bordure encre 1,5 px, rayon 22 px, ombre `0 6px 0` encre.
+  Ajouter `.afa-card` pour le zoom, le reflet et l'inclinaison au survol.
+- **Papier au bic** (`Notebook`), **pilules** (`PillLink`, `AnchorPills`), **bandeau final** (`CtaBand`).
+- **Chaîne de valeur** (`ValueChain variant="dark"`) : verticale jusqu'à 1280 px, horizontale au-delà.
+- **Icônes dessinées** (`AfaIcon`, `AfaIconDark`) : grille 48, trait encre 2,2, un aplat de la palette.
 
 ## Composants (`src/components/`)
 
@@ -60,6 +69,11 @@ Toute nouvelle couleur doit être vérifiée (WCAG AA : 4,5:1 texte, 3:1 grands 
 | `map/`     | `StatusPill`/`StatusShape`/`MapLegend` (implantée ● / en cours ◐ / bientôt ◌), `TerritoryPanel`                                                                                                                                                                                                                            |
 | `brand/`   | `InkUnderline`, `InkMark`, `ValueChain`                                                                                                                                                                                                                                                                                    |
 | `layout/`  | `SiteHeader`, `MobileTabBar`, `SiteFooter`, `Section`, `Container`, `SectionHeading`                                                                                                                                                                                                                                       |
+
+Refonte v2 : `afa/` (`Panel`, `SectionHead`, `PillLink`, `AnchorPills`, `CtaBand`, `Crumbs`, `Notebook`, `Declared`,
+`AfaIcon`, `InkFilter`, `AfaChrome`), `home/HeroJeSuisAfa`, `layout/HeroPanel`, `layout/SiteMenu`,
+`layout/VivrierHero`, `map/AfaMap3D` (+ `afa-map3d.js`), `join/ProfilePicker`. Photos de l'ONG dans
+`public/photos/` (WebP, variante 560 px pour le mobile).
 
 ## Règles d'usage
 
@@ -74,10 +88,12 @@ Toute nouvelle couleur doit être vérifiée (WCAG AA : 4,5:1 texte, 3:1 grands 
 
 ## Mouvement
 
-- Apparition des sections au défilement (`.reveal`) en CSS pur (pas de JavaScript) ; trait d'encre qui se dessine ;
-  survol des cartes ; squelettes de chargement.
+- Hero « Je suis AFA » (`HeroJeSuisAfa`) : 3 scènes de 7 s, compteur circulaire, mot qui change à 42 % et 70 %.
+  Mouvement réduit : pas de défilement automatique, boutons conservés.
+- `AfaChrome` + `useAfaFx` : barre flottante (ordinateur), progression, retour en haut, apparitions en cascade,
+  icônes qui se dessinent, compteur « 4 000 ha » (`data-count`), cartes inclinables, pilules magnétiques, pollen.
+- Carte immersive (`AfaMap3D`, three.js) chargée à l'approche, arrêtée hors écran, repli SVG.
 - **Tout est désactivé** si l'utilisateur a demandé à réduire les animations.
-- Pas de carrousel automatique, pas de vidéo en lecture automatique. Compteurs animés seulement pour des chiffres vérifiés.
 
 ## Responsive
 

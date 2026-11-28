@@ -9,7 +9,7 @@ const filterAvailable = <T extends NavItem>(items: readonly T[]) => items.filter
 /** `header` : affiché dans l'en-tête sur ordinateur (les autres restent dans le menu et le pied de page). */
 const allMainNav = [
   { href: "/a-propos", label: "L'ONG", available: true, header: true },
-  { href: "/actions", label: "Nos actions", available: true, header: false },
+  { href: "/actions", label: "Nos actions", available: true, header: true },
   { href: "/manioc", label: "Manioc", available: true, header: true },
   { href: "/vivrier", label: "Vivrier", available: false, header: true }, // quand des contenus sourcés par culture existeront
   { href: "/veille", label: "Veille", available: true, header: true },
@@ -20,6 +20,20 @@ const allMainNav = [
 ] as const satisfies readonly (NavItem & { header: boolean })[];
 
 export const mainNav = filterAvailable(allMainNav);
+
+/** Menu plein écran : toutes les rubriques publiées, dans l'ordre de lecture. */
+const allMenuNav = [
+  { href: "/", label: "Accueil", available: true },
+  { href: "/a-propos", label: "L'ONG AFA", available: true },
+  { href: "/actions", label: "Nos actions", available: true },
+  { href: "/manioc", label: "Espace manioc", available: true },
+  { href: "/veille", label: "Veille du vivrier", available: true },
+  { href: "/prix", label: "Prix du vivrier", available: true },
+  { href: "/ressources", label: "Ressources", available: true },
+  { href: "/carte", label: "Carte nationale", available: true },
+] as const satisfies readonly NavItem[];
+
+export const menuNav = filterAvailable(allMenuNav);
 
 /** Barre basse mobile : les usages les plus fréquents, à portée du pouce. */
 const allMobileTabs = [
@@ -44,7 +58,6 @@ const allFooterNav: { title: string; links: NavItem[] }[] = [
       { href: "/a-propos#gouvernance", label: "Gouvernance", available: true },
       { href: "/actions", label: "Nos actions", available: true },
       { href: "/carte", label: "Carte nationale", available: true },
-      { href: "/carte#chronologie", label: "Déploiement national", available: true },
       { href: "/a-propos/partenaires", label: "Partenaires", available: false },
     ],
   },
